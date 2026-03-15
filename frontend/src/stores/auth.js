@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { authService } from '@/services/authService'
-import { useToast } from '@/composables/useToast'
+import { useToast } from '@/utils/useToast'
 
 export const useAuthStore = defineStore('auth', () => {
   const user  = ref(null)

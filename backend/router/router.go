@@ -29,6 +29,7 @@ func Setup(db *gorm.DB, cfg *config.Config) *gin.Engine {
 	prestationHandler := &handlers.PrestationHandler{DB: db, Audit: audit}
 	eventHandler := &handlers.EventHandler{DB: db, Audit: audit}
 	adminHandler := &handlers.AdminHandler{DB: db, Audit: audit}
+	logsHandler := &handlers.LogsHandler{DB: db}
 
 	r.GET("/up", func(c *gin.Context) {
 		c.String(http.StatusOK, "OK")
@@ -46,6 +47,9 @@ func Setup(db *gorm.DB, cfg *config.Config) *gin.Engine {
 			protected.GET("/auth/me", authHandler.Me)
 
 			protected.GET("/dashboard/stats", dashHandler.Stats)
+
+			protected.GET("/logs", logsHandler.Index)
+			protected.GET("/logs/activity", logsHandler.Activity)
 
 			protected.GET("/users", userHandler.Index)
 			protected.GET("/users/:id", userHandler.Show)
