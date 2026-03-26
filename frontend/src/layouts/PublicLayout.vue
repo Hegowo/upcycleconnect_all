@@ -4,8 +4,8 @@
     <header v-if="!route.meta.hideNav" class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-[#e2e8f0]">
       <div class="max-w-[1280px] mx-auto px-6 py-4 flex items-center justify-between">
 
-        <RouterLink to="/" class="text-[#006d35] text-2xl font-semibold tracking-[-0.05em] font-jakarta">
-          UpcycleConnect
+        <RouterLink to="/" class="flex items-center">
+          <img src="/logoentier.png" alt="UpcycleConnect" class="h-12 w-auto" />
         </RouterLink>
 
         <nav class="hidden md:flex items-center gap-8">
@@ -31,19 +31,74 @@
             />
             <MagnifyingGlassIcon class="w-[18px] h-[18px] absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           </div>
-          <RouterLink
-            to="/connexion"
-            class="hidden sm:block text-sm font-medium px-4 py-2 rounded-lg text-[#40617f] hover:bg-[#edf4ff] transition"
-          >
-            Connexion
-          </RouterLink>
-          <RouterLink
-            to="/inscription"
-            class="text-sm font-bold font-jakarta px-5 py-2.5 rounded-full text-white transition hover:opacity-90"
-            style="background: #006d35;"
-          >
-            S'inscrire
-          </RouterLink>
+
+          <template v-if="!userAuth.isLoggedIn">
+            <RouterLink
+              to="/connexion"
+              class="hidden sm:block text-sm font-medium px-4 py-2 rounded-lg text-[#40617f] hover:bg-[#edf4ff] transition"
+            >
+              Connexion
+            </RouterLink>
+            <RouterLink
+              to="/inscription"
+              class="text-sm font-bold font-jakarta px-5 py-2.5 rounded-full text-white transition hover:opacity-90"
+              style="background: #006d35;"
+            >
+              S'inscrire
+            </RouterLink>
+          </template>
+
+          <template v-else>
+
+            <button class="w-9 h-9 rounded-full flex items-center justify-center text-[#40617f] hover:bg-[#edf4ff] transition">
+              <BellIcon class="w-5 h-5" />
+            </button>
+
+            <div class="relative">
+              <button
+                @click="profileMenuOpen = !profileMenuOpen"
+                class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-white transition hover:opacity-90 focus:outline-none"
+                style="background: linear-gradient(135deg, #006d35, #1b8848);"
+              >
+                {{ userAuth.initials || '?' }}
+              </button>
+
+              <Transition name="dropdown">
+                <div
+                  v-if="profileMenuOpen"
+                  v-click-outside="closeMenu"
+                  class="absolute right-0 top-12 w-56 bg-white rounded-2xl shadow-xl border border-[#e2e8f0] py-2 z-50"
+                >
+
+                  <div class="px-4 py-3 border-b border-[#f1f5f9]">
+                    <p class="text-sm font-semibold text-[#001d32] truncate">{{ userAuth.fullName }}</p>
+                    <p class="text-xs text-gray-400 truncate">{{ userAuth.user?.email }}</p>
+                  </div>
+
+                  <RouterLink
+                    to="/profil"
+                    @click="closeMenu"
+                    class="flex items-center gap-3 px-4 py-2.5 text-sm text-[#334155] hover:bg-[#f8fafc] transition"
+                  >
+                    <UserCircleIcon class="w-4 h-4 text-[#40617f]" />
+                    Mon profil
+                  </RouterLink>
+
+                  <div class="border-t border-[#f1f5f9] mt-1 pt-1">
+                    <button
+                      @click="handleLogout"
+                      class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition"
+                    >
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                      </svg>
+                      Se déconnecter
+                    </button>
+                  </div>
+                </div>
+              </Transition>
+            </div>
+          </template>
         </div>
       </div>
     </header>
@@ -58,8 +113,8 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
 
           <div class="space-y-4">
-            <RouterLink to="/" class="block text-[#006d35] text-xl font-bold font-jakarta">
-              UpcycleConnect
+            <RouterLink to="/" class="block">
+              <img src="/logoentier.png" alt="UpcycleConnect" class="h-20 w-auto" />
             </RouterLink>
             <p class="text-[#334155] text-sm leading-relaxed">
               La plateforme de référence pour connecter particuliers et artisans engagés dans l'upcycling et l'économie circulaire.
@@ -112,7 +167,7 @@
         </div>
 
         <div class="border-t border-[#e2e8f0] pt-8 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p class="text-[#334155] text-base">© {{ new Date().getFullYear() }} UpcycleConnect. Tous droits réservés.</p>
+          <p class="text-[#334155] text-base">© {{ new Date().getFullYear() }} UpcycleConnect — Tous droits réservés.</p>
           <p class="text-[#334155] text-sm flex items-center gap-1">
             Fait avec <span class="text-red-500 mx-0.5">♥</span> pour la planète.
           </p>
@@ -124,10 +179,26 @@
 </template>
 
 <script setup>
-import { RouterLink, RouterView, useRoute } from 'vue-router'
-import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
+import { ref, onMounted } from 'vue'
+import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
+import { MagnifyingGlassIcon, BellIcon, UserCircleIcon } from '@heroicons/vue/24/outline'
+import { useUserAuthStore } from '@/stores/userAuth'
 
-const route = useRoute()
+const route    = useRoute()
+const router   = useRouter()
+const userAuth = useUserAuthStore()
+
+const profileMenuOpen = ref(false)
+
+onMounted(() => userAuth.init())
+
+function closeMenu() { profileMenuOpen.value = false }
+
+async function handleLogout() {
+  profileMenuOpen.value = false
+  await userAuth.logout()
+  router.push('/')
+}
 
 const navLinks = [
   { label: 'Accueil',     path: '/' },
@@ -160,4 +231,20 @@ const footerLegal = [
   { label: 'Politique de confidentialité', path: '/' },
   { label: 'Contact',                   path: '/' },
 ]
+
+const vClickOutside = {
+  mounted(el, binding) {
+    el._clickOutside = (e) => { if (!el.contains(e.target)) binding.value(e) }
+    document.addEventListener('mousedown', el._clickOutside)
+  },
+  unmounted(el) {
+    document.removeEventListener('mousedown', el._clickOutside)
+  },
+}
 </script>
+
+<style scoped>
+.dropdown-enter-active { transition: opacity 0.15s ease, transform 0.15s ease; }
+.dropdown-leave-active { transition: opacity 0.1s ease, transform 0.1s ease; }
+.dropdown-enter-from, .dropdown-leave-to { opacity: 0; transform: translateY(-6px) scale(0.97); }
+</style>
