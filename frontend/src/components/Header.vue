@@ -18,20 +18,15 @@
 
     <div class="flex items-center gap-3">
 
-      <RouterLink
-        to="/admin/providers?status=pending"
+      <button
         class="relative p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition"
-        title="Prestataires en attente"
+        title="Notifications"
       >
         <BellIcon class="w-5 h-5" />
         <span
           v-if="pendingCount > 0"
           class="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500"
         ></span>
-      </RouterLink>
-
-      <button class="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition">
-        <QuestionMarkCircleIcon class="w-5 h-5" />
       </button>
 
       <div class="h-6 w-px bg-[#e5e7eb]"></div>
@@ -65,7 +60,6 @@ import { useAuthStore } from '@/stores/auth'
 import {
   BellIcon,
   MagnifyingGlassIcon,
-  QuestionMarkCircleIcon,
   ArrowRightOnRectangleIcon,
 } from '@heroicons/vue/24/outline'
 
