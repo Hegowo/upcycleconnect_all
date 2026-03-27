@@ -48,8 +48,7 @@
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue'
+<script setup>import { ref, onMounted } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { ShieldCheckIcon, ClockIcon, XCircleIcon } from '@heroicons/vue/24/outline'
 import { useUserAuthStore } from '@/stores/userAuth'
@@ -77,7 +76,6 @@ onMounted(async () => {
       localStorage.setItem('user_token', json.token)
       localStorage.setItem('user_data', JSON.stringify(json.user))
       state.value = 'success'
-
       setTimeout(() => router.push('/'), 1500)
     } else if (res.status === 410) {
       state.value = 'expired'

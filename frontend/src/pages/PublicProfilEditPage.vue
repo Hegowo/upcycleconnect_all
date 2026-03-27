@@ -162,8 +162,7 @@
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue'
+<script setup>import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserAuthStore } from '@/stores/userAuth'
 import {
@@ -226,7 +225,6 @@ async function uploadAvatar() {
     if (!res.ok) throw new Error(json.message || 'Erreur')
     avatarSuccess.value = true
     avatarFile.value    = null
-
     if (userAuth.user) userAuth.user.avatar_url = json.avatar_url
     await userAuth.fetchMe()
   } catch (err) {
@@ -378,7 +376,6 @@ async function emailVerifyNew() {
     const json = await res.json()
     if (!res.ok) throw new Error(json.message || 'Erreur')
     emailStep.value = 3
-
     if (userAuth.user) userAuth.user.email = json.email
     localStorage.setItem('user_data', JSON.stringify(userAuth.user))
   } catch (err) {

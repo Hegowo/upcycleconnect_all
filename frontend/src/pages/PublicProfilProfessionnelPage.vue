@@ -180,8 +180,7 @@
   </div>
 </template>
 
-<script setup>
-import {
+<script setup>import {
   BuildingStorefrontIcon,
   EnvelopeIcon,
   ShareIcon,

@@ -244,8 +244,7 @@
   </div>
 </template>
 
-<script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+<script setup>import { ref, reactive, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { providerService } from '@/services/userService'
 import { useToast } from '@/utils/useToast'

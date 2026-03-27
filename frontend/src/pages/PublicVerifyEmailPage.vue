@@ -55,8 +55,7 @@
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue'
+<script setup>import { ref, onMounted } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { CheckCircleIcon, XCircleIcon, ArrowRightCircleIcon } from '@heroicons/vue/24/outline'
 

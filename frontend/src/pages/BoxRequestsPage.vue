@@ -212,8 +212,7 @@
   </div>
 </template>
 
-<script setup>
-import { ref, computed, onMounted, watch, nextTick } from 'vue'
+<script setup>import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import {
   InboxIcon, PhotoIcon, CheckCircleIcon, XCircleIcon,
   MagnifyingGlassIcon, QrCodeIcon,
@@ -270,7 +269,6 @@ async function fetchRequests(page = 1) {
 async function selectRequest(req) {
   validationNote.value = ''
   actionError.value = ''
-
   try {
     const res = await fetch(`${BASE}/deposits/${req.id}`, { credentials: 'include' })
     if (!res.ok) throw new Error()
@@ -297,7 +295,6 @@ async function updateStatus(status) {
     }
     const updated = await res.json()
     selectedRequest.value = updated
-
     const idx = requests.value.findIndex(r => r.id === updated.id)
     if (idx !== -1) requests.value[idx] = { ...requests.value[idx], status: updated.status }
     validationNote.value = ''

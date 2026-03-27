@@ -200,8 +200,7 @@
   </div>
 </template>
 
-<script setup>
-import { RouterLink } from 'vue-router'
+<script setup>import { RouterLink } from 'vue-router'
 import {
   ChatBubbleLeftEllipsisIcon,
   LightBulbIcon,

@@ -291,8 +291,7 @@
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+<script setup>import { ref, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import api from '@/services/api'

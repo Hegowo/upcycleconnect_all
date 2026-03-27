@@ -327,8 +327,7 @@
 .tab-scroll::-webkit-scrollbar { display: none; }
 </style>
 
-<script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+<script setup>import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { userService } from '@/services/userService'

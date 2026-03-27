@@ -192,8 +192,7 @@
   </div>
 </template>
 
-<script setup>
-import {
+<script setup>import {
   ChatBubbleLeftEllipsisIcon,
   FolderOpenIcon,
   NewspaperIcon,

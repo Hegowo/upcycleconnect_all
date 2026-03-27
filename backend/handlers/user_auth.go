@@ -253,7 +253,6 @@ func (h *UserAuthHandler) VerifyLogin(c *gin.Context) {
 			ev.UserID, *ev.IPAddress, now,
 		)
 	}
-
 	clientIP := c.ClientIP()
 	h.DB.Exec(
 		"INSERT IGNORE INTO user_known_ips (user_id, ip_address, created_at) VALUES (?, ?, ?)",

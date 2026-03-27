@@ -112,8 +112,7 @@
   </div>
 </template>
 
-<script setup>
-import { ref, reactive, onMounted } from 'vue'
+<script setup>import { ref, reactive, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { categoryService } from '@/services/categoryService'
 import { useToast } from '@/utils/useToast'

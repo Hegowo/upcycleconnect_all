@@ -166,8 +166,7 @@
   </div>
 </template>
 
-<script setup>
-import { ref, computed, onMounted } from 'vue'
+<script setup>import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserAuthStore } from '@/stores/userAuth'
 import {

@@ -461,8 +461,7 @@
   </div>
 </template>
 
-<script setup>
-import { ref, computed } from 'vue'
+<script setup>import { ref, computed } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useUserAuthStore } from '@/stores/userAuth'
 import {
@@ -564,7 +563,6 @@ async function fetchSiret(siret) {
 function useCompanyData() {
   const d = companyData.value?.infolegales
   if (!d) return
-
   if (step.value === 'siret-confirm') {
     form.value.companyName = d.nomcommercialrne || d.nomcommercialinsee || d.denorne || d.denoinsee || ''
     form.value.siret       = siretInput.value
@@ -606,7 +604,6 @@ async function handleRegister() {
       activity:     form.value.activity || null,
       address:      form.value.address || null,
     })
-
     step.value = 'done'
   } catch (e) {
     error.value = e.message || 'Une erreur est survenue. Veuillez réessayer.'

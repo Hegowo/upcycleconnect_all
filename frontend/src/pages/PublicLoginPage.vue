@@ -103,8 +103,7 @@
   </div>
 </template>
 
-<script setup>
-import { ref, computed } from 'vue'
+<script setup>import { ref, computed } from 'vue'
 import { RouterLink, useRouter, useRoute } from 'vue-router'
 import { EyeIcon, EyeSlashIcon, ExclamationTriangleIcon, ArrowRightCircleIcon, CheckCircleIcon, ShieldCheckIcon } from '@heroicons/vue/24/outline'
 import { useUserAuthStore } from '@/stores/userAuth'

@@ -211,8 +211,7 @@
   </div>
 </template>
 
-<script setup>
-import { ref, reactive, onMounted } from 'vue'
+<script setup>import { ref, reactive, onMounted } from 'vue'
 import { prestationService } from '@/services/prestationService'
 import { categoryService } from '@/services/categoryService'
 import { useToast } from '@/utils/useToast'

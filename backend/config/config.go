@@ -11,7 +11,6 @@ type Config struct {
 	DBPassword    string
 	LogLevel      string
 	SocieteApiKey string
-
 	SMTPHost     string
 	SMTPPort     string
 	SMTPUser     string
