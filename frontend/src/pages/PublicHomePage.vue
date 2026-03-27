@@ -1,7 +1,7 @@
 <template>
   <div class="bg-[#f8fafc]">
 
-    <section class="relative overflow-hidden px-8 pt-32 pb-24">
+    <section class="relative overflow-hidden px-4 sm:px-8 pt-20 sm:pt-32 pb-16 sm:pb-24">
 
       <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-[rgba(28,130,65,0.05)] blur-[32px] pointer-events-none" />
       <div class="absolute right-[-96px] top-[-96px] w-[400px] h-[400px] rounded-full bg-[rgba(25,86,135,0.05)] blur-[32px] pointer-events-none" />
@@ -9,7 +9,7 @@
       <div class="max-w-[1280px] mx-auto relative">
         <div class="flex flex-col items-center gap-6 max-w-[896px] mx-auto text-center">
 
-          <h1 class="font-jakarta font-bold text-[#0f172a] tracking-[-0.025em] text-5xl md:text-[72px] leading-[1] md:leading-[72px]">
+          <h1 class="font-jakarta font-bold text-[#0f172a] tracking-[-0.025em] text-4xl sm:text-5xl md:text-[72px] leading-tight md:leading-[72px]">
             Donnez une
             <span class="text-[#1c8241]"> seconde vie</span>
             <br />à vos objets
@@ -38,7 +38,7 @@
       </div>
     </section>
 
-    <section class="bg-white border-t border-b border-[#e2e8f0] py-24 px-8">
+    <section class="bg-white border-t border-b border-[#e2e8f0] py-16 sm:py-24 px-4 sm:px-8">
       <div class="max-w-[1280px] mx-auto flex flex-col gap-12">
 
         <div class="flex flex-col items-center gap-4 text-center">
@@ -50,11 +50,11 @@
           </p>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6" style="grid-template-rows: 198px 218px;">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
 
           <RouterLink
             to="/prestations"
-            class="col-span-2 row-span-2 relative flex flex-col justify-between p-8 rounded-[32px] overflow-hidden border border-[#bbf7d0] cursor-pointer hover:shadow-lg transition-shadow"
+            class="sm:col-span-2 md:col-span-2 md:row-span-2 min-h-[280px] relative flex flex-col justify-between p-8 rounded-[32px] overflow-hidden border border-[#bbf7d0] cursor-pointer hover:shadow-lg transition-shadow"
             style="background: linear-gradient(143deg, #f0fdf4 0%, #d1fae5 100%);"
           >
             <div class="absolute top-0 right-0 w-40 h-36 opacity-20">
@@ -126,10 +126,10 @@
       </div>
     </section>
 
-    <section class="py-20 px-8">
+    <section class="py-12 sm:py-20 px-4 sm:px-8">
       <div class="max-w-[1280px] mx-auto">
         <div
-          class="relative overflow-hidden rounded-[32px] px-16 py-20 flex flex-col md:flex-row items-center justify-between gap-10 shadow-xl"
+          class="relative overflow-hidden rounded-[32px] px-6 sm:px-16 py-12 sm:py-20 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-10 shadow-xl text-center md:text-left"
           style="background: #195687;"
         >
           <div class="flex flex-col gap-4 max-w-lg">

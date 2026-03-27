@@ -1,10 +1,10 @@
 <template>
   <div class="bg-[#f7f9ff]">
 
-    <section class="px-6 pt-16 pb-12 max-w-[1280px] mx-auto">
-      <div class="flex flex-col md:flex-row items-start gap-16">
+    <section class="px-4 sm:px-6 pt-10 sm:pt-16 pb-8 sm:pb-12 max-w-[1280px] mx-auto">
+      <div class="flex flex-col md:flex-row items-start gap-8 md:gap-16">
         <div class="flex-1 flex flex-col gap-6">
-          <h1 class="font-jakarta font-extrabold text-[#001d32] text-[64px] leading-[72px] tracking-[-0.025em]">
+          <h1 class="font-jakarta font-extrabold text-[#001d32] text-4xl sm:text-5xl md:text-[64px] md:leading-[72px] leading-tight tracking-[-0.025em]">
             Nos Événements<br />
             <span class="text-[#006d35]">& Formations</span>
           </h1>
@@ -14,7 +14,7 @@
           </p>
         </div>
 
-        <div class="shrink-0 relative w-80 h-80">
+        <div class="hidden md:block shrink-0 relative w-72 h-72 lg:w-80 lg:h-80">
           <div class="absolute inset-0 bg-[rgba(0,109,53,0.05)] blur-[32px] rounded-full" />
           <div class="relative w-full h-full rounded-[40px] overflow-hidden shadow-2xl rotate-3 bg-gradient-to-br from-[#dbeafe] to-[#bfdbfe] flex items-center justify-center">
             <CalendarDaysIcon class="w-32 h-32 text-[#1d4ed8]/30" />
