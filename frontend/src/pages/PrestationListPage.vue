@@ -6,6 +6,23 @@
       <p class="text-sm text-[#40617f] mt-0.5 hidden sm:block">Prestations & Services — Gérez l'offre de la plateforme</p>
     </div>
 
+    <div class="bg-white rounded-2xl border border-[#f1f5f9] shadow-sm p-4">
+      <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
+        <div class="text-center">
+          <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Prévision Revenus</p>
+          <p class="text-lg font-bold text-[#001d32]">12 400 €</p>
+        </div>
+        <div class="text-center">
+          <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Apprenants Actifs</p>
+          <p class="text-lg font-bold text-[#001d32]">{{ meta.total ?? 0 }}</p>
+        </div>
+        <div class="text-center">
+          <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Total Prestations</p>
+          <p class="text-lg font-bold text-[#001d32]">{{ meta.total ?? 0 }}</p>
+        </div>
+      </div>
+    </div>
+
     <div class="lg:hidden">
       <button @click="showFilters = !showFilters" class="flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg border border-[#e5e7eb] text-[#374151] hover:bg-gray-50 transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/></svg>
@@ -162,30 +179,6 @@
 
         <div v-if="prestations.length" class="mt-4 flex justify-end">
           <AppPagination :current-page="meta.current_page" :last-page="meta.last_page" @page-change="fetchPrestations" />
-        </div>
-      </div>
-    </div>
-
-    <div class="bg-white rounded-2xl border border-[#f1f5f9] shadow-sm p-4">
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
-        <div class="text-center">
-          <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Prévision Revenus</p>
-          <p class="text-lg font-bold text-[#001d32]">12 400 €</p>
-        </div>
-        <div class="text-center">
-          <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Apprenants Actifs</p>
-          <p class="text-lg font-bold text-[#001d32]">{{ meta.total ?? 0 }}</p>
-        </div>
-        <div class="text-center">
-          <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Santé Système</p>
-          <div class="flex items-center justify-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-green-500"></span>
-            <p class="text-lg font-bold text-green-600">99.9% Up</p>
-          </div>
-        </div>
-        <div class="text-center">
-          <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Total Prestations</p>
-          <p class="text-lg font-bold text-[#001d32]">{{ meta.total ?? 0 }}</p>
         </div>
       </div>
     </div>

@@ -3,7 +3,6 @@
 
     <div class="flex items-center gap-3 px-4 py-4 border-b border-[#e5e7eb]">
       <img src="/logoentier.png" alt="UpcycleConnect" class="h-9 w-auto object-contain" />
-      <p class="text-[10px] font-semibold tracking-widest uppercase text-gray-400 whitespace-nowrap">Admin Terminal</p>
     </div>
 
     <nav class="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
@@ -55,15 +54,6 @@
         </RouterLink>
       </template>
     </nav>
-
-    <div class="px-3 pb-3">
-      <button class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-white text-sm font-semibold transition hover:opacity-90" style="background-color:#006d35;">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-        </svg>
-        {{ t('nav.newReport') }}
-      </button>
-    </div>
 
     <div class="px-4 py-4 border-t border-[#e5e7eb]">
       <div class="flex items-center gap-3">
