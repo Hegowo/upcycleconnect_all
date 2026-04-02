@@ -75,7 +75,6 @@ function isActive(to) {
 .nav-scroll::-webkit-scrollbar {
   display: none;
 }
-
 .nav-safe {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
