@@ -23,7 +23,6 @@ const route = useRoute()
 </script>
 
 <style scoped>
-
 @media (max-width: 1023px) {
   .main-pad {
     padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
