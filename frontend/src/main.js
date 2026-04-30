@@ -5,6 +5,10 @@ import router from './router'
 import i18n from '@/utils/i18n.js'
 import './assets/main.css'
 
+window.addEventListener('vite:preloadError', () => {
+  window.location.reload()
+})
+
 const app = createApp(App)
 
 app.use(createPinia())
