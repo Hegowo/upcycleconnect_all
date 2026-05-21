@@ -86,6 +86,7 @@ import {
   InboxIcon,
   CodeBracketIcon,
   MapPinIcon,
+  ChatBubbleLeftEllipsisIcon,
 } from '@heroicons/vue/24/outline'
 
 const { t } = useI18n()
@@ -103,6 +104,7 @@ const navItems = computed(() => [
   { to: '/admin/categories',   icon: TagIcon,                   label: t('nav.categories') },
   { to: '/admin/prestations',  icon: ClipboardDocumentListIcon, label: t('nav.prestations') },
   { to: '/admin/events',       icon: CalendarIcon,              label: t('nav.events') },
+  { to: '/admin/forum',        icon: ChatBubbleLeftEllipsisIcon, label: t('nav.forum') },
   { to: '/admin/logs',         icon: ClockIcon,                 label: t('nav.logs') },
   { to: '/admin/box-requests',      icon: InboxIcon,    label: t('nav.boxRequests') },
   { to: '/admin/collection-points', icon: MapPinIcon,   label: t('nav.collectionPoints') },
