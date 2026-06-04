@@ -30,7 +30,8 @@ type PaymentHandler struct {
 }
 
 type reserveRequest struct {
-	Notes *string `json:"notes"`
+	Notes     *string `json:"notes"`
+	Signature string  `json:"signature"`
 }
 
 func (h *PaymentHandler) Reserve(c *gin.Context) {
@@ -74,6 +75,12 @@ func (h *PaymentHandler) Reserve(c *gin.Context) {
 	}
 	amountCents := int64(math.Round(amountFloat * 100))
 
+	sigBytes, sigErr := decodeSignaturePNG(req.Signature)
+	if sigErr != nil {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Signature requise : " + sigErr.Error()})
+		return
+	}
+
 	reservation := models.Reservation{
 		UserID:       user.ID,
 		PrestationID: prestation.ID,
@@ -84,6 +91,15 @@ func (h *PaymentHandler) Reserve(c *gin.Context) {
 	}
 	if err := h.DB.Create(&reservation).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Erreur lors de la création de la réservation"})
+		return
+	}
+
+	contract, cerr := createSignedContract(h.DB, h.PDF, user, &prestation,
+		reservation.ID, amountCents, "eur", sigBytes, c.ClientIP())
+	if cerr != nil {
+		h.DB.Unscoped().Delete(&reservation)
+		log.Printf("[reserve] contract creation failed: %v", cerr)
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Erreur lors de l'enregistrement du contrat"})
 		return
 	}
 
@@ -112,10 +128,13 @@ func (h *PaymentHandler) Reserve(c *gin.Context) {
 	h.Audit.Log(c, "reservation.created", "Reservation", &reservation.ID, nil, map[string]interface{}{
 		"prestation_id": prestation.ID,
 		"amount_cents":  amountCents,
+		"contract_id":   contract.ID,
 	})
 
 	c.JSON(http.StatusOK, gin.H{
 		"reservation_id": reservation.ID,
+		"contract_id":    contract.ID,
+		"contract_number": contract.Number,
 		"checkout_url":   sess.URL,
 		"session_id":     sess.ID,
 	})
@@ -303,6 +322,10 @@ func (h *PaymentHandler) fulfillReservation(session *stripe.CheckoutSession) err
 	if err := h.DB.Create(&invoice).Error; err != nil {
 		return fmt.Errorf("enregistrement facture: %w", err)
 	}
+
+	h.DB.Model(&models.Contract{}).
+		Where("reservation_id = ?", reservation.ID).
+		Update("status", "active")
 
 	reservation.Status = "paid"
 	if session.PaymentIntent != nil {
