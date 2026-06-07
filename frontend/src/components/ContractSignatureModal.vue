@@ -185,8 +185,12 @@ import { userApi } from '@/services/publicApi'
 const props = defineProps({
   show: { type: Boolean, default: false },
   prestationId: { type: [Number, String], default: null },
+
+  reservationId: { type: [Number, String], default: null },
   notes: { type: String, default: '' },
 })
+
+const mode = computed(() => props.reservationId ? 'accept-quote' : 'reserve')
 
 const emit = defineEmits(['close', 'signed'])
 
@@ -281,11 +285,14 @@ function reset() {
 }
 
 async function fetchPreview() {
-  if (!props.prestationId) return
+  if (!props.prestationId && !props.reservationId) return
   loading.value = true
   errorMsg.value = ''
   try {
-    data.value = await userApi(`/prestations/${props.prestationId}/contract-preview`)
+    const url = mode.value === 'accept-quote'
+      ? `/reservations/${props.reservationId}/quote-contract-preview`
+      : `/prestations/${props.prestationId}/contract-preview`
+    data.value = await userApi(url)
   } catch (e) {
     errorMsg.value = e.message || 'Impossible de charger le contrat.'
   } finally {
@@ -303,7 +310,10 @@ async function submit() {
   submitting.value = true
   try {
     const signature = canvas.value.toDataURL('image/png')
-    const res = await userApi(`/prestations/${props.prestationId}/reserve`, {
+    const url = mode.value === 'accept-quote'
+      ? `/reservations/${props.reservationId}/accept-quote`
+      : `/prestations/${props.prestationId}/reserve`
+    const res = await userApi(url, {
       method: 'POST',
       body: JSON.stringify({
         notes: props.notes || null,
