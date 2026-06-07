@@ -15,6 +15,22 @@
 
       <template v-else>
 
+        <RouterLink
+          to="/communaute/conseils"
+          class="group flex items-center justify-between gap-4 bg-gradient-to-br from-[#006d35] to-[#1b8848] rounded-2xl p-5 mb-6 hover:shadow-lg transition"
+        >
+          <div class="flex items-center gap-4 min-w-0">
+            <div class="w-12 h-12 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
+              <LightBulbIcon class="w-6 h-6 text-white" />
+            </div>
+            <div class="min-w-0">
+              <p class="font-jakarta font-extrabold text-white text-lg leading-tight">Conseils & astuces</p>
+              <p class="text-white/80 text-xs mt-0.5">Articles publiés par l'équipe UpcycleConnect pour vous accompagner.</p>
+            </div>
+          </div>
+          <ArrowRightIcon class="w-5 h-5 text-white opacity-70 group-hover:translate-x-1 transition" />
+        </RouterLink>
+
         <section class="relative rounded-2xl overflow-hidden mb-10 bg-gradient-to-br from-[#001d32] to-[#003060] p-8 sm:p-12">
           <div class="relative z-10">
             <p class="text-[#7dd3b0] text-xs font-bold uppercase tracking-widest mb-2">{{ t('public.community.heroTag') }}</p>
@@ -189,6 +205,8 @@ import {
   PencilSquareIcon,
   XMarkIcon,
   LockClosedIcon,
+  LightBulbIcon,
+  ArrowRightIcon,
 } from '@heroicons/vue/24/outline'
 
 const { t, locale } = useI18n()
