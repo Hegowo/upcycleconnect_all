@@ -12,6 +12,8 @@ type ProviderProfile struct {
 	Status      string     `gorm:"size:20;default:pending" json:"status"`
 
 	KbisPath    *string    `gorm:"size:500" json:"kbis_path"`
+
+	OnboardingCompletedAt *time.Time `json:"onboarding_completed_at"`
 	ApprovedAt  *time.Time `json:"approved_at"`
 	ApprovedBy  *uint      `json:"approved_by"`
 	CreatedAt   time.Time  `json:"created_at"`
@@ -30,6 +32,7 @@ type ProviderProfileResponse struct {
 	Website     *string `json:"website"`
 	Status      string  `json:"status"`
 	HasKbis     bool    `json:"has_kbis"`
+	IsOnboarded bool    `json:"is_onboarded"`
 	ApprovedAt  *string `json:"approved_at"`
 }
 
@@ -50,6 +53,7 @@ func ToProviderProfileResponse(p *ProviderProfile) *ProviderProfileResponse {
 		Website:     p.Website,
 		Status:      p.Status,
 		HasKbis:     p.KbisPath != nil && *p.KbisPath != "",
+		IsOnboarded: p.OnboardingCompletedAt != nil,
 		ApprovedAt:  approvedAt,
 	}
 }

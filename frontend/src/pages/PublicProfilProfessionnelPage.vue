@@ -222,6 +222,12 @@
         </div>
       </template>
     </template>
+
+    <ProOnboardingWizard
+      :show="showOnboarding"
+      :company-name="profile?.company_name || ''"
+      @done="onOnboardingDone"
+    />
   </div>
 </template>
 
@@ -241,6 +247,7 @@ import {
 } from '@heroicons/vue/24/outline'
 import { useUserAuthStore } from '@/stores/userAuth'
 import { userApi } from '@/services/publicApi'
+import ProOnboardingWizard from '@/components/ProOnboardingWizard.vue'
 
 const router   = useRouter()
 const userAuth = useUserAuthStore()
@@ -251,9 +258,15 @@ const realProjects = ref([])
 const prestations  = ref([])
 const projectCount   = ref(0)
 const prestationCount = ref(0)
-const editing  = ref(false)
-const saving   = ref(false)
+const editing   = ref(false)
+const saving    = ref(false)
 const saveError = ref('')
+const showOnboarding = ref(false)
+
+function onOnboardingDone() {
+  showOnboarding.value = false
+  loadData()
+}
 
 const editForm = ref({ company_name: '', description: '', website: '' })
 
@@ -292,6 +305,10 @@ async function loadData() {
         company_name: profile.value.company_name || '',
         description:  profile.value.description  || '',
         website:      profile.value.website       || '',
+      }
+
+      if (profile.value.status === 'approved' && profile.value.is_onboarded === false) {
+        showOnboarding.value = true
       }
     }
   } catch {}
