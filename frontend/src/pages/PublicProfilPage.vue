@@ -255,6 +255,11 @@ onMounted(async () => {
     router.push('/connexion?redirect=/profil')
     return
   }
+
+  if (userAuth.isProvider) {
+    router.replace('/profil/pro')
+    return
+  }
   try {
     const res = await fetch('/api/v1/profile', {
       headers: {
