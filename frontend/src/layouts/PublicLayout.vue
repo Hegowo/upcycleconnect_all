@@ -298,9 +298,7 @@ const mobileMenuOpen = ref(false)
 const searchRef = ref(null)
 const showOnboarding = ref(false)
 
-onMounted(async () => {
-  await userAuth.init()
-
+onMounted(() => {
   if (userAuth.isLoggedIn
       && userAuth.user
       && !userAuth.user.onboarding_completed_at

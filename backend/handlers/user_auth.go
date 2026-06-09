@@ -145,7 +145,7 @@ func (h *UserAuthHandler) Login(c *gin.Context) {
 		}
 		c.JSON(http.StatusOK, gin.H{
 			"token": tokenStr,
-			"user":  models.ToUserResponse(&user),
+			"user":  h.userWithProfile(&user),
 		})
 		return
 	}
@@ -262,21 +262,14 @@ func (h *UserAuthHandler) VerifyLogin(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"token": tokenStr,
-		"user":  models.ToUserResponse(&user),
+		"user":  h.userWithProfile(&user),
 	})
 }
 
-func (h *UserAuthHandler) Me(c *gin.Context) {
-	user := middleware.GetAuthUser(c)
-	if user == nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"message": "Non authentifié"})
-		return
-	}
-
+func (h *UserAuthHandler) userWithProfile(user *models.User) map[string]interface{} {
 	h.DB.Preload("ProviderProfile").First(user, user.ID)
 	resp := models.ToUserResponse(user)
-
-	data := map[string]interface{}{
+	return map[string]interface{}{
 		"id":                      resp.ID,
 		"email":                   resp.Email,
 		"first_name":              resp.FirstName,
@@ -292,7 +285,15 @@ func (h *UserAuthHandler) Me(c *gin.Context) {
 		"updated_at":              resp.UpdatedAt,
 		"provider_profile":        models.ToProviderProfileResponse(user.ProviderProfile),
 	}
-	c.JSON(http.StatusOK, data)
+}
+
+func (h *UserAuthHandler) Me(c *gin.Context) {
+	user := middleware.GetAuthUser(c)
+	if user == nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "Non authentifié"})
+		return
+	}
+	c.JSON(http.StatusOK, h.userWithProfile(user))
 }
 
 func (h *UserAuthHandler) Logout(c *gin.Context) {
@@ -306,7 +307,7 @@ func (h *UserAuthHandler) CompleteOnboarding(c *gin.Context) {
 		return
 	}
 	if user.OnboardingCompletedAt != nil {
-		c.JSON(http.StatusOK, models.ToUserResponse(user))
+		c.JSON(http.StatusOK, h.userWithProfile(user))
 		return
 	}
 	now := time.Now()
@@ -315,7 +316,7 @@ func (h *UserAuthHandler) CompleteOnboarding(c *gin.Context) {
 		return
 	}
 	user.OnboardingCompletedAt = &now
-	c.JSON(http.StatusOK, models.ToUserResponse(user))
+	c.JSON(http.StatusOK, h.userWithProfile(user))
 }
 
 func (h *UserAuthHandler) ResetPassword(c *gin.Context) {
