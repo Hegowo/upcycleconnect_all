@@ -125,6 +125,8 @@
       </div>
     </section>
 
+    <SponsoredCampaigns wrapper-class="py-12 sm:py-16 bg-[#f7f9ff]" />
+
     <section class="py-12 sm:py-20 px-4 sm:px-8">
       <div class="max-w-[1280px] mx-auto">
         <div
@@ -162,6 +164,7 @@ import {
   EllipsisHorizontalIcon,
   ChevronRightIcon,
 } from '@heroicons/vue/24/outline'
+import SponsoredCampaigns from '@/components/SponsoredCampaigns.vue'
 
 const { t } = useI18n()
 </script>
