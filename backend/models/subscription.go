@@ -27,10 +27,8 @@ var SubscriptionPlans = map[string]struct {
 		Label:       "Basic",
 		AmountCents: 1500,
 		Features: []string{
-			"Accès aux annonces avec achats",
-			"Récupération d'objets en conteneurs",
-			"Gestion de vos projets d'upcycling",
-			"Tableau de bord basique",
+			"Tableaux de bord avancés (chiffre d'affaires, réservations)",
+			"Statistiques sur les matériaux disponibles",
 		},
 	},
 	"premium": {
@@ -38,12 +36,9 @@ var SubscriptionPlans = map[string]struct {
 		AmountCents: 3000,
 		Features: []string{
 			"Tout ce qui est inclus dans Basic",
-			"Tableaux de bord avancés",
 			"Analyse d'impact écologique détaillée",
-			"Statistiques sur les matériaux disponibles",
 			"Alertes priorisées pour la collecte",
-			"Mise en avant de vos projets",
-			"Gestion de campagnes publicitaires",
+			"Gestion de campagnes publicitaires (mise en avant)",
 		},
 	},
 }

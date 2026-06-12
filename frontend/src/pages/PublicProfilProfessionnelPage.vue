@@ -48,9 +48,13 @@
               <p v-if="profile.description" class="text-[#001d32] text-sm leading-relaxed max-w-xl mb-4">{{ profile.description }}</p>
 
               <div class="flex gap-2 flex-wrap">
-                <RouterLink to="/profil/pro/projets"
+                <RouterLink to="/profil/pro/dashboard"
                   class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-white text-sm font-bold hover:opacity-90 transition"
                   style="background:linear-gradient(135deg,#006d35,#1b8848);">
+                  <ChartBarIcon class="w-4 h-4" /> Tableau de bord
+                </RouterLink>
+                <RouterLink to="/profil/pro/projets"
+                  class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-[#006d35] text-[#006d35] text-sm font-bold hover:bg-[#edf4ff] transition bg-white">
                   <WrenchScrewdriverIcon class="w-4 h-4" /> Mes projets
                 </RouterLink>
                 <RouterLink to="/profil/pro/evenements"
@@ -241,6 +245,7 @@ import {
   QrCodeIcon,
   StarIcon,
   MegaphoneIcon,
+  ChartBarIcon,
   Cog6ToothIcon,
   CheckBadgeIcon,
   ExclamationTriangleIcon,
