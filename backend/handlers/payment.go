@@ -642,6 +642,10 @@ func (h *PaymentHandler) fulfillReservation(session *stripe.CheckoutSession) err
 		Update("status", "active")
 
 	reservation.Status = "paid"
+
+	commission, net := models.ComputeCommission(reservation.AmountCents)
+	reservation.CommissionCents = commission
+	reservation.NetCents = net
 	if session.PaymentIntent != nil {
 		pi := session.PaymentIntent.ID
 		reservation.StripePaymentIntentID = &pi
