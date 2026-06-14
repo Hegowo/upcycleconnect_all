@@ -153,7 +153,13 @@ async function onItemClick(n) {
   }
   if (n.link) {
     open.value = false
-    router.push(n.link)
+    const link = String(n.link).trim()
+
+    if (/^(https?:)?\/\//i.test(link) || link.startsWith('mailto:') || link.startsWith('tel:')) {
+      window.open(link, '_blank', 'noopener')
+    } else {
+      router.push(link.startsWith('/') ? link : `/${link}`)
+    }
   }
 }
 
