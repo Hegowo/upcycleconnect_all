@@ -263,6 +263,7 @@ html.dark .fixed.inset-0.z-50 .btn-secondary  {
 
 .admin-dark .text-\[\#64748b\] { color: #94a3b8 !important; }
 .admin-dark .bg-\[\#fee2e2\]   { background-color: rgba(220,38,38,0.22) !important; }
+.admin-dark .bg-gray-300       { background-color: #475569 !important; }
 
 .admin-dark [style^="color: rgb(0, 109, 53)"],   .admin-dark [style*="; color: rgb(0, 109, 53)"]   { color: #4ade80 !important; }
 .admin-dark [style^="color: rgb(27, 136, 72)"],  .admin-dark [style*="; color: rgb(27, 136, 72)"]  { color: #4ade80 !important; }
@@ -293,3 +294,19 @@ html.dark .fixed.inset-0.z-50 .btn-secondary  {
 .admin-dark [style^="color: rgb(29, 78, 216)"], .admin-dark [style*="; color: rgb(29, 78, 216)"]   { color: #93c5fd !important; }
 .admin-dark [style^="color: rgb(17, 24, 39)"],  .admin-dark [style*="; color: rgb(17, 24, 39)"]    { color: #f1f5f9 !important; }
 .admin-dark [style^="color: rgb(107, 114, 128)"],.admin-dark [style*="; color: rgb(107, 114, 128)"]{ color: #94a3b8 !important; }
+
+.admin-dark [style*="rgb(237, 233, 254)"] { background-color: rgba(124,58,237,0.25) !important; }
+.admin-dark [style*="rgb(224, 242, 254)"] { background-color: rgba(14,165,233,0.25) !important; }
+.admin-dark [style*="rgb(252, 231, 243)"] { background-color: rgba(219,39,119,0.25) !important; }
+.admin-dark [style*="rgb(224, 231, 255)"] { background-color: rgba(79,70,229,0.25)  !important; }
+.admin-dark [style*="rgb(255, 247, 237)"] { background-color: rgba(234,88,12,0.20)  !important; }
+.admin-dark [style*="rgb(254, 242, 242)"] { background-color: rgba(220,38,38,0.20)  !important; }
+.admin-dark [style*="rgb(241, 245, 249)"] { background-color: #263244 !important; }
+
+.admin-dark [style^="color: rgb(124, 58, 237)"], .admin-dark [style*="; color: rgb(124, 58, 237)"] { color: #c4b5fd !important; }
+.admin-dark [style^="color: rgb(8, 145, 178)"],  .admin-dark [style*="; color: rgb(8, 145, 178)"]  { color: #67e8f9 !important; }
+.admin-dark [style^="color: rgb(157, 23, 77)"],  .admin-dark [style*="; color: rgb(157, 23, 77)"]  { color: #f9a8d4 !important; }
+.admin-dark [style^="color: rgb(67, 56, 202)"],  .admin-dark [style*="; color: rgb(67, 56, 202)"]  { color: #a5b4fc !important; }
+.admin-dark [style^="color: rgb(194, 65, 12)"],  .admin-dark [style*="; color: rgb(194, 65, 12)"]  { color: #fdba74 !important; }
+.admin-dark [style^="color: rgb(185, 28, 28)"],  .admin-dark [style*="; color: rgb(185, 28, 28)"]  { color: #fca5a5 !important; }
+.admin-dark [style^="color: rgb(71, 85, 105)"],  .admin-dark [style*="; color: rgb(71, 85, 105)"]  { color: #94a3b8 !important; }
