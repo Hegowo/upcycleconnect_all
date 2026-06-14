@@ -33,6 +33,16 @@ export const useUserAuthStore = defineStore('userAuth', () => {
   )
 
   async function register(payload) {
+    if (payload instanceof FormData) {
+      const res = await fetch(`${BASE}/auth/register`, {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body: payload,
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw Object.assign(new Error(json.message || 'Erreur réseau'), { status: res.status, data: json })
+      return json
+    }
     await apiFetch('/auth/register', { method: 'POST', body: JSON.stringify(payload) })
   }
 
