@@ -61,6 +61,11 @@ export const providerService = {
     const { data } = await api.put(`/providers/${id}/status`, { status })
     return data
   },
+
+  async downloadKbis(id) {
+    const response = await api.get(`/providers/${id}/kbis`, { responseType: 'blob' })
+    return response.data
+  },
 }
 
 export const adminUserService = {
