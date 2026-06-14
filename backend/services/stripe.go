@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/stripe/stripe-go/v76"
-	stripeSub "github.com/stripe/stripe-go/v76/subscription"
 	"github.com/stripe/stripe-go/v76/checkout/session"
+	stripeSub "github.com/stripe/stripe-go/v76/subscription"
 	"github.com/stripe/stripe-go/v76/webhook"
 
 	"upcycleconnect/backend/config"
@@ -67,10 +67,10 @@ func (s *StripeService) CreateCheckoutSession(p CheckoutParams) (*stripe.Checkou
 }
 
 type SubscriptionCheckoutParams struct {
-	UserID    uint
-	UserEmail string
-	Plan      string
-	Label     string
+	UserID      uint
+	UserEmail   string
+	Plan        string
+	Label       string
 	AmountCents int64
 }
 
@@ -80,7 +80,7 @@ func (s *StripeService) CreateSubscriptionCheckout(p SubscriptionCheckoutParams)
 	}
 	stripe.Key = s.cfg.StripeSecret
 	successURL := fmt.Sprintf("%s/profil/pro/abonnement?success=1&session_id={CHECKOUT_SESSION_ID}", s.cfg.AppURL)
-	cancelURL  := fmt.Sprintf("%s/profil/pro/abonnement?cancelled=1", s.cfg.AppURL)
+	cancelURL := fmt.Sprintf("%s/profil/pro/abonnement?cancelled=1", s.cfg.AppURL)
 	params := &stripe.CheckoutSessionParams{
 		Mode:          stripe.String(string(stripe.CheckoutSessionModeSubscription)),
 		SuccessURL:    stripe.String(successURL),
@@ -126,7 +126,7 @@ func (s *StripeService) CreateCampaignCheckout(userID, campaignID uint, userEmai
 	}
 	stripe.Key = s.cfg.StripeSecret
 	successURL := fmt.Sprintf("%s/profil/pro/campagnes?success=1&session_id={CHECKOUT_SESSION_ID}", s.cfg.AppURL)
-	cancelURL  := fmt.Sprintf("%s/profil/pro/campagnes?cancelled=1", s.cfg.AppURL)
+	cancelURL := fmt.Sprintf("%s/profil/pro/campagnes?cancelled=1", s.cfg.AppURL)
 	params := &stripe.CheckoutSessionParams{
 		Mode:          stripe.String(string(stripe.CheckoutSessionModePayment)),
 		SuccessURL:    stripe.String(successURL),

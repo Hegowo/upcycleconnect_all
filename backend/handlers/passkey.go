@@ -86,9 +86,9 @@ type waUser struct {
 	credentials []webauthn.Credential
 }
 
-func (u *waUser) WebAuthnID() []byte          { return []byte(fmt.Sprintf("%d", u.user.ID)) }
-func (u *waUser) WebAuthnName() string         { return u.user.Email }
-func (u *waUser) WebAuthnDisplayName() string  { return u.user.FirstName + " " + u.user.LastName }
+func (u *waUser) WebAuthnID() []byte                         { return []byte(fmt.Sprintf("%d", u.user.ID)) }
+func (u *waUser) WebAuthnName() string                       { return u.user.Email }
+func (u *waUser) WebAuthnDisplayName() string                { return u.user.FirstName + " " + u.user.LastName }
 func (u *waUser) WebAuthnCredentials() []webauthn.Credential { return u.credentials }
 
 func (h *PasskeyHandler) loadWAUser(userID uint) (*waUser, error) {

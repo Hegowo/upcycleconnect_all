@@ -146,11 +146,11 @@ func (h *PaymentHandler) Reserve(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"reservation_id": reservation.ID,
-		"contract_id":    contract.ID,
+		"reservation_id":  reservation.ID,
+		"contract_id":     contract.ID,
 		"contract_number": contract.Number,
-		"checkout_url":   sess.URL,
-		"session_id":     sess.ID,
+		"checkout_url":    sess.URL,
+		"session_id":      sess.ID,
 	})
 }
 

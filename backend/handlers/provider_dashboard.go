@@ -108,11 +108,11 @@ func (h *ProviderDashboardHandler) Dashboard(c *gin.Context) {
 		}
 
 		resp["advanced"] = gin.H{
-			"revenue_total_cents":   rev.Total,
-			"reservations_paid":     rev.Count,
-			"reservations_total":    reservationsTotal,
-			"monthly_revenue":       monthly,
-			"material_stats":        materials,
+			"revenue_total_cents": rev.Total,
+			"reservations_paid":   rev.Count,
+			"reservations_total":  reservationsTotal,
+			"monthly_revenue":     monthly,
+			"material_stats":      materials,
 		}
 	}
 

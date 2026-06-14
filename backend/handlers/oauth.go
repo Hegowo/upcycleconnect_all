@@ -37,7 +37,7 @@ func (h *OAuthHandler) buildUserWithProfile(user *models.User) map[string]interf
 		"avatar_url": resp.AvatarURL, "status": resp.Status,
 		"role": resp.Role, "email_verified_at": resp.EmailVerifiedAt,
 		"onboarding_completed_at": resp.OnboardingCompletedAt,
-		"created_at": resp.CreatedAt, "updated_at": resp.UpdatedAt,
+		"created_at":              resp.CreatedAt, "updated_at": resp.UpdatedAt,
 		"provider_profile": models.ToProviderProfileResponse(user.ProviderProfile),
 	}
 }

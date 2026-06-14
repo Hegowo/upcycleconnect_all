@@ -255,15 +255,15 @@ func (h *UserDepositHandler) Score(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"score":               score,
-		"level":               level,
-		"deposits_total":      totalCount,
-		"deposits_accepted":   acceptedCount,
-		"deposits_pending":    pendingCount,
-		"deposits_rejected":   rejectedCount,
-		"weight_saved_kg":     totalWeight,
-		"co2_saved_kg":        totalCarbon,
-		"events_attended":     regCount,
+		"score":             score,
+		"level":             level,
+		"deposits_total":    totalCount,
+		"deposits_accepted": acceptedCount,
+		"deposits_pending":  pendingCount,
+		"deposits_rejected": rejectedCount,
+		"weight_saved_kg":   totalWeight,
+		"co2_saved_kg":      totalCarbon,
+		"events_attended":   regCount,
 	})
 }
 

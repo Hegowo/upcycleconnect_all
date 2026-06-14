@@ -66,8 +66,8 @@ func (h *ContractHandler) Preview(c *gin.Context) {
 			"description": prestation.Description,
 			"price_type":  prestation.PriceType,
 		},
-		"amount_cents":   amountCents,
-		"currency":       "eur",
+		"amount_cents": amountCents,
+		"currency":     "eur",
 		"customer": gin.H{
 			"name":    strings.TrimSpace(user.FirstName + " " + user.LastName),
 			"email":   user.Email,

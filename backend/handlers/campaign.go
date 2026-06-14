@@ -92,8 +92,8 @@ func (h *CampaignHandler) CreateCampaign(c *gin.Context) {
 
 	if !h.hasPremiumSubscription(user.ID) {
 		c.JSON(http.StatusPaymentRequired, gin.H{
-			"message":  "La gestion de campagnes publicitaires nécessite un abonnement Premium.",
-			"upgrade":  "/profil/pro/abonnement",
+			"message": "La gestion de campagnes publicitaires nécessite un abonnement Premium.",
+			"upgrade": "/profil/pro/abonnement",
 		})
 		return
 	}
@@ -196,7 +196,7 @@ func (h *CampaignHandler) SubmitCampaign(c *gin.Context) {
 	if err != nil {
 		h.DB.Model(&camp).Updates(map[string]interface{}{"status": "pending"})
 		c.JSON(http.StatusOK, gin.H{
-			"message":     fmt.Sprintf("Campagne soumise (mode hors-ligne : %s)", err.Error()),
+			"message":      fmt.Sprintf("Campagne soumise (mode hors-ligne : %s)", err.Error()),
 			"checkout_url": nil,
 		})
 		return

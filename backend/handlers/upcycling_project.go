@@ -99,7 +99,9 @@ func (h *UpcyclingProjectHandler) CreateProject(c *gin.Context) {
 		return
 	}
 	status := req.Status
-	if status == "" { status = "in_progress" }
+	if status == "" {
+		status = "in_progress"
+	}
 	p := models.UpcyclingProject{
 		ProviderID:  user.ID,
 		Title:       req.Title,
@@ -140,7 +142,9 @@ func (h *UpcyclingProjectHandler) UpdateProject(c *gin.Context) {
 	p.Category = req.Category
 	p.CoverImage = req.CoverImage
 	p.ImpactLabel = req.ImpactLabel
-	if req.Status != "" { p.Status = req.Status }
+	if req.Status != "" {
+		p.Status = req.Status
+	}
 	h.DB.Save(&p)
 	h.DB.Preload("Provider").Preload("Steps", func(db *gorm.DB) *gorm.DB {
 		return db.Order("step_order ASC")

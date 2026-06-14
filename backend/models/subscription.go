@@ -19,9 +19,9 @@ type Subscription struct {
 func (Subscription) TableName() string { return "subscriptions" }
 
 var SubscriptionPlans = map[string]struct {
-	Label      string
+	Label       string
 	AmountCents int64
-	Features   []string
+	Features    []string
 }{
 	"basic": {
 		Label:       "Basic",

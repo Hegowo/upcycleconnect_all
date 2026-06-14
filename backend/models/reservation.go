@@ -7,11 +7,11 @@ import (
 )
 
 type Reservation struct {
-	ID                    uint           `gorm:"primaryKey" json:"id"`
-	UserID                uint           `gorm:"index;not null" json:"user_id"`
-	PrestationID          uint           `gorm:"index;not null" json:"prestation_id"`
-	Status                string         `gorm:"size:20;default:pending" json:"status"`
-	AmountCents           int64          `gorm:"not null;default:0" json:"amount_cents"`
+	ID           uint   `gorm:"primaryKey" json:"id"`
+	UserID       uint   `gorm:"index;not null" json:"user_id"`
+	PrestationID uint   `gorm:"index;not null" json:"prestation_id"`
+	Status       string `gorm:"size:20;default:pending" json:"status"`
+	AmountCents  int64  `gorm:"not null;default:0" json:"amount_cents"`
 
 	CommissionCents       int64          `gorm:"not null;default:0" json:"commission_cents"`
 	NetCents              int64          `gorm:"not null;default:0" json:"net_cents"`
@@ -32,14 +32,14 @@ func (Reservation) TableName() string {
 }
 
 type ReservationResponse struct {
-	ID           uint                `json:"id"`
-	Status       string              `json:"status"`
-	AmountCents  int64               `json:"amount_cents"`
-	Currency     string              `json:"currency"`
-	Notes        *string             `json:"notes"`
-	Prestation   *PrestationResponse `json:"prestation"`
-	CreatedAt    string              `json:"created_at"`
-	UpdatedAt    string              `json:"updated_at"`
+	ID          uint                `json:"id"`
+	Status      string              `json:"status"`
+	AmountCents int64               `json:"amount_cents"`
+	Currency    string              `json:"currency"`
+	Notes       *string             `json:"notes"`
+	Prestation  *PrestationResponse `json:"prestation"`
+	CreatedAt   string              `json:"created_at"`
+	UpdatedAt   string              `json:"updated_at"`
 }
 
 func ToReservationResponse(r *Reservation) ReservationResponse {

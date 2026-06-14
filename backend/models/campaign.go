@@ -61,7 +61,9 @@ type CampaignResponse struct {
 
 func ToCampaignResponse(c *Campaign) CampaignResponse {
 	fmtDate := func(t *time.Time) *string {
-		if t == nil { return nil }
+		if t == nil {
+			return nil
+		}
 		s := t.UTC().Format(time.RFC3339)
 		return &s
 	}

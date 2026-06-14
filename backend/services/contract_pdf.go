@@ -10,20 +10,20 @@ import (
 )
 
 type ContractData struct {
-	Number             string
-	SignedAt           time.Time
-	CustomerName       string
-	CustomerEmail      string
-	CustomerAddress    string
-	CustomerPhone      string
-	PrestationTitle    string
-	PrestationDesc     string
-	ProviderName       string
-	ProviderEmail      string
-	AmountCents        int64
-	Currency           string
-	SignedIP           string
-	SignaturePNG       []byte
+	Number          string
+	SignedAt        time.Time
+	CustomerName    string
+	CustomerEmail   string
+	CustomerAddress string
+	CustomerPhone   string
+	PrestationTitle string
+	PrestationDesc  string
+	ProviderName    string
+	ProviderEmail   string
+	AmountCents     int64
+	Currency        string
+	SignedIP        string
+	SignaturePNG    []byte
 }
 
 func (s *PDFService) GenerateContract(data ContractData) (string, error) {

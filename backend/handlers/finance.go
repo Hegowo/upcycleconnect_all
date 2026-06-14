@@ -67,10 +67,10 @@ func (h *FinanceHandler) Overview(c *gin.Context) {
 		"commission_rate_percent": int(models.CommissionRate * 100),
 		"platform_revenue_cents":  platformRevenue,
 		"transactions": gin.H{
-			"gross_cents":      tx.Gross,
-			"commission_cents": tx.Commission,
+			"gross_cents":            tx.Gross,
+			"commission_cents":       tx.Commission,
 			"net_to_providers_cents": tx.Net,
-			"count":            tx.Count,
+			"count":                  tx.Count,
 		},
 		"subscriptions": gin.H{
 			"active_count": subCount,
