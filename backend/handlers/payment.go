@@ -193,15 +193,42 @@ func (h *PaymentHandler) UpdateQuote(c *gin.Context) {
 	var req struct {
 		Amount  float64 `json:"amount"`
 		Message *string `json:"message"`
+		Lines   []struct {
+			Label  string  `json:"label"`
+			Amount float64 `json:"amount"`
+		} `json:"lines"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Données invalides."})
 		return
 	}
-	amountCents := int64(math.Round(req.Amount * 100))
+
+	var pdfLines []services.InvoiceLine
+	var lineItemsForDB []map[string]interface{}
+	var amountCents int64
+	for _, ln := range req.Lines {
+		label := strings.TrimSpace(ln.Label)
+		cents := int64(math.Round(ln.Amount * 100))
+		if label == "" || cents <= 0 {
+			continue
+		}
+		amountCents += cents
+		pdfLines = append(pdfLines, services.InvoiceLine{Label: label, AmountCents: cents})
+		lineItemsForDB = append(lineItemsForDB, map[string]interface{}{"label": label, "amount_cents": cents})
+	}
+	if len(pdfLines) == 0 {
+		amountCents = int64(math.Round(req.Amount * 100))
+	}
 	if amountCents <= 0 {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Le montant du devis doit être supérieur à 0."})
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Le devis doit comporter au moins une ligne avec un montant supérieur à 0."})
 		return
+	}
+	var lineItemsJSON *string
+	if len(lineItemsForDB) > 0 {
+		if b, err := json.Marshal(lineItemsForDB); err == nil {
+			s := string(b)
+			lineItemsJSON = &s
+		}
 	}
 
 	var quote models.Invoice
@@ -233,6 +260,7 @@ func (h *PaymentHandler) UpdateQuote(c *gin.Context) {
 		TVAPercent:      20.0,
 		Currency:        "eur",
 		Notes:           notes,
+		Lines:           pdfLines,
 	})
 	if gerr != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Erreur lors de la génération du devis."})
@@ -242,6 +270,7 @@ func (h *PaymentHandler) UpdateQuote(c *gin.Context) {
 	h.DB.Model(&quote).Updates(map[string]interface{}{
 		"amount_cents": amountCents,
 		"pdf_path":     pdfPath,
+		"line_items":   lineItemsJSON,
 		"issued_at":    time.Now(),
 	})
 	h.DB.Model(&reservation).Updates(map[string]interface{}{"status": "quote_issued", "amount_cents": amountCents})
@@ -868,6 +897,23 @@ func (h *PaymentHandler) ShowReservation(c *gin.Context) {
 
 	resp := models.ToReservationResponse(&reservation)
 
+	var quoteData gin.H
+	var quoteInv models.Invoice
+	if err := h.DB.Where("reservation_id = ? AND type = ?", reservation.ID, "quote").
+		Order("issued_at DESC").First(&quoteInv).Error; err == nil {
+		var lines []map[string]interface{}
+		if quoteInv.LineItems != nil && *quoteInv.LineItems != "" {
+			_ = json.Unmarshal([]byte(*quoteInv.LineItems), &lines)
+		}
+		quoteData = gin.H{
+			"id":           quoteInv.ID,
+			"number":       quoteInv.Number,
+			"amount_cents": quoteInv.AmountCents,
+			"has_pdf":      quoteInv.PDFPath != nil,
+			"lines":        lines,
+		}
+	}
+
 	var invoice models.Invoice
 	if err := h.DB.Where("reservation_id = ? AND user_id = ?", reservation.ID, user.ID).
 		Order("issued_at DESC").
@@ -876,6 +922,7 @@ func (h *PaymentHandler) ShowReservation(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"reservation":      resp,
 			"invoice":          inv,
+			"quote":            quoteData,
 			"is_provider_view": isProviderView,
 		})
 		return
@@ -884,6 +931,7 @@ func (h *PaymentHandler) ShowReservation(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"reservation":      resp,
 		"invoice":          nil,
+		"quote":            quoteData,
 		"is_provider_view": isProviderView,
 	})
 }
