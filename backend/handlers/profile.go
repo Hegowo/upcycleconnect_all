@@ -395,6 +395,11 @@ func (h *ProfileHandler) RegisterForEvent(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"message": "Événement introuvable."})
 		return
 	}
+
+	if event.CreatedBy != nil && *event.CreatedBy == user.ID {
+		c.JSON(http.StatusForbidden, gin.H{"message": "Vous ne pouvez pas vous inscrire à votre propre événement."})
+		return
+	}
 	if time.Now().After(event.EndDate) {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Cet événement est terminé."})
 		return
