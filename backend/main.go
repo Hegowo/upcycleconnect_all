@@ -59,6 +59,8 @@ func main() {
 
 	database.Seed(db)
 
+	database.MigrateDepositPhotos(db)
+
 	r := router.Setup(db, cfg)
 
 	port := os.Getenv("PORT")

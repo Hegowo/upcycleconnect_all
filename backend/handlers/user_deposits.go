@@ -19,6 +19,19 @@ type UserDepositHandler struct {
 	Audit *services.AuditService
 }
 
+const depositPhotosDir = "/uploads/deposits"
+
+func saveDepositPhoto(p *string) *string {
+	if p == nil || *p == "" {
+		return p
+	}
+	url, _, err := services.SaveDataURIImage(*p, depositPhotosDir, "/uploads/deposits")
+	if err != nil {
+		return p
+	}
+	return &url
+}
+
 func (h *UserDepositHandler) Index(c *gin.Context) {
 	user := middleware.GetAuthUser(c)
 
@@ -137,6 +150,10 @@ func (h *UserDepositHandler) Store(c *gin.Context) {
 		v := *req.EstimatedWeight * 2.5
 		carbon = &v
 	}
+
+	req.Photo1 = saveDepositPhoto(req.Photo1)
+	req.Photo2 = saveDepositPhoto(req.Photo2)
+	req.Photo3 = saveDepositPhoto(req.Photo3)
 
 	deposit := models.DepositRequest{
 		UserID:            user.ID,
