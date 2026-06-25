@@ -75,7 +75,7 @@ func (h *PaymentHandler) Reserve(c *gin.Context) {
 		return
 	}
 	amountFloat, err := strconv.ParseFloat(*prestation.Price, 64)
-	if err != nil || amountFloat <= 0 {
+	if err != nil || amountFloat < 0 {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Prix de la prestation invalide"})
 		return
 	}
@@ -106,6 +106,29 @@ func (h *PaymentHandler) Reserve(c *gin.Context) {
 		h.DB.Unscoped().Delete(&reservation)
 		log.Printf("[reserve] contract creation failed: %v", cerr)
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Erreur lors de l'enregistrement du contrat"})
+		return
+	}
+
+	if amountCents == 0 {
+		reservation.User = user
+		reservation.Prestation = &prestation
+		if ferr := h.finalizeReservation(&reservation, nil); ferr != nil {
+			h.DB.Unscoped().Delete(&reservation)
+			log.Printf("[reserve] free reservation finalize failed: %v", ferr)
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "Erreur lors de la confirmation de la réservation"})
+			return
+		}
+		h.Audit.Log(c, "reservation.created", "Reservation", &reservation.ID, nil, map[string]interface{}{
+			"prestation_id": prestation.ID,
+			"amount_cents":  0,
+			"contract_id":   contract.ID,
+		})
+		c.JSON(http.StatusOK, gin.H{
+			"reservation_id":  reservation.ID,
+			"contract_id":     contract.ID,
+			"contract_number": contract.Number,
+			"free":            true,
+		})
 		return
 	}
 
@@ -763,6 +786,15 @@ func (h *PaymentHandler) fulfillReservation(session *stripe.CheckoutSession) err
 		return fmt.Errorf("lookup réservation: %w", err)
 	}
 
+	var pi *string
+	if session.PaymentIntent != nil {
+		id := session.PaymentIntent.ID
+		pi = &id
+	}
+	return h.finalizeReservation(reservation, pi)
+}
+
+func (h *PaymentHandler) finalizeReservation(reservation *models.Reservation, paymentIntentID *string) error {
 	var existing models.Invoice
 	switch err := h.DB.Where("reservation_id = ? AND type = ?", reservation.ID, "invoice").
 		First(&existing).Error; {
@@ -819,9 +851,8 @@ func (h *PaymentHandler) fulfillReservation(session *stripe.CheckoutSession) err
 	commission, net := models.ComputeCommission(reservation.AmountCents)
 	reservation.CommissionCents = commission
 	reservation.NetCents = net
-	if session.PaymentIntent != nil {
-		pi := session.PaymentIntent.ID
-		reservation.StripePaymentIntentID = &pi
+	if paymentIntentID != nil {
+		reservation.StripePaymentIntentID = paymentIntentID
 	}
 	if err := h.DB.Save(reservation).Error; err != nil {
 		log.Printf("[webhook] invoice %s stored but reservation %d status save failed: %v", number, reservation.ID, err)
@@ -841,19 +872,33 @@ func (h *PaymentHandler) fulfillReservation(session *stripe.CheckoutSession) err
 
 	if h.Notifications != nil {
 		reservationLink := fmt.Sprintf("/profil/reservations/%d", reservation.ID)
-		h.Notifications.MustNotify(reservation.UserID, "payment.confirmed",
-			"Paiement confirmé",
-			fmt.Sprintf("Votre paiement de %s pour « %s » a bien été reçu. Votre facture %s est disponible.",
-				formatEUR(reservation.AmountCents), reservation.Prestation.Title, number),
-			reservationLink)
-		if reservation.Prestation.ProviderID != nil {
-			h.Notifications.MustNotify(*reservation.Prestation.ProviderID, "payment.received",
-				"Paiement reçu pour votre prestation",
-				fmt.Sprintf("Le client %s a payé %s pour « %s ».",
-					reservation.User.FirstName+" "+reservation.User.LastName,
-					formatEUR(reservation.AmountCents),
-					reservation.Prestation.Title),
+		clientName := reservation.User.FirstName + " " + reservation.User.LastName
+		if reservation.AmountCents == 0 {
+			h.Notifications.MustNotify(reservation.UserID, "reservation.confirmed",
+				"Réservation confirmée",
+				fmt.Sprintf("Votre réservation pour « %s » est confirmée. Votre reçu %s est disponible.",
+					reservation.Prestation.Title, number),
 				reservationLink)
+			if reservation.Prestation.ProviderID != nil {
+				h.Notifications.MustNotify(*reservation.Prestation.ProviderID, "reservation.received",
+					"Nouvelle réservation pour votre prestation",
+					fmt.Sprintf("Le client %s a réservé « %s » (prestation gratuite).",
+						clientName, reservation.Prestation.Title),
+					reservationLink)
+			}
+		} else {
+			h.Notifications.MustNotify(reservation.UserID, "payment.confirmed",
+				"Paiement confirmé",
+				fmt.Sprintf("Votre paiement de %s pour « %s » a bien été reçu. Votre facture %s est disponible.",
+					formatEUR(reservation.AmountCents), reservation.Prestation.Title, number),
+				reservationLink)
+			if reservation.Prestation.ProviderID != nil {
+				h.Notifications.MustNotify(*reservation.Prestation.ProviderID, "payment.received",
+					"Paiement reçu pour votre prestation",
+					fmt.Sprintf("Le client %s a payé %s pour « %s ».",
+						clientName, formatEUR(reservation.AmountCents), reservation.Prestation.Title),
+					reservationLink)
+			}
 		}
 	}
 

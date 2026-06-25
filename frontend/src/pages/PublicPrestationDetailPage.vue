@@ -178,6 +178,8 @@ function onContractSigned(res) {
   showContractModal.value = false
   if (res?.checkout_url) {
     window.location.href = res.checkout_url
+  } else if (res?.free && res?.reservation_id) {
+    router.push(`/profil/reservations/${res.reservation_id}`)
   } else {
     reserveError.value = t('public.prestationDetail.errorUnexpected')
   }
