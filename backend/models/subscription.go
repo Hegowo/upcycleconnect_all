@@ -1,6 +1,11 @@
 package models
 
-import "time"
+import (
+	"sync"
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type Subscription struct {
 	ID                   uint       `gorm:"primaryKey" json:"id"`
@@ -18,12 +23,26 @@ type Subscription struct {
 
 func (Subscription) TableName() string { return "subscriptions" }
 
-var SubscriptionPlans = map[string]struct {
+type SubscriptionPlan struct {
+	Key         string
 	Label       string
 	AmountCents int64
 	Features    []string
-}{
+}
+
+type SubscriptionPlanConfig struct {
+	Key         string    `gorm:"size:20;primaryKey" json:"key"`
+	AmountCents int64     `gorm:"not null" json:"amount_cents"`
+	UpdatedAt   time.Time `json:"updated_at"`
+}
+
+func (SubscriptionPlanConfig) TableName() string { return "subscription_plans" }
+
+var PlanOrder = []string{"basic", "premium"}
+
+var defaultSubscriptionPlans = map[string]SubscriptionPlan{
 	"basic": {
+		Key:         "basic",
 		Label:       "Basic",
 		AmountCents: 1500,
 		Features: []string{
@@ -32,6 +51,7 @@ var SubscriptionPlans = map[string]struct {
 		},
 	},
 	"premium": {
+		Key:         "premium",
 		Label:       "Premium",
 		AmountCents: 3000,
 		Features: []string{
@@ -41,6 +61,54 @@ var SubscriptionPlans = map[string]struct {
 			"Gestion de campagnes publicitaires (mise en avant)",
 		},
 	},
+}
+
+var (
+	planMu    sync.RWMutex
+	planCache = clonePlans()
+)
+
+func clonePlans() map[string]SubscriptionPlan {
+	out := make(map[string]SubscriptionPlan, len(defaultSubscriptionPlans))
+	for k, v := range defaultSubscriptionPlans {
+		out[k] = v
+	}
+	return out
+}
+
+func LoadSubscriptionPlans(db *gorm.DB) {
+	plans := clonePlans()
+	var rows []SubscriptionPlanConfig
+	if err := db.Find(&rows).Error; err == nil {
+		for _, r := range rows {
+			if p, ok := plans[r.Key]; ok {
+				p.AmountCents = r.AmountCents
+				plans[r.Key] = p
+			}
+		}
+	}
+	planMu.Lock()
+	planCache = plans
+	planMu.Unlock()
+}
+
+func Plan(key string) (SubscriptionPlan, bool) {
+	planMu.RLock()
+	defer planMu.RUnlock()
+	p, ok := planCache[key]
+	return p, ok
+}
+
+func PlansList() []SubscriptionPlan {
+	planMu.RLock()
+	defer planMu.RUnlock()
+	out := make([]SubscriptionPlan, 0, len(planCache))
+	for _, key := range PlanOrder {
+		if p, ok := planCache[key]; ok {
+			out = append(out, p)
+		}
+	}
+	return out
 }
 
 type SubscriptionResponse struct {
@@ -58,7 +126,7 @@ func ToSubscriptionResponse(s *Subscription) SubscriptionResponse {
 		v := s.CurrentPeriodEnd.UTC().Format(time.RFC3339)
 		end = &v
 	}
-	plan := SubscriptionPlans[s.Plan]
+	plan, _ := Plan(s.Plan)
 	return SubscriptionResponse{
 		ID:               s.ID,
 		Plan:             s.Plan,

@@ -32,7 +32,7 @@ func (h *FinanceHandler) Overview(c *gin.Context) {
 	var subMRR int64
 	subCount := int64(len(subs))
 	for _, s := range subs {
-		if plan, ok := models.SubscriptionPlans[s.Plan]; ok {
+		if plan, ok := models.Plan(s.Plan); ok {
 			subMRR += plan.AmountCents
 		}
 	}

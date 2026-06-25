@@ -150,6 +150,31 @@
     </div>
 
     <div v-else-if="activeTab === 'subscriptions'">
+      <div class="card p-5 mb-6">
+        <h3 class="font-bold text-[#001d32] mb-1">Tarifs des abonnements</h3>
+        <p class="text-xs text-[#64748b] mb-4">Modifiez le prix mensuel de chaque formule. Le nouveau tarif s'applique aux prochaines souscriptions.</p>
+        <div v-if="loadingPlans" class="py-6 text-center">
+          <div class="w-6 h-6 border-4 border-[#006d35] border-t-transparent rounded-full animate-spin mx-auto" />
+        </div>
+        <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div v-for="p in plans" :key="p.key" class="border border-[#e5e7eb] rounded-xl p-4">
+            <p class="font-bold text-[#001d32]">{{ p.label }}</p>
+            <div class="flex items-end gap-2 mt-3">
+              <div class="flex-1">
+                <label class="block text-xs text-[#64748b] mb-1">Prix mensuel (€)</label>
+                <input v-model.number="p.euros" type="number" min="0" step="0.01"
+                  class="w-full px-3 py-2 bg-[#f8fafc] border border-[#e5e7eb] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
+              </div>
+              <button @click="savePlan(p)" :disabled="p.saving"
+                class="px-4 py-2 rounded-lg text-white text-sm font-semibold hover:opacity-90 transition disabled:opacity-50" style="background-color:#1B8848;">
+                {{ p.saving ? '…' : 'Enregistrer' }}
+              </button>
+            </div>
+            <p v-if="p.saved" class="text-xs text-green-600 mt-1.5">Tarif mis à jour ✓</p>
+          </div>
+        </div>
+      </div>
+
       <div v-if="loadingSubs" class="py-16 text-center">
         <div class="w-8 h-8 border-4 border-[#006d35] border-t-transparent rounded-full animate-spin mx-auto" />
       </div>
@@ -252,6 +277,38 @@ const pendingCount = ref(0)
 const subscriptions = ref([])
 const loadingSubs = ref(true)
 
+const plans = ref([])
+const loadingPlans = ref(true)
+async function fetchPlans() {
+  loadingPlans.value = true
+  try {
+    const res = await fetch(`${BASE}/subscription-plans`, { headers: authHeaders() })
+    const j = await res.json()
+    plans.value = (j.data || []).map(p => ({ ...p, euros: (p.amount_cents || 0) / 100, saving: false, saved: false }))
+  } catch { plans.value = [] } finally { loadingPlans.value = false }
+}
+async function savePlan(p) {
+  p.saving = true
+  p.saved = false
+  try {
+    const cents = Math.round((Number(p.euros) || 0) * 100)
+    const res = await fetch(`${BASE}/subscription-plans/${p.key}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', ...authHeaders() },
+      body: JSON.stringify({ amount_cents: cents }),
+    })
+    if (res.ok) {
+      const updated = await res.json()
+      p.amount_cents = updated.amount_cents
+      p.euros = (updated.amount_cents || 0) / 100
+      p.saved = true
+      setTimeout(() => { p.saved = false }, 2500)
+      fetchSubs()
+      fetchFinance()
+    }
+  } finally { p.saving = false }
+}
+
 const rejectModal = ref({ show: false, campaign: null, reason: '' })
 
 async function fetchCampaigns() {
@@ -319,5 +376,5 @@ function subBadge(s) {
   return 'bg-yellow-100 text-yellow-800'
 }
 
-onMounted(() => { fetchFinance(); fetchCampaigns(); fetchSubs() })
+onMounted(() => { fetchFinance(); fetchCampaigns(); fetchSubs(); fetchPlans() })
 </script>

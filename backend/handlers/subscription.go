@@ -19,9 +19,9 @@ type SubscriptionHandler struct {
 
 func (h *SubscriptionHandler) Plans(c *gin.Context) {
 	plans := []gin.H{}
-	for key, plan := range models.SubscriptionPlans {
+	for _, plan := range models.PlansList() {
 		plans = append(plans, gin.H{
-			"key":          key,
+			"key":          plan.Key,
 			"label":        plan.Label,
 			"amount_cents": plan.AmountCents,
 			"features":     plan.Features,
@@ -65,7 +65,7 @@ func (h *SubscriptionHandler) Checkout(c *gin.Context) {
 		return
 	}
 
-	plan, ok := models.SubscriptionPlans[req.Plan]
+	plan, ok := models.Plan(req.Plan)
 	if !ok {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Plan inconnu"})
 		return
@@ -104,6 +104,60 @@ func (h *SubscriptionHandler) Cancel(c *gin.Context) {
 	h.DB.Model(&sub).Updates(map[string]interface{}{"status": "cancelled"})
 	h.Audit.Log(c, "subscription.cancelled", "Subscription", &sub.ID, nil, nil)
 	c.JSON(http.StatusOK, gin.H{"message": "Abonnement annulé."})
+}
+
+func (h *SubscriptionHandler) AdminPlans(c *gin.Context) {
+	plans := []gin.H{}
+	for _, plan := range models.PlansList() {
+		plans = append(plans, gin.H{
+			"key":          plan.Key,
+			"label":        plan.Label,
+			"amount_cents": plan.AmountCents,
+			"features":     plan.Features,
+		})
+	}
+	c.JSON(http.StatusOK, gin.H{"data": plans})
+}
+
+func (h *SubscriptionHandler) AdminUpdatePlan(c *gin.Context) {
+	key := c.Param("key")
+	if _, ok := models.Plan(key); !ok {
+		c.JSON(http.StatusNotFound, gin.H{"message": "Plan inconnu"})
+		return
+	}
+	var req struct {
+		AmountCents *int64 `json:"amount_cents"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil || req.AmountCents == nil {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Montant requis (amount_cents)."})
+		return
+	}
+	if *req.AmountCents < 0 {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Le montant doit être positif."})
+		return
+	}
+
+	var cfg models.SubscriptionPlanConfig
+	if err := h.DB.Where(models.SubscriptionPlanConfig{Key: key}).
+		Assign(models.SubscriptionPlanConfig{AmountCents: *req.AmountCents}).
+		FirstOrCreate(&cfg).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Erreur lors de l'enregistrement."})
+		return
+	}
+	models.LoadSubscriptionPlans(h.DB)
+
+	h.Audit.Log(c, "subscription_plan.updated", "SubscriptionPlan", nil, nil, map[string]interface{}{
+		"key":          key,
+		"amount_cents": *req.AmountCents,
+	})
+
+	plan, _ := models.Plan(key)
+	c.JSON(http.StatusOK, gin.H{
+		"key":          plan.Key,
+		"label":        plan.Label,
+		"amount_cents": plan.AmountCents,
+		"features":     plan.Features,
+	})
 }
 
 func (h *SubscriptionHandler) AdminIndex(c *gin.Context) {

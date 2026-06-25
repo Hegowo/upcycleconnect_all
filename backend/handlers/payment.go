@@ -619,7 +619,7 @@ func (h *PaymentHandler) fulfillSubscription(session *stripe.CheckoutSession) er
 		return fmt.Errorf("metadata abonnement incomplète")
 	}
 
-	planDef, ok := models.SubscriptionPlans[plan]
+	planDef, ok := models.Plan(plan)
 	if !ok {
 		return fmt.Errorf("plan inconnu: %s", plan)
 	}

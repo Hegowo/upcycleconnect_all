@@ -342,6 +342,8 @@ func Setup(db *gorm.DB, cfg *config.Config) *gin.Engine {
 
 			protected.GET("/tips", tipHandler.AdminIndex)
 			protected.GET("/subscriptions", subscriptionHandler.AdminIndex)
+			protected.GET("/subscription-plans", subscriptionHandler.AdminPlans)
+			protected.PUT("/subscription-plans/:key", subscriptionHandler.AdminUpdatePlan)
 			protected.GET("/campaigns", campaignHandler.AdminIndex)
 			protected.PUT("/campaigns/:id/status", campaignHandler.AdminUpdateStatus)
 			protected.GET("/projects", projectHandler.AdminIndex)
