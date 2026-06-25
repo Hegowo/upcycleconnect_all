@@ -53,6 +53,10 @@
                   style="background:linear-gradient(135deg,#006d35,#1b8848);">
                   <ChartBarIcon class="w-4 h-4" /> Tableau de bord
                 </RouterLink>
+                <RouterLink to="/profil/pro/reservations"
+                  class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-[#006d35] text-[#006d35] text-sm font-bold hover:bg-[#edf4ff] transition bg-white">
+                  <ClipboardDocumentListIcon class="w-4 h-4" /> Réservations
+                </RouterLink>
                 <RouterLink to="/profil/pro/projets"
                   class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-[#006d35] text-[#006d35] text-sm font-bold hover:bg-[#edf4ff] transition bg-white">
                   <WrenchScrewdriverIcon class="w-4 h-4" /> Mes projets
@@ -202,8 +206,8 @@
             <div class="bg-white rounded-[24px] border border-[#edf4ff] p-6">
               <div class="flex items-center justify-between mb-5">
                 <h2 class="font-jakarta font-bold text-[#001d32] text-xl">Mes prestations</h2>
-                <RouterLink to="/prestations" class="text-xs text-[#006d35] font-semibold hover:underline">
-                  Voir tout →
+                <RouterLink to="/profil/pro/prestations" class="text-xs text-[#006d35] font-semibold hover:underline">
+                  Gérer →
                 </RouterLink>
               </div>
               <div v-if="!prestations.length" class="text-center py-8">
@@ -249,6 +253,7 @@ import {
   Cog6ToothIcon,
   CheckBadgeIcon,
   ExclamationTriangleIcon,
+  ClipboardDocumentListIcon,
 } from '@heroicons/vue/24/outline'
 import { useUserAuthStore } from '@/stores/userAuth'
 import { userApi } from '@/services/publicApi'

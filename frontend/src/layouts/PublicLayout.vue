@@ -119,6 +119,16 @@
 
                   <RouterLink
                     v-if="userAuth.isProvider"
+                    to="/profil/pro/reservations"
+                    @click="closeMenu"
+                    class="flex items-center gap-3 px-4 py-2.5 text-sm text-[#334155] hover:bg-[#f8fafc] transition"
+                  >
+                    <ClipboardDocumentListIcon class="w-4 h-4 text-[#40617f]" />
+                    Mes réservations
+                  </RouterLink>
+
+                  <RouterLink
+                    v-if="userAuth.isProvider"
                     to="/profil/contrats-recus"
                     @click="closeMenu"
                     class="flex items-center gap-3 px-4 py-2.5 text-sm text-[#334155] hover:bg-[#f8fafc] transition"
@@ -282,7 +292,7 @@
 <script setup>import { ref, onMounted, computed } from 'vue'
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { MagnifyingGlassIcon, UserCircleIcon, DocumentTextIcon, PlusCircleIcon, Cog6ToothIcon, PencilSquareIcon } from '@heroicons/vue/24/outline'
+import { MagnifyingGlassIcon, UserCircleIcon, DocumentTextIcon, PlusCircleIcon, Cog6ToothIcon, PencilSquareIcon, ClipboardDocumentListIcon } from '@heroicons/vue/24/outline'
 import NotificationsDropdown from '@/components/NotificationsDropdown.vue'
 import OnboardingTutorial from '@/components/OnboardingTutorial.vue'
 import { useUserAuthStore } from '@/stores/userAuth'

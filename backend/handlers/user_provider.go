@@ -230,6 +230,79 @@ func (h *UserProviderHandler) ListPrestations(c *gin.Context) {
 	})
 }
 
+func (h *UserProviderHandler) ListReservations(c *gin.Context) {
+	user := middleware.GetAuthUser(c)
+	if h.ensureApproved(c, user) == nil {
+		return
+	}
+
+	prestSubq := h.DB.Model(&models.Prestation{}).Select("id").Where("provider_id = ?", user.ID)
+
+	base := h.DB.Model(&models.Reservation{}).Where("prestation_id IN (?)", prestSubq)
+	if status := c.Query("status"); status != "" {
+		base = base.Where("status = ?", status)
+	}
+
+	var total int64
+	base.Count(&total)
+
+	perPage, _ := strconv.Atoi(c.DefaultQuery("per_page", "50"))
+	if perPage < 1 || perPage > 100 {
+		perPage = 50
+	}
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	if page < 1 {
+		page = 1
+	}
+	lastPage := int(math.Ceil(float64(total) / float64(perPage)))
+	if lastPage < 1 {
+		lastPage = 1
+	}
+
+	fetch := h.DB.Preload("User").Preload("Prestation").Where("prestation_id IN (?)", prestSubq)
+	if status := c.Query("status"); status != "" {
+		fetch = fetch.Where("status = ?", status)
+	}
+	var items []models.Reservation
+	fetch.Order("created_at DESC").
+		Offset((page - 1) * perPage).
+		Limit(perPage).
+		Find(&items)
+
+	out := make([]gin.H, 0, len(items))
+	for i := range items {
+		r := &items[i]
+		var client gin.H
+		if r.User != nil {
+			client = gin.H{
+				"id":         r.User.ID,
+				"first_name": r.User.FirstName,
+				"last_name":  r.User.LastName,
+				"email":      r.User.Email,
+				"avatar_url": r.User.AvatarURL,
+			}
+		}
+		var prest gin.H
+		if r.Prestation != nil {
+			prest = gin.H{"id": r.Prestation.ID, "title": r.Prestation.Title, "price_type": r.Prestation.PriceType}
+		}
+		out = append(out, gin.H{
+			"id":           r.ID,
+			"status":       r.Status,
+			"amount_cents": r.AmountCents,
+			"currency":     r.Currency,
+			"created_at":   r.CreatedAt.UTC().Format("2006-01-02T15:04:05.000000Z"),
+			"client":       client,
+			"prestation":   prest,
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": out,
+		"meta": gin.H{"current_page": page, "last_page": lastPage, "per_page": perPage, "total": total},
+	})
+}
+
 func (h *UserProviderHandler) CreatePrestation(c *gin.Context) {
 	user := middleware.GetAuthUser(c)
 	if h.ensureApproved(c, user) == nil {

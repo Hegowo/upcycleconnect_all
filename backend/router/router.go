@@ -252,6 +252,7 @@ func Setup(db *gorm.DB, cfg *config.Config) *gin.Engine {
 			userProtected.PUT("/provider/profile", userProviderHandler.UpdateProfile)
 			userProtected.POST("/provider/kbis", userProviderHandler.UploadKbis)
 			userProtected.POST("/provider/onboarding/complete", userProviderHandler.CompleteOnboarding)
+			userProtected.GET("/provider/reservations", userProviderHandler.ListReservations)
 			userProtected.GET("/provider/prestations", userProviderHandler.ListPrestations)
 			userProtected.GET("/provider/prestations/:id", userProviderHandler.ShowPrestation)
 			userProtected.GET("/provider/prestations/:id/participants", userProviderHandler.ListParticipants)
