@@ -115,7 +115,9 @@ async function downloadContract(c) {
     const a    = document.createElement('a')
     a.href     = url
     a.download = `${c.number}.pdf`
+    document.body.appendChild(a)
     a.click()
+    a.remove()
     URL.revokeObjectURL(url)
   } catch {} finally {
     downloadingId.value = null

@@ -457,7 +457,9 @@ async function downloadContract() {
     const a    = document.createElement('a')
     a.href     = url
     a.download = `${contract.value.number}.pdf`
+    document.body.appendChild(a)
     a.click()
+    a.remove()
     URL.revokeObjectURL(url)
   } catch {
   } finally {
