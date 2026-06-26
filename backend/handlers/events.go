@@ -173,6 +173,10 @@ func (h *EventHandler) Store(c *gin.Context) {
 	if event.Status == "" {
 		event.Status = "draft"
 	}
+
+	if authUser != nil && !authUser.IsAdmin() && event.Status == "published" {
+		event.Status = "pending"
+	}
 	if event.PriceCents < 0 {
 		event.PriceCents = 0
 	}
@@ -326,8 +330,12 @@ func (h *EventHandler) Update(c *gin.Context) {
 		after["max_participants"] = *req.MaxParticipants
 	}
 	if req.Status != nil {
-		updates["status"] = *req.Status
-		after["status"] = *req.Status
+		st := *req.Status
+		if au := middleware.GetAuthUser(c); au != nil && !au.IsAdmin() && st == "published" {
+			st = "pending"
+		}
+		updates["status"] = st
+		after["status"] = st
 	}
 	if req.PriceCents != nil {
 		v := *req.PriceCents

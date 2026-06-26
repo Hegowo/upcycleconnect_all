@@ -34,33 +34,32 @@ func (User) TableName() string {
 	return "users"
 }
 
-func (u *User) PrimaryRole() *string {
-	if len(u.Roles) == 0 {
-		return nil
-	}
+func (u *User) hasRole(name string) bool {
 	for _, r := range u.Roles {
-		if r.Name == "super_admin" {
-			name := r.Name
-			return &name
+		if r.Name == name {
+			return true
 		}
 	}
-	for _, r := range u.Roles {
-		if r.Name == "admin" {
-			name := r.Name
-			return &name
+	return false
+}
+
+func (u *User) PrimaryRole() *string {
+	for _, name := range []string{"super_admin", "admin", "employee"} {
+		if u.hasRole(name) {
+			n := name
+			return &n
 		}
 	}
 	return nil
 }
 
 func (u *User) IsAdmin() bool {
-	for _, r := range u.Roles {
-		if r.Name == "admin" || r.Name == "super_admin" {
-			return true
-		}
-	}
-	return false
+	return u.hasRole("admin") || u.hasRole("super_admin")
 }
+
+func (u *User) IsEmployee() bool { return u.hasRole("employee") }
+
+func (u *User) IsStaff() bool { return u.IsAdmin() || u.IsEmployee() }
 
 func (u *User) IsSuperAdmin() bool {
 	for _, r := range u.Roles {

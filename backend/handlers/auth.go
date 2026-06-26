@@ -43,8 +43,8 @@ func (h *AuthHandler) Login(c *gin.Context) {
 		return
 	}
 
-	if !user.IsAdmin() {
-		c.JSON(http.StatusForbidden, gin.H{"message": "Accès refusé : compte administrateur requis."})
+	if !user.IsStaff() {
+		c.JSON(http.StatusForbidden, gin.H{"message": "Accès refusé : compte administrateur ou employé requis."})
 		return
 	}
 

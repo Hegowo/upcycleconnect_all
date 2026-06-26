@@ -38,6 +38,7 @@ func Setup(db *gorm.DB, cfg *config.Config) *gin.Engine {
 	prestationHandler := &handlers.PrestationHandler{DB: db, Audit: audit, Notifications: notifications}
 	eventHandler := &handlers.EventHandler{DB: db, Audit: audit, Notifications: notifications}
 	adminHandler := &handlers.AdminHandler{DB: db, Audit: audit}
+	employeeHandler := &handlers.EmployeeHandler{DB: db, Audit: audit}
 	logsHandler := &handlers.LogsHandler{DB: db}
 	siretHandler := &handlers.SiretHandler{Cfg: cfg}
 	depositHandler := &handlers.DepositHandler{DB: db, Audit: audit}
@@ -273,17 +274,50 @@ func Setup(db *gorm.DB, cfg *config.Config) *gin.Engine {
 	{
 		api.POST("/auth/login", authHandler.Login)
 
+		staff := api.Group("")
+		staff.Use(middleware.AuthMiddleware(db, cfg))
+		staff.Use(middleware.IsStaff())
+		{
+			staff.POST("/auth/logout", authHandler.Logout)
+			staff.GET("/auth/me", authHandler.Me)
+
+			staff.GET("/notifications", notificationHandler.Index)
+			staff.GET("/notifications/unread-count", notificationHandler.UnreadCount)
+			staff.POST("/notifications/:id/read", notificationHandler.MarkRead)
+			staff.POST("/notifications/read-all", notificationHandler.MarkAllRead)
+
+			staff.GET("/categories", categoryHandler.Index)
+
+			staff.GET("/events", eventHandler.Index)
+			staff.POST("/events", eventHandler.Store)
+			staff.GET("/events/:id", eventHandler.Show)
+			staff.PUT("/events/:id", eventHandler.Update)
+			staff.DELETE("/events/:id", eventHandler.Destroy)
+			staff.PUT("/events/:id/status", eventHandler.UpdateStatus)
+
+			staff.GET("/tips", tipHandler.AdminIndex)
+			staff.POST("/tips", tipHandler.AdminStore)
+			staff.GET("/tips/:id", tipHandler.AdminShow)
+			staff.PUT("/tips/:id", tipHandler.AdminUpdate)
+			staff.DELETE("/tips/:id", tipHandler.AdminDestroy)
+
+			staff.GET("/forum/categories", forumHandler.ListCategories)
+			staff.POST("/forum/categories", forumHandler.AdminCreateCategory)
+			staff.PUT("/forum/categories/:id", forumHandler.AdminUpdateCategory)
+			staff.DELETE("/forum/categories/:id", forumHandler.AdminDeleteCategory)
+			staff.GET("/forum/threads", forumHandler.AdminListThreads)
+			staff.DELETE("/forum/threads/:id", forumHandler.AdminDeleteThread)
+			staff.PUT("/forum/threads/:id/pin", forumHandler.AdminPinThread)
+			staff.PUT("/forum/threads/:id/lock", forumHandler.AdminLockThread)
+			staff.DELETE("/forum/replies/:id", forumHandler.AdminDeleteReply)
+			staff.GET("/forum/reports", forumHandler.AdminListReports)
+			staff.PUT("/forum/reports/:id/resolve", forumHandler.AdminResolveReport)
+		}
+
 		protected := api.Group("")
 		protected.Use(middleware.AuthMiddleware(db, cfg))
 		protected.Use(middleware.IsAdmin())
 		{
-			protected.POST("/auth/logout", authHandler.Logout)
-			protected.GET("/auth/me", authHandler.Me)
-
-			protected.GET("/notifications", notificationHandler.Index)
-			protected.GET("/notifications/unread-count", notificationHandler.UnreadCount)
-			protected.POST("/notifications/:id/read", notificationHandler.MarkRead)
-			protected.POST("/notifications/read-all", notificationHandler.MarkAllRead)
 			protected.GET("/notifications/sent", adminNotifHandler.SentList)
 			protected.POST("/notifications/broadcast", adminNotifHandler.Broadcast)
 			protected.GET("/notifications/recipients", adminNotifHandler.RecipientSearch)
@@ -323,7 +357,6 @@ func Setup(db *gorm.DB, cfg *config.Config) *gin.Engine {
 			protected.PUT("/providers/:id/status", providerHandler.UpdateStatus)
 			protected.GET("/providers/:id/kbis", userProviderHandler.DownloadKbis)
 
-			protected.GET("/categories", categoryHandler.Index)
 			protected.POST("/categories", categoryHandler.Store)
 			protected.GET("/categories/:id", categoryHandler.Show)
 			protected.PUT("/categories/:id", categoryHandler.Update)
@@ -337,14 +370,6 @@ func Setup(db *gorm.DB, cfg *config.Config) *gin.Engine {
 			protected.DELETE("/prestations/:id", prestationHandler.Destroy)
 			protected.PUT("/prestations/:id/status", prestationHandler.UpdateStatus)
 
-			protected.GET("/events", eventHandler.Index)
-			protected.POST("/events", eventHandler.Store)
-			protected.GET("/events/:id", eventHandler.Show)
-			protected.PUT("/events/:id", eventHandler.Update)
-			protected.DELETE("/events/:id", eventHandler.Destroy)
-			protected.PUT("/events/:id/status", eventHandler.UpdateStatus)
-
-			protected.GET("/tips", tipHandler.AdminIndex)
 			protected.GET("/subscriptions", subscriptionHandler.AdminIndex)
 			protected.GET("/subscription-plans", subscriptionHandler.AdminPlans)
 			protected.POST("/subscription-plans", subscriptionHandler.AdminCreatePlan)
@@ -353,22 +378,11 @@ func Setup(db *gorm.DB, cfg *config.Config) *gin.Engine {
 			protected.GET("/campaigns", campaignHandler.AdminIndex)
 			protected.PUT("/campaigns/:id/status", campaignHandler.AdminUpdateStatus)
 			protected.GET("/projects", projectHandler.AdminIndex)
-			protected.POST("/tips", tipHandler.AdminStore)
-			protected.GET("/tips/:id", tipHandler.AdminShow)
-			protected.PUT("/tips/:id", tipHandler.AdminUpdate)
-			protected.DELETE("/tips/:id", tipHandler.AdminDestroy)
 
-			protected.GET("/forum/categories", forumHandler.ListCategories)
-			protected.POST("/forum/categories", forumHandler.AdminCreateCategory)
-			protected.PUT("/forum/categories/:id", forumHandler.AdminUpdateCategory)
-			protected.DELETE("/forum/categories/:id", forumHandler.AdminDeleteCategory)
-			protected.GET("/forum/threads", forumHandler.AdminListThreads)
-			protected.DELETE("/forum/threads/:id", forumHandler.AdminDeleteThread)
-			protected.PUT("/forum/threads/:id/pin", forumHandler.AdminPinThread)
-			protected.PUT("/forum/threads/:id/lock", forumHandler.AdminLockThread)
-			protected.DELETE("/forum/replies/:id", forumHandler.AdminDeleteReply)
-			protected.GET("/forum/reports", forumHandler.AdminListReports)
-			protected.PUT("/forum/reports/:id/resolve", forumHandler.AdminResolveReport)
+			protected.GET("/employees", employeeHandler.Index)
+			protected.POST("/employees", employeeHandler.Store)
+			protected.PUT("/employees/:id", employeeHandler.Update)
+			protected.DELETE("/employees/:id", employeeHandler.Destroy)
 
 			protected.GET("/deposits", depositHandler.Index)
 			protected.GET("/deposits/:id", depositHandler.Show)

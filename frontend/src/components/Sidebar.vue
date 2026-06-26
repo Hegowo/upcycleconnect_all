@@ -12,7 +12,7 @@
 
     <nav class="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
       <RouterLink
-        v-for="item in navItems"
+        v-for="item in visibleNavItems"
         :key="item.to"
         :to="item.to"
         custom
@@ -137,10 +137,11 @@ const navItems = computed(() => [
   { to: '/admin/dashboard',         icon: Squares2X2Icon,             label: t('nav.dashboard') },
   { to: '/admin/users',             icon: UsersIcon,                  label: t('nav.users') },
   { to: '/admin/providers',         icon: BriefcaseIcon,              label: t('nav.providers') },
+  { to: '/admin/employees',         icon: UsersIcon,                  label: 'Employés' },
   { to: '/admin/categories',        icon: TagIcon,                    label: t('nav.categories') },
   { to: '/admin/prestations',       icon: ClipboardDocumentListIcon,  label: t('nav.prestations') },
-  { to: '/admin/events',            icon: CalendarIcon,               label: t('nav.events') },
-  { to: '/admin/forum',             icon: ChatBubbleLeftEllipsisIcon, label: t('nav.forum') },
+  { to: '/admin/events',            icon: CalendarIcon,               label: t('nav.events'), staff: true },
+  { to: '/admin/forum',             icon: ChatBubbleLeftEllipsisIcon, label: t('nav.forum'), staff: true },
   { to: '/admin/monetization',      icon: BanknotesIcon,              label: 'Monétisation' },
   { to: '/admin/locales',           icon: LanguageIcon,               label: 'Langues' },
   { to: '/admin/notifications',     icon: BellAlertIcon,              label: 'Notifications' },
@@ -151,6 +152,10 @@ const navItems = computed(() => [
   { to: '/admin/settings',          icon: Cog6ToothIcon,              label: t('nav.settings') },
   { to: '/admin/docs',              icon: CodeBracketIcon,            label: t('nav.apiDocs') },
 ])
+
+const visibleNavItems = computed(() =>
+  auth.isEmployee ? navItems.value.filter(i => i.staff) : navItems.value
+)
 
 const superAdminItems = computed(() => [
   { to: '/admin/admins',   icon: ShieldCheckIcon, label: t('nav.admins') },

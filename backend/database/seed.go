@@ -18,11 +18,17 @@ func Seed(db *gorm.DB) {
 }
 
 func seedRoles(db *gorm.DB) {
-	for _, name := range []string{"super_admin", "admin", "user"} {
+	labels := map[string]string{
+		"super_admin": "Super administrateur",
+		"admin":       "Administrateur",
+		"user":        "Utilisateur",
+		"employee":    "Employé",
+	}
+	for _, name := range []string{"super_admin", "admin", "user", "employee"} {
 		var count int64
 		db.Model(&models.Role{}).Where("name = ?", name).Count(&count)
 		if count == 0 {
-			db.Create(&models.Role{Name: name})
+			db.Create(&models.Role{Name: name, Label: labels[name]})
 		}
 	}
 }

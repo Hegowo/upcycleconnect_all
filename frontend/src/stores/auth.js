@@ -11,6 +11,7 @@ export const useAuthStore = defineStore('auth', () => {
   const role            = computed(() => user.value?.role || null)
   const isSuperAdmin    = computed(() => role.value === 'super_admin')
   const isAdmin         = computed(() => ['admin', 'super_admin'].includes(role.value))
+  const isEmployee      = computed(() => role.value === 'employee')
   const fullName        = computed(() => user.value ? `${user.value.first_name} ${user.value.last_name}` : '')
 
   async function login(email, password) {
@@ -70,6 +71,7 @@ export const useAuthStore = defineStore('auth', () => {
     role,
     isSuperAdmin,
     isAdmin,
+    isEmployee,
     fullName,
     login,
     logout,

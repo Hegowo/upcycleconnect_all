@@ -71,6 +71,7 @@ const router = createRouter({
         { path: 'admins',        component: () => import('@/pages/AdminListPage.vue'),      meta: { title: 'Administrateurs', requiresRole: 'super_admin' } },
         { path: 'admins/create', component: () => import('@/pages/AdminFormPage.vue'),      meta: { title: 'Nouvel administrateur', requiresRole: 'super_admin' } },
         { path: 'admins/:id/edit', component: () => import('@/pages/AdminFormPage.vue'),    meta: { title: 'Modifier l\'administrateur', requiresRole: 'super_admin' } },
+        { path: 'employees',     component: () => import('@/pages/EmployeeListPage.vue'),   meta: { title: 'Employés' } },
         { path: 'categories',        component: () => import('@/pages/CategoryListPage.vue'),    meta: { title: 'Catégories' } },
         { path: 'categories/create', component: () => import('@/pages/CategoryFormPage.vue'),    meta: { title: 'Nouvelle catégorie' } },
         { path: 'categories/:id/edit', component: () => import('@/pages/CategoryFormPage.vue'), meta: { title: 'Modifier la catégorie' } },
@@ -83,9 +84,9 @@ const router = createRouter({
         { path: 'locales',       component: () => import('@/pages/LocalesPage.vue'),       meta: { title: 'Langues' } },
         { path: 'notifications', component: () => import('@/pages/AdminNotificationsPage.vue'), meta: { title: 'Notifications' } },
         { path: 'export',        component: () => import('@/pages/ExportPage.vue'),             meta: { title: 'Export & Audit' } },
-        { path: 'events',        component: () => import('@/pages/EventListPage.vue'),  meta: { title: 'Événements' } },
-        { path: 'events/create', component: () => import('@/pages/EventFormPage.vue'),  meta: { title: 'Nouvel événement' } },
-        { path: 'events/:id/edit', component: () => import('@/pages/EventFormPage.vue'), meta: { title: 'Modifier l\'événement' } },
+        { path: 'events',        component: () => import('@/pages/EventListPage.vue'),  meta: { title: 'Événements', staff: true } },
+        { path: 'events/create', component: () => import('@/pages/EventFormPage.vue'),  meta: { title: 'Nouvel événement', staff: true } },
+        { path: 'events/:id/edit', component: () => import('@/pages/EventFormPage.vue'), meta: { title: 'Modifier l\'événement', staff: true } },
         {
           path: 'logs',
           component: () => import('@/pages/LogsPage.vue'),
@@ -97,7 +98,7 @@ const router = createRouter({
           meta: { title: 'Base de données', requiresRole: 'super_admin', fullscreen: true },
         },
         { path: 'settings', component: () => import('@/pages/SettingsPage.vue'), meta: { title: 'Paramètres' } },
-        { path: 'forum', component: () => import('@/pages/ForumAdminPage.vue'), meta: { title: 'Forum Communauté' } },
+        { path: 'forum', component: () => import('@/pages/ForumAdminPage.vue'), meta: { title: 'Forum Communauté', staff: true } },
         { path: 'box-requests', component: () => import('@/pages/BoxRequestsPage.vue'), meta: { title: 'Demandes de Dépôt' } },
         { path: 'collection-points', component: () => import('@/pages/CollectionPointsPage.vue'), meta: { title: 'Points de collecte' } },
         { path: 'docs', component: () => import('@/pages/SwaggerPage.vue'), meta: { title: 'Documentation API', fullscreen: true } },
@@ -118,8 +119,10 @@ router.beforeEach(async (to, from, next) => {
     await auth.initAuth()
   }
 
+  const employeeHome = '/admin/events'
+
   if (to.path === '/admin/login' && auth.isAuthenticated) {
-    return next('/admin/dashboard')
+    return next(auth.isEmployee ? employeeHome : '/admin/dashboard')
   }
 
   if (to.meta.requiresAuth && !auth.isAuthenticated) {
@@ -128,6 +131,12 @@ router.beforeEach(async (to, from, next) => {
 
   if (to.meta.requiresRole === 'super_admin' && !auth.isSuperAdmin) {
     return next('/admin/dashboard')
+  }
+
+  if (auth.isAuthenticated && auth.isEmployee && to.path.startsWith('/admin') && to.path !== '/admin/login') {
+    if (!to.meta.staff) {
+      return next(employeeHome)
+    }
   }
 
   next()

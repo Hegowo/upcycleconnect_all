@@ -17,6 +17,17 @@ func IsAdmin() gin.HandlerFunc {
 	}
 }
 
+func IsStaff() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		user := GetAuthUser(c)
+		if user == nil || !user.IsStaff() {
+			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"message": "Accès refusé"})
+			return
+		}
+		c.Next()
+	}
+}
+
 func IsSuperAdmin() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		user := GetAuthUser(c)
