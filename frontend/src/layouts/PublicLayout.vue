@@ -334,6 +334,7 @@ const navLinks = computed(() => [
   { label: t('public.layout.navHome'),         path: '/' },
   { label: t('public.layout.navPrestations'),  path: '/prestations' },
   { label: t('public.layout.navEvents'),       path: '/evenements' },
+  { label: t('public.layout.navProjects'),     path: '/projets' },
   { label: t('public.layout.navCommunity'),    path: '/communaute' },
 ])
 
