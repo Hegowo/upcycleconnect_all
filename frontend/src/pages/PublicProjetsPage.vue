@@ -10,6 +10,10 @@
         <div>
           <h1 class="font-jakarta font-extrabold text-[#001d32] text-3xl tracking-tight">Projets d'upcycling</h1>
           <p class="text-[#40617f] text-sm mt-1">Documentez vos projets de transformation et partagez-les avec la communauté.</p>
+          <p class="text-[#40617f] text-xs mt-2 inline-flex items-center gap-1.5 bg-[#edf4ff] px-3 py-1.5 rounded-lg">
+            <GlobeAltIcon class="w-3.5 h-3.5 text-[#006d35]" />
+            Seuls les projets en statut <strong class="text-[#001d32]">« Terminé »</strong> ou <strong class="text-[#001d32]">« Mis en avant »</strong> apparaissent dans la galerie publique.
+          </p>
         </div>
         <button @click="openProjectForm(null)" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-white font-bold text-sm hover:opacity-90 transition" style="background:linear-gradient(135deg,#006d35,#1b8848);">
           <PlusIcon class="w-4 h-4" /> Nouveau projet
@@ -64,6 +68,12 @@
                 <div class="flex items-center gap-2 mb-1 flex-wrap">
                   <span :class="projectStatusBadge(p.status)" class="text-xs font-bold px-2 py-0.5 rounded-full">{{ projectStatusLabel(p.status) }}</span>
                   <span v-if="p.category" class="text-xs text-[#40617f] bg-[#f7f9ff] px-2 py-0.5 rounded-full">{{ p.category }}</span>
+                  <span v-if="isPublic(p.status)" class="text-xs font-semibold text-[#166534] bg-[#dcfce7] px-2 py-0.5 rounded-full inline-flex items-center gap-1">
+                    <GlobeAltIcon class="w-3 h-3" /> Visible publiquement
+                  </span>
+                  <span v-else class="text-xs font-semibold text-[#92400e] bg-[#fef3c7] px-2 py-0.5 rounded-full inline-flex items-center gap-1">
+                    <LockClosedIcon class="w-3 h-3" /> Privé
+                  </span>
                 </div>
                 <h3 class="font-jakarta font-bold text-[#001d32] text-lg">{{ p.title }}</h3>
                 <p class="text-[#40617f] text-sm mt-0.5 line-clamp-2">{{ p.description }}</p>
@@ -141,7 +151,8 @@
                     <option value="in_progress">En cours</option>
                     <option value="completed">Terminé</option>
                     <option value="showcased">Mis en avant</option>
-                  </select></div>
+                  </select>
+                  <p class="text-[10px] text-[#94a3b8] mt-1 leading-tight">« Terminé » ou « Mis en avant » = visible dans la galerie publique.</p></div>
               </div>
               <div>
                 <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1.5">Images</label>
@@ -235,7 +246,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
-import { ArrowLeftIcon, PlusIcon, PencilSquareIcon, TrashIcon, XMarkIcon, WrenchScrewdriverIcon, PhotoIcon } from '@heroicons/vue/24/outline'
+import { ArrowLeftIcon, PlusIcon, PencilSquareIcon, TrashIcon, XMarkIcon, WrenchScrewdriverIcon, PhotoIcon, GlobeAltIcon, LockClosedIcon } from '@heroicons/vue/24/outline'
 import { userApi } from '@/services/publicApi'
 
 const projects = ref([])
@@ -437,6 +448,7 @@ async function deleteStep(p, step) {
   await fetchProjects()
 }
 
+function isPublic(s) { return s === 'completed' || s === 'showcased' }
 function projectStatusLabel(s) { return { in_progress: 'En cours', completed: 'Terminé', showcased: 'Mis en avant' }[s] || s }
 function projectStatusBadge(s) {
   if (s === 'showcased') return 'bg-[#dcfce7] text-[#166534]'
