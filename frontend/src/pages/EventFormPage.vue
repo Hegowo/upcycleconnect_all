@@ -36,7 +36,6 @@
 
         <div>
           <label class="label">Séances <span class="text-red-500">*</span></label>
-          <p class="text-xs text-gray-500 mb-2">Une séance par jour, chacune avec son propre horaire — gère les événements sur plusieurs jours avec des interruptions.</p>
           <div class="space-y-2">
             <div v-for="(s, i) in form.sessions" :key="i" class="flex items-center gap-2 flex-wrap">
               <input v-model="s.start_date" type="datetime-local" class="input flex-1 min-w-[180px]" :min="isEditing ? undefined : todayMin" />
