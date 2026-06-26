@@ -207,6 +207,8 @@ func Setup(db *gorm.DB, cfg *config.Config) *gin.Engine {
 			userProtected.POST("/projects/:id/steps", projectHandler.AddStep)
 			userProtected.PUT("/projects/:id/steps/:step_id", projectHandler.UpdateStep)
 			userProtected.DELETE("/projects/:id/steps/:step_id", projectHandler.DeleteStep)
+			userProtected.POST("/projects/:id/steps/:step_id/images", projectHandler.AddStepImage)
+			userProtected.DELETE("/projects/:id/steps/:step_id/images/:image_id", projectHandler.DeleteStepImage)
 
 			userProtected.POST("/deposits/collect", userDepositHandler.CollectDeposit)
 

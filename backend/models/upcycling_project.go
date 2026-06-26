@@ -52,9 +52,21 @@ type ProjectStep struct {
 	CompletedAt *time.Time `json:"completed_at"`
 	CreatedAt   time.Time  `json:"created_at"`
 	UpdatedAt   time.Time  `json:"updated_at"`
+
+	Images []ProjectStepImage `gorm:"foreignKey:StepID;constraint:OnDelete:CASCADE" json:"images"`
 }
 
 func (ProjectStep) TableName() string { return "project_steps" }
+
+type ProjectStepImage struct {
+	ID        uint      `gorm:"primaryKey" json:"id"`
+	StepID    uint      `gorm:"index;not null" json:"step_id"`
+	URL       string    `gorm:"size:500;not null" json:"url"`
+	Position  int       `gorm:"not null;default:0" json:"position"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+func (ProjectStepImage) TableName() string { return "project_step_images" }
 
 type ProjectResponse struct {
 	ID           uint          `json:"id"`

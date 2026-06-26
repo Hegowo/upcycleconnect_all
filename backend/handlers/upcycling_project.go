@@ -40,6 +40,8 @@ func (h *UpcyclingProjectHandler) PublicIndex(c *gin.Context) {
 		return db.Order("position ASC")
 	}).Preload("Steps", func(db *gorm.DB) *gorm.DB {
 		return db.Order("step_order ASC")
+	}).Preload("Steps.Images", func(db *gorm.DB) *gorm.DB {
+		return db.Order("position ASC")
 	}).Where("status IN ?", []string{"showcased", "completed"}).Order("created_at DESC")
 
 	if providerID := c.Query("provider_id"); providerID != "" {
@@ -67,6 +69,9 @@ func (h *UpcyclingProjectHandler) PublicShow(c *gin.Context) {
 		Preload("Steps", func(db *gorm.DB) *gorm.DB {
 			return db.Order("step_order ASC")
 		}).
+		Preload("Steps.Images", func(db *gorm.DB) *gorm.DB {
+			return db.Order("position ASC")
+		}).
 		Where("status IN ?", []string{"showcased", "completed"}).
 		First(&p, c.Param("id")).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"message": "Projet introuvable"})
@@ -86,6 +91,8 @@ func (h *UpcyclingProjectHandler) MyProjects(c *gin.Context) {
 		return db.Order("position ASC")
 	}).Preload("Steps", func(db *gorm.DB) *gorm.DB {
 		return db.Order("step_order ASC")
+	}).Preload("Steps.Images", func(db *gorm.DB) *gorm.DB {
+		return db.Order("position ASC")
 	}).Where("provider_id = ?", user.ID).Order("created_at DESC").Find(&projects)
 	resp := make([]models.ProjectResponse, 0, len(projects))
 	for i := range projects {
@@ -323,6 +330,63 @@ func (h *UpcyclingProjectHandler) DeleteStep(c *gin.Context) {
 	}
 	h.DB.Where("id = ? AND project_id = ?", stepID, projectID).Delete(&models.ProjectStep{})
 	c.JSON(http.StatusOK, gin.H{"message": "Étape supprimée"})
+}
+
+func (h *UpcyclingProjectHandler) ownedStep(c *gin.Context) (*models.ProjectStep, bool) {
+	user := middleware.GetAuthUser(c)
+	if user == nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "Non authentifié"})
+		return nil, false
+	}
+	projectID, _ := strconv.ParseUint(c.Param("id"), 10, 64)
+	stepID, _ := strconv.ParseUint(c.Param("step_id"), 10, 64)
+	var p models.UpcyclingProject
+	if err := h.DB.Where("id = ? AND provider_id = ?", projectID, user.ID).First(&p).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "Projet introuvable"})
+		return nil, false
+	}
+	var step models.ProjectStep
+	if err := h.DB.Where("id = ? AND project_id = ?", stepID, projectID).First(&step).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "Étape introuvable"})
+		return nil, false
+	}
+	return &step, true
+}
+
+func (h *UpcyclingProjectHandler) AddStepImage(c *gin.Context) {
+	step, ok := h.ownedStep(c)
+	if !ok {
+		return
+	}
+	var req struct {
+		Image string `json:"image" binding:"required"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil || req.Image == "" {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Image requise (URL ou fichier)."})
+		return
+	}
+	url, _, err := services.SaveDataURIImage(req.Image, "/uploads/projects", "/uploads/projects")
+	if err != nil {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Image invalide."})
+		return
+	}
+	var count int64
+	h.DB.Model(&models.ProjectStepImage{}).Where("step_id = ?", step.ID).Count(&count)
+	img := models.ProjectStepImage{StepID: step.ID, URL: url, Position: int(count)}
+	if err := h.DB.Create(&img).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Erreur lors de l'enregistrement de l'image."})
+		return
+	}
+	c.JSON(http.StatusCreated, models.ProjectImageResponse{ID: img.ID, URL: img.URL})
+}
+
+func (h *UpcyclingProjectHandler) DeleteStepImage(c *gin.Context) {
+	step, ok := h.ownedStep(c)
+	if !ok {
+		return
+	}
+	h.DB.Where("id = ? AND step_id = ?", c.Param("image_id"), step.ID).Delete(&models.ProjectStepImage{})
+	c.Status(http.StatusNoContent)
 }
 
 func (h *UpcyclingProjectHandler) AdminIndex(c *gin.Context) {

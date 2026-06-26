@@ -97,6 +97,9 @@
                 <div class="flex-1 min-w-0">
                   <p class="font-semibold text-[#001d32] text-sm">{{ step.title }}</p>
                   <p v-if="step.description" class="text-[#40617f] text-xs mt-0.5">{{ step.description }}</p>
+                  <div v-if="step.images && step.images.length" class="flex gap-1.5 mt-2 flex-wrap">
+                    <img v-for="img in step.images" :key="img.id" :src="img.url" class="w-12 h-12 rounded-lg object-cover border border-[#edf4ff]" />
+                  </div>
                 </div>
                 <div class="flex gap-1 shrink-0">
                   <button @click="editStep(p, step)" class="p-1.5 rounded-lg hover:bg-white transition text-[#40617f] hover:text-[#006d35]">
@@ -140,8 +143,28 @@
                     <option value="showcased">Mis en avant</option>
                   </select></div>
               </div>
-              <div><label class="block text-xs font-semibold text-[#40617f] uppercase mb-1.5">Image de couverture (URL)</label>
-                <input v-model="projectForm.cover_image" type="text" class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" /></div>
+              <div>
+                <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1.5">Images</label>
+                <div class="flex gap-2 flex-wrap">
+                  <div v-for="(img, i) in projImages" :key="i" class="relative w-20 h-20 rounded-xl overflow-hidden group border border-[#e5e7eb]">
+                    <img :src="img.url" class="w-full h-full object-cover" />
+                    <button type="button" @click="projRemove(img)" class="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-black/60 text-white text-[10px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition">✕</button>
+                  </div>
+                  <div @dragover.prevent="projDrag = true" @dragleave.prevent="projDrag = false" @drop.prevent="projDrag = false; projAddFiles($event.dataTransfer.files)"
+                    @click="projFileEl?.click()"
+                    :class="projDrag ? 'border-[#006d35] bg-[#f0fdf4] text-[#006d35]' : 'border-[#cbd5e1] text-[#94a3b8]'"
+                    class="w-20 h-20 rounded-xl border-2 border-dashed flex flex-col items-center justify-center text-center cursor-pointer hover:border-[#006d35] hover:text-[#006d35] transition">
+                    <input ref="projFileEl" type="file" accept="image/*" multiple class="hidden" @change="projAddFiles($event.target.files); $event.target.value = ''" />
+                    <PhotoIcon class="w-5 h-5" />
+                    <span class="text-[9px] mt-0.5 px-1 leading-tight">Glisser / cliquer</span>
+                  </div>
+                </div>
+                <div class="flex gap-2 mt-2">
+                  <input v-model="projUrlInput" type="text" placeholder="… ou coller une URL d'image" @keydown.enter.prevent="projAddUrl"
+                    class="flex-1 px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
+                  <button type="button" @click="projAddUrl" class="px-3 rounded-xl text-white text-sm font-semibold shrink-0" style="background:linear-gradient(135deg,#006d35,#1b8848);">Ajouter</button>
+                </div>
+              </div>
               <div><label class="block text-xs font-semibold text-[#40617f] uppercase mb-1.5">Impact écologique</label>
                 <input v-model="projectForm.impact_label" type="text" placeholder="Ex: 150 kg de déchets évités" class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" /></div>
               <p v-if="projectFormError" class="text-red-600 text-sm">{{ projectFormError }}</p>
@@ -168,8 +191,28 @@
                 <input v-model="stepForm.title" type="text" class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" /></div>
               <div><label class="block text-xs font-semibold text-[#40617f] uppercase mb-1.5">Description</label>
                 <textarea v-model="stepForm.description" rows="3" class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30 resize-none" /></div>
-              <div><label class="block text-xs font-semibold text-[#40617f] uppercase mb-1.5">Image (URL)</label>
-                <input v-model="stepForm.image_url" type="text" class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" /></div>
+              <div>
+                <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1.5">Images</label>
+                <div class="flex gap-2 flex-wrap">
+                  <div v-for="(img, i) in stepImages" :key="i" class="relative w-20 h-20 rounded-xl overflow-hidden group border border-[#e5e7eb]">
+                    <img :src="img.url" class="w-full h-full object-cover" />
+                    <button type="button" @click="stepRemove(img)" class="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-black/60 text-white text-[10px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition">✕</button>
+                  </div>
+                  <div @dragover.prevent="stepDrag = true" @dragleave.prevent="stepDrag = false" @drop.prevent="stepDrag = false; stepAddFiles($event.dataTransfer.files)"
+                    @click="stepFileEl?.click()"
+                    :class="stepDrag ? 'border-[#006d35] bg-[#f0fdf4] text-[#006d35]' : 'border-[#cbd5e1] text-[#94a3b8]'"
+                    class="w-20 h-20 rounded-xl border-2 border-dashed flex flex-col items-center justify-center text-center cursor-pointer hover:border-[#006d35] hover:text-[#006d35] transition">
+                    <input ref="stepFileEl" type="file" accept="image/*" multiple class="hidden" @change="stepAddFiles($event.target.files); $event.target.value = ''" />
+                    <PhotoIcon class="w-5 h-5" />
+                    <span class="text-[9px] mt-0.5 px-1 leading-tight">Glisser / cliquer</span>
+                  </div>
+                </div>
+                <div class="flex gap-2 mt-2">
+                  <input v-model="stepUrlInput" type="text" placeholder="… ou coller une URL d'image" @keydown.enter.prevent="stepAddUrl"
+                    class="flex-1 px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
+                  <button type="button" @click="stepAddUrl" class="px-3 rounded-xl text-white text-sm font-semibold shrink-0" style="background:linear-gradient(135deg,#006d35,#1b8848);">Ajouter</button>
+                </div>
+              </div>
               <div class="flex items-center gap-3">
                 <input v-model="stepForm.completed" type="checkbox" id="stepCompleted" class="w-4 h-4 accent-[#006d35]" />
                 <label for="stepCompleted" class="text-sm text-[#001d32] font-medium">Étape complétée</label>
@@ -260,6 +303,54 @@ async function removeImage(p, img) {
     await fetchProjects()
   } catch (e) { alert(e.message || 'Erreur lors de la suppression.') }
 }
+
+const projImages = ref([])
+const projRemovedIds = ref([])
+const projUrlInput = ref('')
+const projDrag = ref(false)
+const projFileEl = ref(null)
+
+const stepImages = ref([])
+const stepRemovedIds = ref([])
+const stepUrlInput = ref('')
+const stepDrag = ref(false)
+const stepFileEl = ref(null)
+
+async function addPending(targetRef, files) {
+  const imgs = Array.from(files || []).filter(f => f.type.startsWith('image/'))
+  for (const f of imgs) {
+    const dataUrl = await resizeImage(f)
+    targetRef.value.push({ id: null, url: dataUrl, upload: dataUrl })
+  }
+}
+function addPendingUrl(targetRef, urlRef) {
+  const u = (urlRef.value || '').trim()
+  if (!u) return
+  targetRef.value.push({ id: null, url: u, upload: u })
+  urlRef.value = ''
+}
+function removePending(targetRef, removedRef, item) {
+  if (item.id) removedRef.value.push(item.id)
+  targetRef.value = targetRef.value.filter(i => i !== item)
+}
+async function applyImageChanges(basePath, targetRef, removedRef) {
+  for (const id of removedRef.value) {
+    try { await userApi(`${basePath}/${id}`, { method: 'DELETE' }) } catch {}
+  }
+  for (const it of targetRef.value) {
+    if (it.upload) {
+      try { await userApi(basePath, { method: 'POST', body: JSON.stringify({ image: it.upload }) }) } catch {}
+    }
+  }
+}
+
+function projAddFiles(files) { return addPending(projImages, files) }
+function projAddUrl() { addPendingUrl(projImages, projUrlInput) }
+function projRemove(item) { removePending(projImages, projRemovedIds, item) }
+function stepAddFiles(files) { return addPending(stepImages, files) }
+function stepAddUrl() { addPendingUrl(stepImages, stepUrlInput) }
+function stepRemove(item) { removePending(stepImages, stepRemovedIds, item) }
+
 const showProjectForm = ref(false)
 const savingProject = ref(false)
 const projectFormError = ref('')
@@ -284,6 +375,9 @@ function openProjectForm(p) {
     id: p.id, title: p.title, description: p.description || '', category: p.category || '',
     cover_image: p.cover_image || '', impact_label: p.impact_label || '', status: p.status,
   } : emptyProject()
+  projImages.value = p && p.images ? p.images.map(i => ({ id: i.id, url: i.url, upload: null })) : []
+  projRemovedIds.value = []
+  projUrlInput.value = ''
   showProjectForm.value = true
 }
 function closeProjectForm() { if (!savingProject.value) showProjectForm.value = false }
@@ -293,8 +387,10 @@ async function saveProject() {
   projectFormError.value = ''
   try {
     const payload = { ...projectForm.value, cover_image: projectForm.value.cover_image || null, impact_label: projectForm.value.impact_label || null }
-    if (projectForm.value.id) await userApi(`/projects/${projectForm.value.id}`, { method: 'PUT', body: JSON.stringify(payload) })
-    else await userApi('/projects', { method: 'POST', body: JSON.stringify(payload) })
+    let id = projectForm.value.id
+    if (id) await userApi(`/projects/${id}`, { method: 'PUT', body: JSON.stringify(payload) })
+    else { const saved = await userApi('/projects', { method: 'POST', body: JSON.stringify(payload) }); id = saved.id }
+    await applyImageChanges(`/projects/${id}/images`, projImages, projRemovedIds)
     showProjectForm.value = false
     await fetchProjects()
   } catch (e) { projectFormError.value = e.message } finally { savingProject.value = false }
@@ -308,11 +404,17 @@ async function deleteProject(p) {
 function addStep(p) {
   currentProjectId = p.id
   stepForm.value = { ...emptyStep(), step_order: (p.steps?.length || 0) }
+  stepImages.value = []
+  stepRemovedIds.value = []
+  stepUrlInput.value = ''
   showStepForm.value = true
 }
 function editStep(p, step) {
   currentProjectId = p.id
   stepForm.value = { id: step.id, title: step.title, description: step.description || '', image_url: step.image_url || '', completed: !!step.completed_at, step_order: step.step_order }
+  stepImages.value = step.images ? step.images.map(i => ({ id: i.id, url: i.url, upload: null })) : []
+  stepRemovedIds.value = []
+  stepUrlInput.value = ''
   showStepForm.value = true
 }
 function closeStepForm() { if (!savingStep.value) showStepForm.value = false }
@@ -321,8 +423,10 @@ async function saveStep() {
   savingStep.value = true
   try {
     const payload = { ...stepForm.value, image_url: stepForm.value.image_url || null }
-    if (stepForm.value.id) await userApi(`/projects/${currentProjectId}/steps/${stepForm.value.id}`, { method: 'PUT', body: JSON.stringify(payload) })
-    else await userApi(`/projects/${currentProjectId}/steps`, { method: 'POST', body: JSON.stringify(payload) })
+    let sid = stepForm.value.id
+    if (sid) await userApi(`/projects/${currentProjectId}/steps/${sid}`, { method: 'PUT', body: JSON.stringify(payload) })
+    else { const saved = await userApi(`/projects/${currentProjectId}/steps`, { method: 'POST', body: JSON.stringify(payload) }); sid = saved.id }
+    await applyImageChanges(`/projects/${currentProjectId}/steps/${sid}/images`, stepImages, stepRemovedIds)
     showStepForm.value = false
     await fetchProjects()
   } catch (e) { alert(e.message) } finally { savingStep.value = false }

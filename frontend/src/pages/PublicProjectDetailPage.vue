@@ -56,8 +56,8 @@
               <div class="flex-1 min-w-0 pb-2">
                 <p class="font-semibold text-[#001d32] text-sm">{{ step.title }}</p>
                 <p v-if="step.description" class="text-[#40617f] text-sm mt-0.5 whitespace-pre-line">{{ step.description }}</p>
-                <div v-if="step.image_url" class="mt-2 rounded-xl overflow-hidden max-w-sm">
-                  <img :src="step.image_url" class="w-full object-cover" />
+                <div v-if="stepImages(step).length" class="flex gap-2 mt-2 flex-wrap">
+                  <img v-for="(src, i) in stepImages(step)" :key="i" :src="src" class="w-32 h-32 rounded-xl object-cover border border-[#edf4ff]" />
                 </div>
               </div>
             </div>
@@ -85,6 +85,12 @@ const images = computed(() => {
   if (!list.length && project.value.cover_image) return [project.value.cover_image]
   return list
 })
+
+function stepImages(step) {
+  const list = (step.images || []).map(i => i.url)
+  if (!list.length && step.image_url) return [step.image_url]
+  return list
+}
 
 function statusLabel(s) { return { in_progress: 'En cours', completed: 'Terminé', showcased: 'Mis en avant' }[s] || s }
 function statusBadge(s) {
