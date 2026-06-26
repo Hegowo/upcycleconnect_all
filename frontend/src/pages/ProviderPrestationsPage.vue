@@ -201,7 +201,13 @@ async function submitPrestation(s) {
     const saved = await userApi(`/provider/prestations/${s.id}/submit`, { method: 'PUT' })
     const idx = prestations.value.findIndex(p => p.id === s.id)
     if (idx !== -1) prestations.value[idx] = saved
-  } catch {}
+  } catch (e) {
+    if (e.data?.upgrade_required) {
+      if (confirm(`${e.message}\n\nVoir les formules d'abonnement ?`)) router.push('/profil/pro/abonnement')
+    } else {
+      alert(e.message || 'Erreur lors de la soumission.')
+    }
+  }
 }
 
 async function deletePrestation(s) {

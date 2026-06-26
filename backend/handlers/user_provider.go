@@ -445,6 +445,10 @@ func (h *UserProviderHandler) SubmitPrestation(c *gin.Context) {
 		return
 	}
 
+	if enforcePrestationQuota(c, h.DB, user.ID) {
+		return
+	}
+
 	old := map[string]string{"status": p.Status}
 
 	h.DB.Model(&p).Update("status", "pending")

@@ -49,7 +49,7 @@ func main() {
 		&models.Tip{},
 		&models.Locale{},
 		&models.Subscription{},
-		&models.SubscriptionPlanConfig{},
+		&models.SubscriptionPlan{},
 		&models.Campaign{},
 		&models.CampaignItem{},
 		&models.UpcyclingProject{},
@@ -62,6 +62,7 @@ func main() {
 
 	database.MigrateDepositPhotos(db)
 
+	database.SeedSubscriptionPlans(db)
 	models.LoadSubscriptionPlans(db)
 
 	r := router.Setup(db, cfg)

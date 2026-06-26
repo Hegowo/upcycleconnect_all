@@ -18,6 +18,9 @@
           </div>
           <div>
             <p class="font-jakarta font-bold text-[#001d32]">Abonnement {{ subscription.plan_label }} actif</p>
+            <p class="text-[#40617f] text-xs mt-0.5" v-if="subscription.started_at">
+              Depuis le {{ formatDate(subscription.started_at) }}
+            </p>
             <p class="text-[#40617f] text-xs mt-0.5" v-if="subscription.current_period_end">
               Renouvellement le {{ formatDate(subscription.current_period_end) }}
             </p>

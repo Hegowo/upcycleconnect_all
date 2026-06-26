@@ -1,6 +1,8 @@
 package models
 
 import (
+	"encoding/json"
+	"sort"
 	"sync"
 	"time"
 
@@ -12,8 +14,9 @@ type Subscription struct {
 	UserID               uint       `gorm:"uniqueIndex;not null" json:"user_id"`
 	StripeCustomerID     string     `gorm:"size:100" json:"stripe_customer_id"`
 	StripeSubscriptionID string     `gorm:"size:100;uniqueIndex" json:"stripe_subscription_id"`
-	Plan                 string     `gorm:"size:20;default:basic" json:"plan"`
+	Plan                 string     `gorm:"size:40;default:basic" json:"plan"`
 	Status               string     `gorm:"size:30;default:inactive" json:"status"`
+	StartedAt            *time.Time `json:"started_at"`
 	CurrentPeriodEnd     *time.Time `json:"current_period_end"`
 	CreatedAt            time.Time  `json:"created_at"`
 	UpdatedAt            time.Time  `json:"updated_at"`
@@ -24,71 +27,93 @@ type Subscription struct {
 func (Subscription) TableName() string { return "subscriptions" }
 
 type SubscriptionPlan struct {
-	Key         string
-	Label       string
-	AmountCents int64
-	Features    []string
+	Key         string `gorm:"size:40;primaryKey" json:"key"`
+	Label       string `gorm:"size:80;default:''" json:"label"`
+	AmountCents int64  `gorm:"not null;default:0" json:"amount_cents"`
+	IsDefault   bool   `gorm:"not null;default:false" json:"is_default"`
+	IsActive    bool   `gorm:"not null;default:true" json:"is_active"`
+	SortOrder   int    `gorm:"not null;default:0" json:"sort_order"`
+
+	MaxPrestations      *int `json:"max_prestations"`
+	MaxProjectsPerMonth *int `json:"max_projects_per_month"`
+	MaxCampaigns        *int `json:"max_campaigns"`
+	MaxEventsPerMonth   *int `json:"max_events_per_month"`
+
+	FeatureAdvancedStats bool `gorm:"not null;default:false" json:"feature_advanced_stats"`
+	FeaturePremiumStats  bool `gorm:"not null;default:false" json:"feature_premium_stats"`
+
+	FeaturesJSON string    `gorm:"type:text" json:"-"`
+	CreatedAt    time.Time `json:"created_at"`
+	UpdatedAt    time.Time `json:"updated_at"`
 }
 
-type SubscriptionPlanConfig struct {
-	Key         string    `gorm:"size:20;primaryKey" json:"key"`
-	AmountCents int64     `gorm:"not null" json:"amount_cents"`
-	UpdatedAt   time.Time `json:"updated_at"`
+func (SubscriptionPlan) TableName() string { return "subscription_plans" }
+
+func (p SubscriptionPlan) Features() []string {
+	if p.FeaturesJSON == "" {
+		return []string{}
+	}
+	var f []string
+	if json.Unmarshal([]byte(p.FeaturesJSON), &f) != nil {
+		return []string{}
+	}
+	return f
 }
 
-func (SubscriptionPlanConfig) TableName() string { return "subscription_plans" }
+func intPtr(v int) *int { return &v }
 
-var PlanOrder = []string{"basic", "premium"}
-
-var defaultSubscriptionPlans = map[string]SubscriptionPlan{
-	"basic": {
-		Key:         "basic",
-		Label:       "Basic",
-		AmountCents: 1500,
-		Features: []string{
+var DefaultPlanSeeds = []SubscriptionPlan{
+	{
+		Key: "free", Label: "Gratuit", AmountCents: 0, IsDefault: true, IsActive: true, SortOrder: 0,
+		MaxPrestations: intPtr(1), MaxProjectsPerMonth: intPtr(1), MaxCampaigns: intPtr(0), MaxEventsPerMonth: intPtr(1),
+		FeatureAdvancedStats: false, FeaturePremiumStats: false,
+		FeaturesJSON: mustJSON([]string{"1 prestation publiée", "1 projet par mois", "1 événement par mois"}),
+	},
+	{
+		Key: "basic", Label: "Basic", AmountCents: 1500, IsDefault: false, IsActive: true, SortOrder: 1,
+		MaxPrestations: intPtr(10), MaxProjectsPerMonth: intPtr(5), MaxCampaigns: intPtr(0), MaxEventsPerMonth: intPtr(5),
+		FeatureAdvancedStats: true, FeaturePremiumStats: false,
+		FeaturesJSON: mustJSON([]string{
+			"Jusqu'à 10 prestations publiées",
+			"5 projets et 5 événements par mois",
 			"Tableaux de bord avancés (chiffre d'affaires, réservations)",
 			"Statistiques sur les matériaux disponibles",
-		},
+		}),
 	},
-	"premium": {
-		Key:         "premium",
-		Label:       "Premium",
-		AmountCents: 3000,
-		Features: []string{
-			"Tout ce qui est inclus dans Basic",
+	{
+		Key: "premium", Label: "Premium", AmountCents: 3000, IsDefault: false, IsActive: true, SortOrder: 2,
+		MaxPrestations: nil, MaxProjectsPerMonth: nil, MaxCampaigns: intPtr(5), MaxEventsPerMonth: nil,
+		FeatureAdvancedStats: true, FeaturePremiumStats: true,
+		FeaturesJSON: mustJSON([]string{
+			"Prestations, projets et événements illimités",
+			"Jusqu'à 5 campagnes publicitaires",
 			"Analyse d'impact écologique détaillée",
 			"Alertes priorisées pour la collecte",
-			"Gestion de campagnes publicitaires (mise en avant)",
-		},
+		}),
 	},
+}
+
+func mustJSON(v []string) string {
+	b, _ := json.Marshal(v)
+	return string(b)
 }
 
 var (
 	planMu    sync.RWMutex
-	planCache = clonePlans()
+	planCache = map[string]SubscriptionPlan{}
 )
 
-func clonePlans() map[string]SubscriptionPlan {
-	out := make(map[string]SubscriptionPlan, len(defaultSubscriptionPlans))
-	for k, v := range defaultSubscriptionPlans {
-		out[k] = v
-	}
-	return out
-}
-
 func LoadSubscriptionPlans(db *gorm.DB) {
-	plans := clonePlans()
-	var rows []SubscriptionPlanConfig
-	if err := db.Find(&rows).Error; err == nil {
-		for _, r := range rows {
-			if p, ok := plans[r.Key]; ok {
-				p.AmountCents = r.AmountCents
-				plans[r.Key] = p
-			}
-		}
+	var rows []SubscriptionPlan
+	if err := db.Find(&rows).Error; err != nil {
+		return
+	}
+	m := make(map[string]SubscriptionPlan, len(rows))
+	for _, r := range rows {
+		m[r.Key] = r
 	}
 	planMu.Lock()
-	planCache = plans
+	planCache = m
 	planMu.Unlock()
 }
 
@@ -99,16 +124,47 @@ func Plan(key string) (SubscriptionPlan, bool) {
 	return p, ok
 }
 
-func PlansList() []SubscriptionPlan {
+func sortedPlans(activeOnly bool) []SubscriptionPlan {
 	planMu.RLock()
-	defer planMu.RUnlock()
 	out := make([]SubscriptionPlan, 0, len(planCache))
-	for _, key := range PlanOrder {
-		if p, ok := planCache[key]; ok {
-			out = append(out, p)
+	for _, p := range planCache {
+		if activeOnly && !p.IsActive {
+			continue
 		}
+		out = append(out, p)
+	}
+	planMu.RUnlock()
+	sort.Slice(out, func(i, j int) bool {
+		if out[i].SortOrder != out[j].SortOrder {
+			return out[i].SortOrder < out[j].SortOrder
+		}
+		return out[i].AmountCents < out[j].AmountCents
+	})
+	return out
+}
+
+func PlansList() []SubscriptionPlan {
+	out := make([]SubscriptionPlan, 0)
+	for _, p := range sortedPlans(true) {
+		if p.IsDefault {
+			continue
+		}
+		out = append(out, p)
 	}
 	return out
+}
+
+func AllPlans() []SubscriptionPlan { return sortedPlans(false) }
+
+func DefaultPlan() SubscriptionPlan {
+	planMu.RLock()
+	defer planMu.RUnlock()
+	for _, p := range planCache {
+		if p.IsDefault {
+			return p
+		}
+	}
+	return SubscriptionPlan{Key: "free", Label: "Gratuit"}
 }
 
 type SubscriptionResponse struct {
@@ -116,15 +172,22 @@ type SubscriptionResponse struct {
 	Plan             string  `json:"plan"`
 	PlanLabel        string  `json:"plan_label"`
 	Status           string  `json:"status"`
+	StartedAt        *string `json:"started_at"`
 	CurrentPeriodEnd *string `json:"current_period_end"`
 	AmountCents      int64   `json:"amount_cents"`
 }
 
 func ToSubscriptionResponse(s *Subscription) SubscriptionResponse {
-	var end *string
-	if s.CurrentPeriodEnd != nil {
-		v := s.CurrentPeriodEnd.UTC().Format(time.RFC3339)
-		end = &v
+	fmtTime := func(t *time.Time) *string {
+		if t == nil {
+			return nil
+		}
+		v := t.UTC().Format(time.RFC3339)
+		return &v
+	}
+	started := s.StartedAt
+	if started == nil {
+		started = &s.CreatedAt
 	}
 	plan, _ := Plan(s.Plan)
 	return SubscriptionResponse{
@@ -132,7 +195,8 @@ func ToSubscriptionResponse(s *Subscription) SubscriptionResponse {
 		Plan:             s.Plan,
 		PlanLabel:        plan.Label,
 		Status:           s.Status,
-		CurrentPeriodEnd: end,
+		StartedAt:        fmtTime(started),
+		CurrentPeriodEnd: fmtTime(s.CurrentPeriodEnd),
 		AmountCents:      plan.AmountCents,
 	}
 }

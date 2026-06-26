@@ -643,7 +643,8 @@ func (h *PaymentHandler) fulfillSubscription(session *stripe.CheckoutSession) er
 		return nil
 	}
 
-	periodEnd := time.Now().AddDate(0, 1, 0)
+	now := time.Now()
+	periodEnd := now.AddDate(0, 1, 0)
 
 	var sub models.Subscription
 	if h.DB.Where("user_id = ?", userID).First(&sub).Error == nil {
@@ -652,6 +653,7 @@ func (h *PaymentHandler) fulfillSubscription(session *stripe.CheckoutSession) er
 			"stripe_subscription_id": subID,
 			"plan":                   plan,
 			"status":                 "active",
+			"started_at":             &now,
 			"current_period_end":     &periodEnd,
 		})
 	} else {
@@ -661,6 +663,7 @@ func (h *PaymentHandler) fulfillSubscription(session *stripe.CheckoutSession) er
 			StripeSubscriptionID: subID,
 			Plan:                 plan,
 			Status:               "active",
+			StartedAt:            &now,
 			CurrentPeriodEnd:     &periodEnd,
 		}
 		h.DB.Create(&sub)

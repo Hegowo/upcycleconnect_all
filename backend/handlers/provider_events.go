@@ -112,6 +112,10 @@ func (h *ProviderEventHandler) Store(c *gin.Context) {
 		return
 	}
 
+	if enforceEventQuota(c, h.DB, user.ID) {
+		return
+	}
+
 	var req struct {
 		CategoryID      *uint   `json:"category_id"`
 		Title           string  `json:"title" binding:"required"`

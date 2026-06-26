@@ -90,11 +90,7 @@ func (h *CampaignHandler) CreateCampaign(c *gin.Context) {
 		return
 	}
 
-	if !h.hasPremiumSubscription(user.ID) {
-		c.JSON(http.StatusPaymentRequired, gin.H{
-			"message": "La gestion de campagnes publicitaires nécessite un abonnement Premium.",
-			"upgrade": "/profil/pro/abonnement",
-		})
+	if enforceCampaignQuota(c, h.DB, user.ID) {
 		return
 	}
 	var req campaignPayload
@@ -301,13 +297,4 @@ func (h *CampaignHandler) AdminUpdateStatus(c *gin.Context) {
 	h.Audit.Log(c, "campaign.status_updated", "Campaign", &camp.ID, map[string]string{"status": camp.Status}, map[string]string{"status": req.Status})
 	h.DB.Preload("Provider").First(&camp, camp.ID)
 	c.JSON(http.StatusOK, models.ToCampaignResponse(&camp))
-}
-
-func (h *CampaignHandler) hasPremiumSubscription(userID uint) bool {
-	var sub models.Subscription
-	if err := h.DB.Where("user_id = ? AND status = ? AND plan = ?", userID, "active", "premium").
-		First(&sub).Error; err != nil {
-		return false
-	}
-	return true
 }

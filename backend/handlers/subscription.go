@@ -1,7 +1,10 @@
 package handlers
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
+	"strings"
 
 	"upcycleconnect/backend/middleware"
 	"upcycleconnect/backend/models"
@@ -20,12 +23,7 @@ type SubscriptionHandler struct {
 func (h *SubscriptionHandler) Plans(c *gin.Context) {
 	plans := []gin.H{}
 	for _, plan := range models.PlansList() {
-		plans = append(plans, gin.H{
-			"key":          plan.Key,
-			"label":        plan.Label,
-			"amount_cents": plan.AmountCents,
-			"features":     plan.Features,
-		})
+		plans = append(plans, planJSON(plan))
 	}
 	c.JSON(http.StatusOK, gin.H{"data": plans})
 }
@@ -52,10 +50,10 @@ func (h *SubscriptionHandler) Checkout(c *gin.Context) {
 	}
 
 	var req struct {
-		Plan string `json:"plan" binding:"required,oneof=basic premium"`
+		Plan string `json:"plan" binding:"required"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Plan invalide (basic ou premium)"})
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Plan requis"})
 		return
 	}
 
@@ -66,8 +64,8 @@ func (h *SubscriptionHandler) Checkout(c *gin.Context) {
 	}
 
 	plan, ok := models.Plan(req.Plan)
-	if !ok {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Plan inconnu"})
+	if !ok || !plan.IsActive || plan.IsDefault {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Plan invalide ou indisponible."})
 		return
 	}
 
@@ -106,58 +104,166 @@ func (h *SubscriptionHandler) Cancel(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Abonnement annulé."})
 }
 
+func planJSON(p models.SubscriptionPlan) gin.H {
+	return gin.H{
+		"key":                    p.Key,
+		"label":                  p.Label,
+		"amount_cents":           p.AmountCents,
+		"is_default":             p.IsDefault,
+		"is_active":              p.IsActive,
+		"sort_order":             p.SortOrder,
+		"max_prestations":        p.MaxPrestations,
+		"max_projects_per_month": p.MaxProjectsPerMonth,
+		"max_campaigns":          p.MaxCampaigns,
+		"max_events_per_month":   p.MaxEventsPerMonth,
+		"feature_advanced_stats": p.FeatureAdvancedStats,
+		"feature_premium_stats":  p.FeaturePremiumStats,
+		"features":               p.Features(),
+	}
+}
+
+type planRequest struct {
+	Label                string    `json:"label"`
+	AmountCents          *int64    `json:"amount_cents"`
+	IsActive             *bool     `json:"is_active"`
+	IsDefault            *bool     `json:"is_default"`
+	SortOrder            *int      `json:"sort_order"`
+	MaxPrestations       *int      `json:"max_prestations"`
+	MaxProjectsPerMonth  *int      `json:"max_projects_per_month"`
+	MaxCampaigns         *int      `json:"max_campaigns"`
+	MaxEventsPerMonth    *int      `json:"max_events_per_month"`
+	FeatureAdvancedStats *bool     `json:"feature_advanced_stats"`
+	FeaturePremiumStats  *bool     `json:"feature_premium_stats"`
+	Features             *[]string `json:"features"`
+}
+
+func applyPlan(p *models.SubscriptionPlan, req planRequest) {
+	p.Label = strings.TrimSpace(req.Label)
+	if req.AmountCents != nil {
+		p.AmountCents = *req.AmountCents
+	}
+	if req.IsActive != nil {
+		p.IsActive = *req.IsActive
+	}
+	if req.SortOrder != nil {
+		p.SortOrder = *req.SortOrder
+	}
+	p.MaxPrestations = req.MaxPrestations
+	p.MaxProjectsPerMonth = req.MaxProjectsPerMonth
+	p.MaxCampaigns = req.MaxCampaigns
+	p.MaxEventsPerMonth = req.MaxEventsPerMonth
+	if req.FeatureAdvancedStats != nil {
+		p.FeatureAdvancedStats = *req.FeatureAdvancedStats
+	}
+	if req.FeaturePremiumStats != nil {
+		p.FeaturePremiumStats = *req.FeaturePremiumStats
+	}
+	if req.Features != nil {
+		b, _ := json.Marshal(*req.Features)
+		p.FeaturesJSON = string(b)
+	}
+}
+
+func (h *SubscriptionHandler) uniquePlanKey(base string) string {
+	if base == "" {
+		base = "plan"
+	}
+	key := base
+	for i := 2; ; i++ {
+		var cnt int64
+		h.DB.Model(&models.SubscriptionPlan{}).Where("`key` = ?", key).Count(&cnt)
+		if cnt == 0 {
+			return key
+		}
+		key = fmt.Sprintf("%s-%d", base, i)
+	}
+}
+
 func (h *SubscriptionHandler) AdminPlans(c *gin.Context) {
 	plans := []gin.H{}
-	for _, plan := range models.PlansList() {
-		plans = append(plans, gin.H{
-			"key":          plan.Key,
-			"label":        plan.Label,
-			"amount_cents": plan.AmountCents,
-			"features":     plan.Features,
-		})
+	for _, plan := range models.AllPlans() {
+		var subs int64
+		h.DB.Model(&models.Subscription{}).Where("plan = ? AND status = ?", plan.Key, "active").Count(&subs)
+		j := planJSON(plan)
+		j["active_subscribers"] = subs
+		plans = append(plans, j)
 	}
 	c.JSON(http.StatusOK, gin.H{"data": plans})
 }
 
+func (h *SubscriptionHandler) AdminCreatePlan(c *gin.Context) {
+	var req planRequest
+	if err := c.ShouldBindJSON(&req); err != nil || strings.TrimSpace(req.Label) == "" {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Le nom du plan est requis."})
+		return
+	}
+	plan := models.SubscriptionPlan{Key: h.uniquePlanKey(slugify(req.Label)), IsActive: true}
+	applyPlan(&plan, req)
+	if err := h.DB.Create(&plan).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Erreur lors de la création du plan."})
+		return
+	}
+	if req.IsDefault != nil && *req.IsDefault {
+		h.setDefaultPlan(plan.Key)
+	}
+	models.LoadSubscriptionPlans(h.DB)
+	h.Audit.Log(c, "subscription_plan.created", "SubscriptionPlan", nil, nil, map[string]interface{}{"key": plan.Key})
+	updated, _ := models.Plan(plan.Key)
+	c.JSON(http.StatusCreated, planJSON(updated))
+}
+
 func (h *SubscriptionHandler) AdminUpdatePlan(c *gin.Context) {
 	key := c.Param("key")
-	if _, ok := models.Plan(key); !ok {
-		c.JSON(http.StatusNotFound, gin.H{"message": "Plan inconnu"})
+	var plan models.SubscriptionPlan
+	if err := h.DB.Where("`key` = ?", key).First(&plan).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "Plan introuvable"})
 		return
 	}
-	var req struct {
-		AmountCents *int64 `json:"amount_cents"`
-	}
-	if err := c.ShouldBindJSON(&req); err != nil || req.AmountCents == nil {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Montant requis (amount_cents)."})
+	var req planRequest
+	if err := c.ShouldBindJSON(&req); err != nil || strings.TrimSpace(req.Label) == "" {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Le nom du plan est requis."})
 		return
 	}
-	if *req.AmountCents < 0 {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Le montant doit être positif."})
-		return
-	}
-
-	var cfg models.SubscriptionPlanConfig
-	if err := h.DB.Where(models.SubscriptionPlanConfig{Key: key}).
-		Assign(models.SubscriptionPlanConfig{AmountCents: *req.AmountCents}).
-		FirstOrCreate(&cfg).Error; err != nil {
+	applyPlan(&plan, req)
+	if err := h.DB.Save(&plan).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Erreur lors de l'enregistrement."})
 		return
 	}
+	if req.IsDefault != nil && *req.IsDefault {
+		h.setDefaultPlan(plan.Key)
+	}
 	models.LoadSubscriptionPlans(h.DB)
+	h.Audit.Log(c, "subscription_plan.updated", "SubscriptionPlan", nil, nil, map[string]interface{}{"key": key})
+	updated, _ := models.Plan(key)
+	c.JSON(http.StatusOK, planJSON(updated))
+}
 
-	h.Audit.Log(c, "subscription_plan.updated", "SubscriptionPlan", nil, nil, map[string]interface{}{
-		"key":          key,
-		"amount_cents": *req.AmountCents,
-	})
+func (h *SubscriptionHandler) AdminDeletePlan(c *gin.Context) {
+	key := c.Param("key")
+	var plan models.SubscriptionPlan
+	if err := h.DB.Where("`key` = ?", key).First(&plan).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "Plan introuvable"})
+		return
+	}
+	if plan.IsDefault {
+		c.JSON(http.StatusConflict, gin.H{"message": "Impossible de supprimer le plan par défaut. Définissez-en un autre par défaut d'abord."})
+		return
+	}
+	var subs int64
+	h.DB.Model(&models.Subscription{}).Where("plan = ? AND status = ?", key, "active").Count(&subs)
+	if subs > 0 {
+		c.JSON(http.StatusConflict, gin.H{"message": fmt.Sprintf("%d abonné(s) actif(s) sur ce plan. Désactivez-le plutôt que de le supprimer.", subs)})
+		return
+	}
+	h.DB.Where("`key` = ?", key).Delete(&models.SubscriptionPlan{})
+	models.LoadSubscriptionPlans(h.DB)
+	h.Audit.Log(c, "subscription_plan.deleted", "SubscriptionPlan", nil, map[string]interface{}{"key": key}, nil)
+	c.JSON(http.StatusOK, gin.H{"message": "Plan supprimé."})
+}
 
-	plan, _ := models.Plan(key)
-	c.JSON(http.StatusOK, gin.H{
-		"key":          plan.Key,
-		"label":        plan.Label,
-		"amount_cents": plan.AmountCents,
-		"features":     plan.Features,
-	})
+func (h *SubscriptionHandler) setDefaultPlan(key string) {
+	h.DB.Model(&models.SubscriptionPlan{}).Where("`key` <> ?", key).Update("is_default", false)
+	h.DB.Model(&models.SubscriptionPlan{}).Where("`key` = ?", key).Update("is_default", true)
 }
 
 func (h *SubscriptionHandler) AdminIndex(c *gin.Context) {

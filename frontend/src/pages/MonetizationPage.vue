@@ -151,26 +151,83 @@
 
     <div v-else-if="activeTab === 'subscriptions'">
       <div class="card p-5 mb-6">
-        <h3 class="font-bold text-[#001d32] mb-1">Tarifs des abonnements</h3>
-        <p class="text-xs text-[#64748b] mb-4">Modifiez le prix mensuel de chaque formule. Le nouveau tarif s'applique aux prochaines souscriptions.</p>
+        <div class="flex items-center justify-between gap-3 mb-1 flex-wrap">
+          <h3 class="font-bold text-[#001d32]">Formules d'abonnement</h3>
+          <button @click="openPlanForm()" class="px-3 py-1.5 rounded-lg text-white text-xs font-semibold hover:opacity-90 transition" style="background-color:#1B8848;">
+            + Nouvelle formule
+          </button>
+        </div>
+        <p class="text-xs text-[#64748b] mb-4">Créez et configurez les formules : prix, quotas (laisser vide = illimité) et droits. Appliqué aux prochaines souscriptions.</p>
+
+        <div v-if="planForm.show" class="border-2 border-[#006d35]/30 rounded-xl p-4 mb-5 bg-[#f8fafc]">
+          <h4 class="font-bold text-[#001d32] mb-3">{{ planForm.key ? 'Modifier la formule' : 'Nouvelle formule' }}</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs text-[#64748b] mb-1">Nom *</label>
+              <input v-model="planForm.label" type="text" class="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-lg text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-[#64748b] mb-1">Prix mensuel (€)</label>
+              <input v-model.number="planForm.euros" type="number" min="0" step="0.01" class="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-lg text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-[#64748b] mb-1">Prestations publiées max</label>
+              <input v-model="planForm.max_prestations" type="number" min="0" placeholder="illimité" class="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-lg text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-[#64748b] mb-1">Projets / mois max</label>
+              <input v-model="planForm.max_projects_per_month" type="number" min="0" placeholder="illimité" class="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-lg text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-[#64748b] mb-1">Campagnes max</label>
+              <input v-model="planForm.max_campaigns" type="number" min="0" placeholder="illimité" class="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-lg text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-[#64748b] mb-1">Événements / mois max</label>
+              <input v-model="planForm.max_events_per_month" type="number" min="0" placeholder="illimité" class="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-lg text-sm" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs text-[#64748b] mb-1">Avantages affichés (un par ligne)</label>
+              <textarea v-model="planForm.featuresText" rows="3" class="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-lg text-sm resize-none"></textarea>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-4 mt-3 text-sm text-[#001d32]">
+            <label class="flex items-center gap-2"><input type="checkbox" v-model="planForm.feature_advanced_stats" /> Tableaux de bord avancés</label>
+            <label class="flex items-center gap-2"><input type="checkbox" v-model="planForm.feature_premium_stats" /> Analyses premium</label>
+            <label class="flex items-center gap-2"><input type="checkbox" v-model="planForm.is_active" /> Active (souscriptible)</label>
+            <label class="flex items-center gap-2"><input type="checkbox" v-model="planForm.is_default" /> Formule par défaut (gratuite)</label>
+          </div>
+          <p v-if="planForm.error" class="text-red-600 text-xs mt-2">{{ planForm.error }}</p>
+          <div class="flex gap-2 mt-4">
+            <button @click="savePlanForm" :disabled="planForm.saving" class="px-4 py-2 rounded-lg text-white text-sm font-semibold hover:opacity-90 transition disabled:opacity-50" style="background-color:#1B8848;">
+              {{ planForm.saving ? 'Enregistrement…' : 'Enregistrer' }}
+            </button>
+            <button @click="planForm.show = false" class="px-4 py-2 rounded-lg bg-gray-100 text-[#40617f] text-sm font-semibold hover:bg-gray-200 transition">Annuler</button>
+          </div>
+        </div>
+
         <div v-if="loadingPlans" class="py-6 text-center">
           <div class="w-6 h-6 border-4 border-[#006d35] border-t-transparent rounded-full animate-spin mx-auto" />
         </div>
-        <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div v-for="p in plans" :key="p.key" class="border border-[#e5e7eb] rounded-xl p-4">
-            <p class="font-bold text-[#001d32]">{{ p.label }}</p>
-            <div class="flex items-end gap-2 mt-3">
-              <div class="flex-1">
-                <label class="block text-xs text-[#64748b] mb-1">Prix mensuel (€)</label>
-                <input v-model.number="p.euros" type="number" min="0" step="0.01"
-                  class="w-full px-3 py-2 bg-[#f8fafc] border border-[#e5e7eb] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
-              </div>
-              <button @click="savePlan(p)" :disabled="p.saving"
-                class="px-4 py-2 rounded-lg text-white text-sm font-semibold hover:opacity-90 transition disabled:opacity-50" style="background-color:#1B8848;">
-                {{ p.saving ? '…' : 'Enregistrer' }}
-              </button>
+        <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div v-for="p in plans" :key="p.key" class="border border-[#e5e7eb] rounded-xl p-4 flex flex-col">
+            <div class="flex items-center gap-2 mb-1 flex-wrap">
+              <p class="font-bold text-[#001d32]">{{ p.label }}</p>
+              <span v-if="p.is_default" class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-700">Défaut</span>
+              <span v-if="!p.is_active" class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-gray-200 text-gray-600">Inactive</span>
             </div>
-            <p v-if="p.saved" class="text-xs text-green-600 mt-1.5">Tarif mis à jour ✓</p>
+            <p class="text-[#006d35] font-extrabold text-lg">{{ formatEUR(p.amount_cents) }}<span class="text-xs text-[#64748b] font-normal">/mois</span></p>
+            <ul class="text-xs text-[#40617f] mt-2 space-y-0.5 flex-1">
+              <li>Prestations : {{ limitLabel(p.max_prestations) }}</li>
+              <li>Projets/mois : {{ limitLabel(p.max_projects_per_month) }}</li>
+              <li>Campagnes : {{ limitLabel(p.max_campaigns) }}</li>
+              <li>Événements/mois : {{ limitLabel(p.max_events_per_month) }}</li>
+            </ul>
+            <p class="text-[10px] text-[#94a3b8] mt-2">{{ p.active_subscribers || 0 }} abonné(s) actif(s)</p>
+            <div class="flex gap-2 mt-3">
+              <button @click="openPlanForm(p)" class="flex-1 px-3 py-1.5 rounded-lg bg-[#edf4ff] text-[#1a73e8] text-xs font-semibold hover:bg-[#d0e8ff] transition">Modifier</button>
+              <button v-if="!p.is_default" @click="deletePlan(p)" class="px-3 py-1.5 rounded-lg bg-red-50 text-red-600 text-xs font-semibold hover:bg-red-100 transition">Suppr.</button>
+            </div>
           </div>
         </div>
       </div>
@@ -279,34 +336,75 @@ const loadingSubs = ref(true)
 
 const plans = ref([])
 const loadingPlans = ref(true)
+function limitLabel(v) { return (v === null || v === undefined) ? 'illimité' : v }
 async function fetchPlans() {
   loadingPlans.value = true
   try {
     const res = await fetch(`${BASE}/subscription-plans`, { headers: authHeaders() })
     const j = await res.json()
-    plans.value = (j.data || []).map(p => ({ ...p, euros: (p.amount_cents || 0) / 100, saving: false, saved: false }))
+    plans.value = j.data || []
   } catch { plans.value = [] } finally { loadingPlans.value = false }
 }
-async function savePlan(p) {
-  p.saving = true
-  p.saved = false
+
+const planForm = ref({ show: false })
+function openPlanForm(p) {
+  if (p) {
+    planForm.value = {
+      show: true, key: p.key, label: p.label, euros: (p.amount_cents || 0) / 100,
+      max_prestations: p.max_prestations ?? '', max_projects_per_month: p.max_projects_per_month ?? '',
+      max_campaigns: p.max_campaigns ?? '', max_events_per_month: p.max_events_per_month ?? '',
+      feature_advanced_stats: !!p.feature_advanced_stats, feature_premium_stats: !!p.feature_premium_stats,
+      is_active: !!p.is_active, is_default: !!p.is_default,
+      featuresText: (p.features || []).join('\n'), saving: false, error: '',
+    }
+  } else {
+    planForm.value = {
+      show: true, key: null, label: '', euros: 0,
+      max_prestations: '', max_projects_per_month: '', max_campaigns: '', max_events_per_month: '',
+      feature_advanced_stats: false, feature_premium_stats: false, is_active: true, is_default: false,
+      featuresText: '', saving: false, error: '',
+    }
+  }
+}
+function numOrNull(v) { return (v === '' || v === null || v === undefined) ? null : Number(v) }
+async function savePlanForm() {
+  const f = planForm.value
+  if (!f.label || !f.label.trim()) { f.error = 'Le nom est requis.'; return }
+  f.saving = true; f.error = ''
+  const payload = {
+    label: f.label.trim(),
+    amount_cents: Math.round((Number(f.euros) || 0) * 100),
+    max_prestations: numOrNull(f.max_prestations),
+    max_projects_per_month: numOrNull(f.max_projects_per_month),
+    max_campaigns: numOrNull(f.max_campaigns),
+    max_events_per_month: numOrNull(f.max_events_per_month),
+    feature_advanced_stats: f.feature_advanced_stats,
+    feature_premium_stats: f.feature_premium_stats,
+    is_active: f.is_active,
+    is_default: f.is_default,
+    features: f.featuresText.split('\n').map(s => s.trim()).filter(Boolean),
+  }
   try {
-    const cents = Math.round((Number(p.euros) || 0) * 100)
-    const res = await fetch(`${BASE}/subscription-plans/${p.key}`, {
-      method: 'PUT',
+    const url = f.key ? `${BASE}/subscription-plans/${f.key}` : `${BASE}/subscription-plans`
+    const res = await fetch(url, {
+      method: f.key ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json', ...authHeaders() },
-      body: JSON.stringify({ amount_cents: cents }),
+      body: JSON.stringify(payload),
     })
     if (res.ok) {
-      const updated = await res.json()
-      p.amount_cents = updated.amount_cents
-      p.euros = (updated.amount_cents || 0) / 100
-      p.saved = true
-      setTimeout(() => { p.saved = false }, 2500)
-      fetchSubs()
-      fetchFinance()
+      planForm.value.show = false
+      fetchPlans(); fetchSubs(); fetchFinance()
+    } else {
+      const j = await res.json().catch(() => ({}))
+      f.error = j.message || 'Erreur lors de l\'enregistrement.'
     }
-  } finally { p.saving = false }
+  } catch { f.error = 'Erreur réseau.' } finally { f.saving = false }
+}
+async function deletePlan(p) {
+  if (!confirm(`Supprimer la formule « ${p.label} » ?`)) return
+  const res = await fetch(`${BASE}/subscription-plans/${p.key}`, { method: 'DELETE', headers: authHeaders() })
+  if (res.ok) { fetchPlans() }
+  else { const j = await res.json().catch(() => ({})); alert(j.message || 'Suppression impossible.') }
 }
 
 const rejectModal = ref({ show: false, campaign: null, reason: '' })

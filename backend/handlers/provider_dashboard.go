@@ -15,14 +15,6 @@ type ProviderDashboardHandler struct {
 	DB *gorm.DB
 }
 
-func (h *ProviderDashboardHandler) activeSubscriptionPlan(userID uint) string {
-	var sub models.Subscription
-	if err := h.DB.Where("user_id = ? AND status = ?", userID, "active").First(&sub).Error; err != nil {
-		return ""
-	}
-	return sub.Plan
-}
-
 func (h *ProviderDashboardHandler) Dashboard(c *gin.Context) {
 	user := middleware.GetAuthUser(c)
 	if user == nil {
@@ -30,9 +22,11 @@ func (h *ProviderDashboardHandler) Dashboard(c *gin.Context) {
 		return
 	}
 
-	plan := h.activeSubscriptionPlan(user.ID)
-	hasAdvanced := plan == "basic" || plan == "premium"
-	hasPremium := plan == "premium"
+	var sub models.Subscription
+	hasActiveSub := h.DB.Where("user_id = ? AND status = ?", user.ID, "active").First(&sub).Error == nil
+	plan := effectivePlan(h.DB, user.ID)
+	hasAdvanced := plan.FeatureAdvancedStats
+	hasPremium := plan.FeaturePremiumStats
 
 	var prestationsCount, activePrestations, projectsCount, campaignsCount int64
 	h.DB.Model(&models.Prestation{}).Where("provider_id = ? AND deleted_at IS NULL", user.ID).Count(&prestationsCount)
@@ -42,8 +36,9 @@ func (h *ProviderDashboardHandler) Dashboard(c *gin.Context) {
 
 	resp := gin.H{
 		"subscription": gin.H{
-			"active": plan != "",
-			"plan":   plan,
+			"active":     hasActiveSub,
+			"plan":       plan.Key,
+			"plan_label": plan.Label,
 		},
 		"basic": gin.H{
 			"prestations_count":  prestationsCount,

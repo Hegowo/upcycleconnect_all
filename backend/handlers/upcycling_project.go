@@ -93,6 +93,9 @@ func (h *UpcyclingProjectHandler) CreateProject(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "Non authentifié"})
 		return
 	}
+	if enforceProjectQuota(c, h.DB, user.ID) {
+		return
+	}
 	var req projectPayload
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": err.Error()})
