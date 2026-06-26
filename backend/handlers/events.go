@@ -51,7 +51,7 @@ func (h *EventHandler) Index(c *gin.Context) {
 	}
 
 	var events []models.Event
-	fetchQuery := h.DB.Preload("Category").Preload("Creator.Roles").
+	fetchQuery := h.DB.Preload("Category").Preload("Creator.Roles").Preload("Sessions", orderSessions).
 		Where("platform_events.deleted_at IS NULL")
 
 	if status := c.Query("status"); status != "" {
@@ -106,16 +106,48 @@ func (h *EventHandler) Index(c *gin.Context) {
 	})
 }
 
+func orderSessions(db *gorm.DB) *gorm.DB { return db.Order("position ASC") }
+
+type sessionInput struct {
+	StartDate string `json:"start_date"`
+	EndDate   string `json:"end_date"`
+}
+
+func buildSessions(inputs []sessionInput) ([]models.EventSession, time.Time, time.Time, error) {
+	var sessions []models.EventSession
+	var minStart, maxEnd time.Time
+	for i, in := range inputs {
+		s, err := parseDateTime(in.StartDate)
+		if err != nil {
+			return nil, time.Time{}, time.Time{}, fmt.Errorf("date de début de séance invalide")
+		}
+		e, err := parseDateTime(in.EndDate)
+		if err != nil {
+			return nil, time.Time{}, time.Time{}, fmt.Errorf("date de fin de séance invalide")
+		}
+		sessions = append(sessions, models.EventSession{StartDate: s, EndDate: e, Position: i})
+		if minStart.IsZero() || s.Before(minStart) {
+			minStart = s
+		}
+		if maxEnd.IsZero() || e.After(maxEnd) {
+			maxEnd = e
+		}
+	}
+	return sessions, minStart, maxEnd, nil
+}
+
 func (h *EventHandler) Store(c *gin.Context) {
 	var req struct {
-		CategoryID      *uint   `json:"category_id"`
-		Title           string  `json:"title" binding:"required"`
-		Description     *string `json:"description"`
-		Location        *string `json:"location"`
-		StartDate       string  `json:"start_date" binding:"required"`
-		EndDate         string  `json:"end_date" binding:"required"`
-		MaxParticipants *int    `json:"max_participants"`
-		Status          string  `json:"status"`
+		CategoryID      *uint          `json:"category_id"`
+		Title           string         `json:"title" binding:"required"`
+		Description     *string        `json:"description"`
+		Location        *string        `json:"location"`
+		StartDate       string         `json:"start_date"`
+		EndDate         string         `json:"end_date"`
+		PriceCents      int64          `json:"price_cents"`
+		MaxParticipants *int           `json:"max_participants"`
+		Status          string         `json:"status"`
+		Sessions        []sessionInput `json:"sessions"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Données invalides."})
@@ -133,6 +165,7 @@ func (h *EventHandler) Store(c *gin.Context) {
 		Title:           req.Title,
 		Description:     req.Description,
 		Location:        req.Location,
+		PriceCents:      req.PriceCents,
 		MaxParticipants: req.MaxParticipants,
 		Status:          req.Status,
 		CreatedBy:       createdBy,
@@ -140,26 +173,47 @@ func (h *EventHandler) Store(c *gin.Context) {
 	if event.Status == "" {
 		event.Status = "draft"
 	}
+	if event.PriceCents < 0 {
+		event.PriceCents = 0
+	}
 
-	startDate, err := parseDateTime(req.StartDate)
-	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Format de date de début invalide."})
-		return
+	var sessions []models.EventSession
+	if len(req.Sessions) > 0 {
+		s, minStart, maxEnd, err := buildSessions(req.Sessions)
+		if err != nil {
+			c.JSON(http.StatusUnprocessableEntity, gin.H{"message": err.Error()})
+			return
+		}
+		sessions = s
+		event.StartDate = minStart
+		event.EndDate = maxEnd
+	} else {
+		startDate, err := parseDateTime(req.StartDate)
+		if err != nil {
+			c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Format de date de début invalide."})
+			return
+		}
+		endDate, err := parseDateTime(req.EndDate)
+		if err != nil {
+			c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Format de date de fin invalide."})
+			return
+		}
+		event.StartDate = startDate
+		event.EndDate = endDate
 	}
-	endDate, err := parseDateTime(req.EndDate)
-	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Format de date de fin invalide."})
-		return
-	}
-	event.StartDate = startDate
-	event.EndDate = endDate
 
 	if err := h.DB.Create(&event).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Erreur lors de la création."})
 		return
 	}
+	if len(sessions) > 0 {
+		for i := range sessions {
+			sessions[i].EventID = event.ID
+		}
+		h.DB.Create(&sessions)
+	}
 
-	h.DB.Preload("Category").Preload("Creator.Roles").First(&event, event.ID)
+	h.DB.Preload("Category").Preload("Creator.Roles").Preload("Sessions", orderSessions).First(&event, event.ID)
 
 	h.Audit.Log(c, "event.created", "Event", &event.ID, nil, map[string]interface{}{
 		"title": event.Title,
@@ -176,14 +230,14 @@ func (h *EventHandler) Show(c *gin.Context) {
 	}
 
 	var event models.Event
-	if err := h.DB.Preload("Category").Preload("Creator.Roles").
+	if err := h.DB.Preload("Category").Preload("Creator.Roles").Preload("Sessions", orderSessions).
 		Where("id = ? AND deleted_at IS NULL", id).First(&event).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"message": "Ressource introuvable"})
 		return
 	}
 
 	var count int64
-	h.DB.Model(&models.EventRegistration{}).Where("event_id = ?", event.ID).Count(&count)
+	h.DB.Model(&models.EventRegistration{}).Where("event_id = ? AND status <> ?", event.ID, "pending").Count(&count)
 
 	c.JSON(http.StatusOK, models.ToEventResponseWithCount(&event, count))
 }
@@ -202,14 +256,16 @@ func (h *EventHandler) Update(c *gin.Context) {
 	}
 
 	var req struct {
-		CategoryID      *uint   `json:"category_id"`
-		Title           *string `json:"title"`
-		Description     *string `json:"description"`
-		Location        *string `json:"location"`
-		StartDate       *string `json:"start_date"`
-		EndDate         *string `json:"end_date"`
-		MaxParticipants *int    `json:"max_participants"`
-		Status          *string `json:"status"`
+		CategoryID      *uint           `json:"category_id"`
+		Title           *string         `json:"title"`
+		Description     *string         `json:"description"`
+		Location        *string         `json:"location"`
+		StartDate       *string         `json:"start_date"`
+		EndDate         *string         `json:"end_date"`
+		PriceCents      *int64          `json:"price_cents"`
+		MaxParticipants *int            `json:"max_participants"`
+		Status          *string         `json:"status"`
+		Sessions        *[]sessionInput `json:"sessions"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "Données invalides."})
@@ -273,12 +329,36 @@ func (h *EventHandler) Update(c *gin.Context) {
 		updates["status"] = *req.Status
 		after["status"] = *req.Status
 	}
+	if req.PriceCents != nil {
+		v := *req.PriceCents
+		if v < 0 {
+			v = 0
+		}
+		updates["price_cents"] = v
+		after["price_cents"] = v
+	}
+	if req.Sessions != nil {
+		sessions, minStart, maxEnd, err := buildSessions(*req.Sessions)
+		if err != nil {
+			c.JSON(http.StatusUnprocessableEntity, gin.H{"message": err.Error()})
+			return
+		}
+		h.DB.Where("event_id = ?", event.ID).Delete(&models.EventSession{})
+		if len(sessions) > 0 {
+			for i := range sessions {
+				sessions[i].EventID = event.ID
+			}
+			h.DB.Create(&sessions)
+			updates["start_date"] = minStart
+			updates["end_date"] = maxEnd
+		}
+	}
 
 	if len(updates) > 0 {
 		h.DB.Model(&event).Updates(updates)
 	}
 
-	h.DB.Preload("Category").Preload("Creator.Roles").First(&event, event.ID)
+	h.DB.Preload("Category").Preload("Creator.Roles").Preload("Sessions", orderSessions).First(&event, event.ID)
 
 	h.Audit.Log(c, "event.updated", "Event", &event.ID, old, after)
 

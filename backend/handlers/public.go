@@ -139,7 +139,7 @@ func (h *PublicHandler) Events(c *gin.Context) {
 	}
 
 	var events []models.Event
-	fetch := h.DB.Preload("Category").
+	fetch := h.DB.Preload("Category").Preload("Sessions", func(db *gorm.DB) *gorm.DB { return db.Order("position ASC") }).
 		Where("platform_events.status = ? AND platform_events.deleted_at IS NULL", "published")
 	if from := c.Query("start_date_from"); from != "" {
 		fetch = fetch.Where("start_date >= ?", from)
@@ -199,14 +199,14 @@ func (h *PublicHandler) ShowEvent(c *gin.Context) {
 		return
 	}
 	var e models.Event
-	if err := h.DB.Preload("Category").Preload("Creator").
+	if err := h.DB.Preload("Category").Preload("Creator").Preload("Sessions", func(db *gorm.DB) *gorm.DB { return db.Order("position ASC") }).
 		Where("id = ? AND status = ? AND deleted_at IS NULL", id, "published").
 		First(&e).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"message": "Ressource introuvable"})
 		return
 	}
 	var count int64
-	h.DB.Model(&models.EventRegistration{}).Where("event_id = ?", e.ID).Count(&count)
+	h.DB.Model(&models.EventRegistration{}).Where("event_id = ? AND status <> ?", e.ID, "pending").Count(&count)
 	c.JSON(http.StatusOK, models.ToEventResponseWithCount(&e, count))
 }
 

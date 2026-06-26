@@ -20,8 +20,10 @@ import (
 )
 
 type ProfileHandler struct {
-	DB     *gorm.DB
-	Mailer *services.Mailer
+	DB            *gorm.DB
+	Mailer        *services.Mailer
+	Stripe        *services.StripeService
+	Notifications *services.NotificationService
 }
 
 func (h *ProfileHandler) Stats(c *gin.Context) {
@@ -406,19 +408,67 @@ func (h *ProfileHandler) RegisterForEvent(c *gin.Context) {
 	}
 	if event.MaxParticipants != nil {
 		var count int64
-		h.DB.Model(&models.EventRegistration{}).Where("event_id = ?", event.ID).Count(&count)
+		h.DB.Model(&models.EventRegistration{}).Where("event_id = ? AND status <> ?", event.ID, "pending").Count(&count)
 		if int(count) >= *event.MaxParticipants {
 			c.JSON(http.StatusConflict, gin.H{"message": "Cet événement est complet."})
 			return
 		}
 	}
 
-	reg := models.EventRegistration{UserID: user.ID, EventID: event.ID}
-	if err := h.DB.Create(&reg).Error; err != nil {
+	var existing models.EventRegistration
+	hasExisting := h.DB.Where("user_id = ? AND event_id = ?", user.ID, event.ID).First(&existing).Error == nil
+	if hasExisting && existing.Status != "pending" {
 		c.JSON(http.StatusConflict, gin.H{"message": "Vous êtes déjà inscrit à cet événement."})
 		return
 	}
-	c.JSON(http.StatusCreated, gin.H{"message": "Inscription confirmée.", "id": reg.ID})
+
+	if event.PriceCents <= 0 {
+		if hasExisting {
+			h.DB.Model(&existing).Updates(map[string]interface{}{"status": "confirmed", "amount_cents": 0})
+		} else {
+			reg := models.EventRegistration{UserID: user.ID, EventID: event.ID, Status: "confirmed"}
+			if err := h.DB.Create(&reg).Error; err != nil {
+				c.JSON(http.StatusConflict, gin.H{"message": "Vous êtes déjà inscrit à cet événement."})
+				return
+			}
+			existing = reg
+		}
+		h.notifyEventCreator(&event, user, false)
+		c.JSON(http.StatusCreated, gin.H{"message": "Inscription confirmée.", "id": existing.ID, "free": true})
+		return
+	}
+
+	if h.Stripe == nil {
+		c.JSON(http.StatusServiceUnavailable, gin.H{"message": "Paiement indisponible."})
+		return
+	}
+	sess, err := h.Stripe.CreateEventCheckout(user.ID, event.ID, user.Email, event.Title, event.PriceCents)
+	if err != nil {
+		c.JSON(http.StatusServiceUnavailable, gin.H{"message": err.Error()})
+		return
+	}
+	sid := sess.ID
+	if hasExisting {
+		h.DB.Model(&existing).Updates(map[string]interface{}{"amount_cents": event.PriceCents, "stripe_session_id": sid})
+	} else {
+		reg := models.EventRegistration{UserID: user.ID, EventID: event.ID, Status: "pending", AmountCents: event.PriceCents, StripeSessionID: &sid}
+		if err := h.DB.Create(&reg).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "Erreur lors de l'inscription."})
+			return
+		}
+	}
+	c.JSON(http.StatusOK, gin.H{"checkout_url": sess.URL, "session_id": sess.ID, "free": false})
+}
+
+func (h *ProfileHandler) notifyEventCreator(event *models.Event, participant *models.User, paid bool) {
+	if h.Notifications == nil || event.CreatedBy == nil {
+		return
+	}
+	msg := fmt.Sprintf("%s s'est inscrit à « %s ».", participant.FirstName+" "+participant.LastName, event.Title)
+	if paid {
+		msg = fmt.Sprintf("%s s'est inscrit (payant) à « %s ».", participant.FirstName+" "+participant.LastName, event.Title)
+	}
+	h.Notifications.MustNotify(*event.CreatedBy, "event.registration", "Nouvelle inscription", msg, fmt.Sprintf("/evenements/%d", event.ID))
 }
 
 func (h *ProfileHandler) UnregisterFromEvent(c *gin.Context) {
@@ -440,7 +490,7 @@ func (h *ProfileHandler) CheckEventRegistration(c *gin.Context) {
 
 	var count int64
 	h.DB.Model(&models.EventRegistration{}).
-		Where("user_id = ? AND event_id = ?", user.ID, eventID).
+		Where("user_id = ? AND event_id = ? AND status <> ?", user.ID, eventID, "pending").
 		Count(&count)
 
 	c.JSON(http.StatusOK, gin.H{"registered": count > 0})

@@ -113,8 +113,8 @@
               </div>
               <div class="border-t border-gray-100 pt-5 flex items-center justify-between">
                 <div>
-                  <p class="text-[#40617f] text-xs uppercase tracking-wider">{{ t('public.events.freeLabel') }}</p>
-                  <p class="text-[#006d35] font-bold text-lg">{{ t('public.events.priceFree') }}</p>
+                  <p class="text-[#40617f] text-xs uppercase tracking-wider">{{ event.price_cents > 0 ? 'Tarif' : t('public.events.freeLabel') }}</p>
+                  <p class="text-[#006d35] font-bold text-lg">{{ event.price_cents > 0 ? formatEUR(event.price_cents) : t('public.events.priceFree') }}</p>
                 </div>
                 <button v-if="!isFull(event)"
                   class="bg-[#006d35] text-white font-bold text-sm px-5 py-3 rounded-xl hover:bg-[#1b8848] transition-colors">
@@ -209,6 +209,10 @@ function categoryBadgeClass(name = '') {
   if (n.includes('formation') || n.includes('training')) return 'bg-[#d1fae5] text-[#065f46]'
   if (n.includes('conf')) return 'bg-[#f3e8ff] text-[#7c3aed]'
   return 'bg-gray-100 text-gray-600'
+}
+
+function formatEUR(cents) {
+  return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format((cents || 0) / 100)
 }
 
 function isFull(event) {

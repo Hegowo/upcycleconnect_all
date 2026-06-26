@@ -43,7 +43,6 @@ func Setup(db *gorm.DB, cfg *config.Config) *gin.Engine {
 	depositHandler := &handlers.DepositHandler{DB: db, Audit: audit}
 	collectionPointHandler := &handlers.CollectionPointHandler{DB: db, Audit: audit}
 	userAuthHandler := &handlers.UserAuthHandler{DB: db, Cfg: cfg, Mailer: mailer}
-	profileHandler := &handlers.ProfileHandler{DB: db, Mailer: mailer}
 	publicHandler := &handlers.PublicHandler{DB: db}
 	userDepositHandler := &handlers.UserDepositHandler{DB: db, Audit: audit}
 	userProviderHandler := &handlers.UserProviderHandler{DB: db, Audit: audit, Notifications: notifications}
@@ -61,6 +60,7 @@ func Setup(db *gorm.DB, cfg *config.Config) *gin.Engine {
 	}
 
 	stripeService := services.NewStripeService(cfg)
+	profileHandler := &handlers.ProfileHandler{DB: db, Mailer: mailer, Stripe: stripeService, Notifications: notifications}
 	pdfService, err := services.NewPDFService("/var/lib/upcycleconnect/invoices")
 	if err != nil {
 		log.Fatalf("Failed to initialize PDF service: %v", err)

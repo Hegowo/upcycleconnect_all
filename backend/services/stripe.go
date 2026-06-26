@@ -182,6 +182,37 @@ func (s *StripeService) CreateDepositCheckout(providerID, depositID uint, userEm
 	return session.New(params)
 }
 
+func (s *StripeService) CreateEventCheckout(userID, eventID uint, userEmail, title string, amountCents int64) (*stripe.CheckoutSession, error) {
+	if s.cfg.StripeSecret == "" || s.cfg.StripeSecret == "sk_test_local_dummy" {
+		return nil, fmt.Errorf("Stripe non configuré — ajoute ta clé dans le .env")
+	}
+	stripe.Key = s.cfg.StripeSecret
+	successURL := fmt.Sprintf("%s/evenements/%d?inscription=1&session_id={CHECKOUT_SESSION_ID}", s.cfg.AppURL, eventID)
+	cancelURL := fmt.Sprintf("%s/evenements/%d?annule=1", s.cfg.AppURL, eventID)
+	params := &stripe.CheckoutSessionParams{
+		Mode:          stripe.String(string(stripe.CheckoutSessionModePayment)),
+		SuccessURL:    stripe.String(successURL),
+		CancelURL:     stripe.String(cancelURL),
+		CustomerEmail: stripe.String(userEmail),
+		LineItems: []*stripe.CheckoutSessionLineItemParams{
+			{
+				PriceData: &stripe.CheckoutSessionLineItemPriceDataParams{
+					Currency: stripe.String("eur"),
+					ProductData: &stripe.CheckoutSessionLineItemPriceDataProductDataParams{
+						Name: stripe.String("Inscription : " + title),
+					},
+					UnitAmount: stripe.Int64(amountCents),
+				},
+				Quantity: stripe.Int64(1),
+			},
+		},
+	}
+	params.AddMetadata("user_id", fmt.Sprintf("%d", userID))
+	params.AddMetadata("event_id", fmt.Sprintf("%d", eventID))
+	params.AddMetadata("type", "event_registration")
+	return session.New(params)
+}
+
 func (s *StripeService) VerifyWebhook(payload []byte, signature string) (stripe.Event, error) {
 	if s.cfg.StripeWebhookSecret == "" {
 		return stripe.Event{}, fmt.Errorf("stripe webhook secret is not configured")

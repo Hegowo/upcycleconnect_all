@@ -556,6 +556,10 @@ func (h *PaymentHandler) Webhook(c *gin.Context) {
 			if err := h.fulfillDepositPurchase(&session); err != nil {
 				log.Printf("[webhook] deposit purchase fulfill failed for session=%s: %v", session.ID, err)
 			}
+		case "event_registration":
+			if err := h.fulfillEventRegistration(&session); err != nil {
+				log.Printf("[webhook] event registration fulfill failed for session=%s: %v", session.ID, err)
+			}
 		default:
 			if err := h.fulfillReservation(&session); err != nil {
 				log.Printf("[webhook] fulfill failed for session=%s: %v", session.ID, err)
@@ -602,6 +606,35 @@ func (h *PaymentHandler) fulfillDepositPurchase(session *stripe.CheckoutSession)
 				"Votre objet a été acheté",
 				fmt.Sprintf("Votre annonce « %s » a été achetée par un professionnel.", dep.Title),
 				"/profil")
+		}
+	}
+	return nil
+}
+
+func (h *PaymentHandler) fulfillEventRegistration(session *stripe.CheckoutSession) error {
+	var reg models.EventRegistration
+	if err := h.DB.Where("stripe_session_id = ?", session.ID).First(&reg).Error; err != nil {
+		return err
+	}
+	if reg.Status == "paid" {
+		return nil
+	}
+	now := time.Now()
+	h.DB.Model(&reg).Updates(map[string]interface{}{"status": "paid", "paid_at": now})
+
+	if h.Notifications != nil {
+		var event models.Event
+		if err := h.DB.First(&event, reg.EventID).Error; err == nil {
+			h.Notifications.MustNotify(reg.UserID, "event.registration_paid",
+				"Inscription confirmée",
+				fmt.Sprintf("Votre inscription payante à « %s » est confirmée.", event.Title),
+				fmt.Sprintf("/evenements/%d", event.ID))
+			if event.CreatedBy != nil {
+				h.Notifications.MustNotify(*event.CreatedBy, "event.registration",
+					"Nouvelle inscription payante",
+					fmt.Sprintf("Une inscription payante a été reçue pour « %s ».", event.Title),
+					fmt.Sprintf("/evenements/%d", event.ID))
+			}
 		}
 	}
 	return nil

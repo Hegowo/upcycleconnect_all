@@ -70,6 +70,18 @@
                   <span>{{ event.location }}</span>
                 </div>
               </div>
+
+              <div v-if="event.sessions && event.sessions.length > 1" class="bg-white rounded-2xl p-5 mt-2 border border-[#edf4ff]">
+                <p class="text-[#001d32] font-jakarta font-bold text-sm mb-3 flex items-center gap-2">
+                  <CalendarDaysIcon class="w-4 h-4 text-[#006d35]" /> Programme ({{ event.sessions.length }} séances)
+                </p>
+                <div class="space-y-1.5">
+                  <div v-for="(s, i) in event.sessions" :key="s.id" class="flex items-center justify-between text-sm">
+                    <span class="text-[#001d32] font-medium">Jour {{ i + 1 }} — {{ formatDate(s.start_date) }}</span>
+                    <span class="text-[#40617f]">{{ formatTime(s.start_date) }} – {{ formatTime(s.end_date) }}</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div v-if="event.description" class="bg-white rounded-[32px] p-10 shadow-sm flex flex-col gap-4">
@@ -98,9 +110,11 @@
               <div class="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-[rgba(0,109,53,0.05)]" />
 
               <div class="flex items-baseline justify-between mb-2">
-                <span class="font-jakarta font-extrabold text-[#001d32] text-4xl">{{ t('public.eventDetail.priceFree') }}</span>
+                <span class="font-jakarta font-extrabold text-[#001d32] text-4xl">
+                  {{ event.price_cents > 0 ? formatEUR(event.price_cents) : t('public.eventDetail.priceFree') }}
+                </span>
               </div>
-              <p class="text-[#40617f] text-sm mb-6">{{ t('public.eventDetail.freeLabel') }}</p>
+              <p class="text-[#40617f] text-sm mb-6">{{ event.price_cents > 0 ? 'par participant' : t('public.eventDetail.freeLabel') }}</p>
 
               <div v-if="!isPast" class="mb-6">
                 <div v-if="event.max_participants" class="flex items-center gap-2">
@@ -153,8 +167,11 @@
                 @click="register" :disabled="actionLoading"
                 class="w-full py-4 rounded-2xl text-white font-bold text-base flex items-center justify-center gap-2 transition hover:opacity-90 shadow-[0_10px_15px_-3px_rgba(0,109,53,0.2)] disabled:opacity-60"
                 style="background: linear-gradient(168deg, #006d35 0%, #1b8848 100%);">
-                {{ actionLoading ? t('public.eventDetail.registering') : t('public.eventDetail.ctaReserve') }}
-                <ArrowRightIcon v-if="!actionLoading" class="w-4 h-4" />
+                <template v-if="actionLoading">{{ t('public.eventDetail.registering') }}</template>
+                <template v-else>
+                  {{ event.price_cents > 0 ? `S'inscrire — ${formatEUR(event.price_cents)}` : t('public.eventDetail.ctaReserve') }}
+                  <ArrowRightIcon class="w-4 h-4" />
+                </template>
               </button>
 
               <p v-if="feedback" class="mt-3 text-center text-sm font-medium"
@@ -373,6 +390,10 @@ function formatTime(iso) {
   return new Date(iso).toLocaleTimeString(localeCode.value, { hour: '2-digit', minute: '2-digit' })
 }
 
+function formatEUR(cents) {
+  return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format((cents || 0) / 100)
+}
+
 function formatMsgTime(iso) {
   if (!iso) return ''
   const d = new Date(iso)
@@ -419,13 +440,14 @@ async function register() {
       method: 'POST',
       headers: { Authorization: `Bearer ${userAuth.token}` },
     })
+    const data = await res.json().catch(() => ({}))
     if (res.ok) {
+      if (data.checkout_url) { window.location.href = data.checkout_url; return }
       isRegistered.value = true
       event.value.registrations_count++
       showFeedback(t('public.eventDetail.registerSuccess'))
       startPolling()
     } else {
-      const data = await res.json().catch(() => ({}))
       showFeedback(data.message || t('public.eventDetail.registerError'), true)
     }
   } catch {
@@ -557,6 +579,13 @@ onMounted(async () => {
       })
       if (res.ok) isRegistered.value = (await res.json()).registered
     } catch {}
+  }
+
+  if (route.query.inscription === '1') {
+    isRegistered.value = true
+    showFeedback('Paiement reçu — votre inscription est confirmée. Merci !')
+  } else if (route.query.annule === '1') {
+    showFeedback('Paiement annulé — vous n\'êtes pas inscrit.', true)
   }
 
   loading.value = false

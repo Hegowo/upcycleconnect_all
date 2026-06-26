@@ -32,6 +32,7 @@ func main() {
 		&models.CollectionPoint{},
 		&models.DepositRequest{},
 		&models.EventRegistration{},
+		&models.EventSession{},
 		&models.EventMessage{},
 		&models.ReservationMessage{},
 		&models.PrestationImage{},
