@@ -20,11 +20,27 @@ type UpcyclingProject struct {
 	UpdatedAt   time.Time      `json:"updated_at"`
 	DeletedAt   gorm.DeletedAt `gorm:"index" json:"-"`
 
-	Provider *User         `gorm:"foreignKey:ProviderID" json:"-"`
-	Steps    []ProjectStep `gorm:"foreignKey:ProjectID;constraint:OnDelete:CASCADE" json:"steps,omitempty"`
+	Provider *User          `gorm:"foreignKey:ProviderID" json:"-"`
+	Steps    []ProjectStep  `gorm:"foreignKey:ProjectID;constraint:OnDelete:CASCADE" json:"steps,omitempty"`
+	Images   []ProjectImage `gorm:"foreignKey:ProjectID;constraint:OnDelete:CASCADE" json:"-"`
 }
 
 func (UpcyclingProject) TableName() string { return "upcycling_projects" }
+
+type ProjectImage struct {
+	ID        uint      `gorm:"primaryKey" json:"id"`
+	ProjectID uint      `gorm:"index;not null" json:"project_id"`
+	URL       string    `gorm:"size:500;not null" json:"url"`
+	Position  int       `gorm:"not null;default:0" json:"position"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+func (ProjectImage) TableName() string { return "project_images" }
+
+type ProjectImageResponse struct {
+	ID  uint   `json:"id"`
+	URL string `json:"url"`
+}
 
 type ProjectStep struct {
 	ID          uint       `gorm:"primaryKey" json:"id"`
@@ -45,14 +61,15 @@ type ProjectResponse struct {
 	Title        string        `json:"title"`
 	Description  string        `json:"description"`
 	Category     string        `json:"category"`
-	CoverImage   *string       `json:"cover_image"`
-	ImpactLabel  *string       `json:"impact_label"`
-	Status       string        `json:"status"`
-	ProviderID   uint          `json:"provider_id"`
-	ProviderName string        `json:"provider_name"`
-	Steps        []ProjectStep `json:"steps"`
-	StepCount    int           `json:"step_count"`
-	CreatedAt    string        `json:"created_at"`
+	CoverImage   *string                `json:"cover_image"`
+	ImpactLabel  *string                `json:"impact_label"`
+	Status       string                 `json:"status"`
+	ProviderID   uint                   `json:"provider_id"`
+	ProviderName string                 `json:"provider_name"`
+	Steps        []ProjectStep          `json:"steps"`
+	StepCount    int                    `json:"step_count"`
+	Images       []ProjectImageResponse `json:"images"`
+	CreatedAt    string                 `json:"created_at"`
 }
 
 func ToProjectResponse(p *UpcyclingProject, withSteps bool) ProjectResponse {
@@ -63,6 +80,10 @@ func ToProjectResponse(p *UpcyclingProject, withSteps bool) ProjectResponse {
 	steps := p.Steps
 	if !withSteps {
 		steps = nil
+	}
+	images := make([]ProjectImageResponse, 0, len(p.Images))
+	for _, img := range p.Images {
+		images = append(images, ProjectImageResponse{ID: img.ID, URL: img.URL})
 	}
 	return ProjectResponse{
 		ID:           p.ID,
@@ -76,6 +97,7 @@ func ToProjectResponse(p *UpcyclingProject, withSteps bool) ProjectResponse {
 		ProviderName: name,
 		Steps:        steps,
 		StepCount:    len(p.Steps),
+		Images:       images,
 		CreatedAt:    p.CreatedAt.UTC().Format(time.RFC3339),
 	}
 }

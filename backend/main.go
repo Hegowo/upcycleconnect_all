@@ -54,6 +54,7 @@ func main() {
 		&models.CampaignItem{},
 		&models.UpcyclingProject{},
 		&models.ProjectStep{},
+		&models.ProjectImage{},
 	); err != nil {
 		log.Fatalf("Failed to migrate database: %v", err)
 	}

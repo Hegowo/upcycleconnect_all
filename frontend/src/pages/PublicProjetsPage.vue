@@ -29,11 +29,37 @@
       <div v-else class="space-y-6">
         <div v-for="p in projects" :key="p.id" class="bg-white rounded-[24px] border border-[#edf4ff] overflow-hidden">
 
+          <div class="p-5 border-b border-[#f1f5f9]">
+            <p class="text-xs font-semibold uppercase tracking-wider text-[#40617f] mb-2">Images du projet</p>
+            <div class="flex gap-2 flex-wrap">
+              <div v-for="img in p.images" :key="img.id" class="relative w-24 h-24 rounded-xl overflow-hidden group border border-[#edf4ff]">
+                <img :src="img.url" class="w-full h-full object-cover" />
+                <button @click="removeImage(p, img)" title="Supprimer"
+                  class="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/60 text-white text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition">✕</button>
+              </div>
+              <div
+                @dragover.prevent="dragOverId = p.id" @dragleave.prevent="dragOverId = null" @drop.prevent="onDrop($event, p)"
+                @click="triggerFile(p)"
+                :class="dragOverId === p.id ? 'border-[#006d35] bg-[#f0fdf4] text-[#006d35]' : 'border-[#cbd5e1] text-[#94a3b8]'"
+                class="w-24 h-24 rounded-xl border-2 border-dashed flex flex-col items-center justify-center text-center cursor-pointer hover:border-[#006d35] hover:text-[#006d35] transition"
+              >
+                <input type="file" accept="image/*" multiple class="hidden" :ref="el => { if (el) fileInputs[p.id] = el }" @change="onFilePick($event, p)" />
+                <div v-if="uploadingId === p.id" class="w-5 h-5 border-2 border-[#006d35] border-t-transparent rounded-full animate-spin" />
+                <template v-else>
+                  <PhotoIcon class="w-6 h-6" />
+                  <span class="text-[10px] mt-1 px-1 leading-tight">Glisser ou cliquer</span>
+                </template>
+              </div>
+            </div>
+            <div class="flex gap-2 mt-3">
+              <input v-model="imgUrlInput[p.id]" type="text" placeholder="… ou coller une URL d'image" @keydown.enter.prevent="addImageFromUrl(p)"
+                class="flex-1 px-3 py-2 bg-[#f8fafc] border border-[#e5e7eb] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
+              <button @click="addImageFromUrl(p)" class="px-3 py-2 rounded-lg text-white text-sm font-semibold hover:opacity-90 transition" style="background:linear-gradient(135deg,#006d35,#1b8848);">Ajouter</button>
+            </div>
+          </div>
+
           <div class="p-5 flex items-start justify-between gap-4 flex-wrap border-b border-[#f1f5f9]">
             <div class="flex items-start gap-4 flex-1 min-w-0">
-              <div v-if="p.cover_image" class="w-16 h-16 rounded-xl overflow-hidden shrink-0">
-                <img :src="p.cover_image" class="w-full h-full object-cover" />
-              </div>
               <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2 mb-1 flex-wrap">
                   <span :class="projectStatusBadge(p.status)" class="text-xs font-bold px-2 py-0.5 rounded-full">{{ projectStatusLabel(p.status) }}</span>
@@ -166,11 +192,74 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
-import { ArrowLeftIcon, PlusIcon, PencilSquareIcon, TrashIcon, XMarkIcon, WrenchScrewdriverIcon } from '@heroicons/vue/24/outline'
+import { ArrowLeftIcon, PlusIcon, PencilSquareIcon, TrashIcon, XMarkIcon, WrenchScrewdriverIcon, PhotoIcon } from '@heroicons/vue/24/outline'
 import { userApi } from '@/services/publicApi'
 
 const projects = ref([])
 const loading = ref(true)
+
+const fileInputs = {}
+const imgUrlInput = ref({})
+const dragOverId = ref(null)
+const uploadingId = ref(null)
+
+function resizeImage(file, maxDim = 1280, quality = 0.8) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onerror = reject
+    reader.onload = (e) => {
+      const img = new Image()
+      img.onerror = reject
+      img.onload = () => {
+        let { width, height } = img
+        if (width > maxDim || height > maxDim) {
+          if (width > height) { height = Math.round(height * maxDim / width); width = maxDim }
+          else { width = Math.round(width * maxDim / height); height = maxDim }
+        }
+        const canvas = document.createElement('canvas')
+        canvas.width = width; canvas.height = height
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height)
+        resolve(canvas.toDataURL('image/jpeg', quality))
+      }
+      img.src = e.target.result
+    }
+    reader.readAsDataURL(file)
+  })
+}
+
+function triggerFile(p) { fileInputs[p.id]?.click() }
+function onFilePick(e, p) { uploadFiles(p, Array.from(e.target.files || [])); e.target.value = '' }
+function onDrop(e, p) { dragOverId.value = null; uploadFiles(p, Array.from(e.dataTransfer.files || [])) }
+
+async function uploadFiles(p, files) {
+  const images = files.filter(f => f.type.startsWith('image/'))
+  if (!images.length) return
+  uploadingId.value = p.id
+  try {
+    for (const file of images) {
+      const dataUrl = await resizeImage(file)
+      await userApi(`/projects/${p.id}/images`, { method: 'POST', body: JSON.stringify({ image: dataUrl }) })
+    }
+    await fetchProjects()
+  } catch (e) { alert(e.message || "Erreur lors de l'envoi de l'image.") } finally { uploadingId.value = null }
+}
+
+async function addImageFromUrl(p) {
+  const url = (imgUrlInput.value[p.id] || '').trim()
+  if (!url) return
+  try {
+    await userApi(`/projects/${p.id}/images`, { method: 'POST', body: JSON.stringify({ image: url }) })
+    imgUrlInput.value[p.id] = ''
+    await fetchProjects()
+  } catch (e) { alert(e.message || "Impossible d'ajouter l'image.") }
+}
+
+async function removeImage(p, img) {
+  try {
+    await userApi(`/projects/${p.id}/images/${img.id}`, { method: 'DELETE' })
+    await fetchProjects()
+  } catch (e) { alert(e.message || 'Erreur lors de la suppression.') }
+}
 const showProjectForm = ref(false)
 const savingProject = ref(false)
 const projectFormError = ref('')
