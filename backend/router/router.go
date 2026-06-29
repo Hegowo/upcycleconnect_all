@@ -39,6 +39,7 @@ func Setup(db *gorm.DB, cfg *config.Config) *gin.Engine {
 	eventHandler := &handlers.EventHandler{DB: db, Audit: audit, Notifications: notifications}
 	adminHandler := &handlers.AdminHandler{DB: db, Audit: audit}
 	employeeHandler := &handlers.EmployeeHandler{DB: db, Audit: audit}
+	staffScheduleHandler := &handlers.StaffScheduleHandler{DB: db, Audit: audit, Notifications: notifications}
 	logsHandler := &handlers.LogsHandler{DB: db}
 	siretHandler := &handlers.SiretHandler{Cfg: cfg}
 	depositHandler := &handlers.DepositHandler{DB: db, Audit: audit}
@@ -312,6 +313,9 @@ func Setup(db *gorm.DB, cfg *config.Config) *gin.Engine {
 			staff.DELETE("/forum/replies/:id", forumHandler.AdminDeleteReply)
 			staff.GET("/forum/reports", forumHandler.AdminListReports)
 			staff.PUT("/forum/reports/:id/resolve", forumHandler.AdminResolveReport)
+
+			staff.GET("/staff/shifts", staffScheduleHandler.ListShifts)
+			staff.GET("/staff/events", staffScheduleHandler.ListEvents)
 		}
 
 		protected := api.Group("")
@@ -383,6 +387,12 @@ func Setup(db *gorm.DB, cfg *config.Config) *gin.Engine {
 			protected.POST("/employees", employeeHandler.Store)
 			protected.PUT("/employees/:id", employeeHandler.Update)
 			protected.DELETE("/employees/:id", employeeHandler.Destroy)
+
+			protected.POST("/staff/shifts", staffScheduleHandler.CreateShift)
+			protected.DELETE("/staff/shifts/:id", staffScheduleHandler.DeleteShift)
+			protected.POST("/staff/events", staffScheduleHandler.CreateEvent)
+			protected.PUT("/staff/events/:id", staffScheduleHandler.UpdateEvent)
+			protected.DELETE("/staff/events/:id", staffScheduleHandler.DeleteEvent)
 
 			protected.GET("/deposits", depositHandler.Index)
 			protected.GET("/deposits/:id", depositHandler.Show)

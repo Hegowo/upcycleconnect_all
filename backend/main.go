@@ -33,6 +33,8 @@ func main() {
 		&models.DepositRequest{},
 		&models.EventRegistration{},
 		&models.EventSession{},
+		&models.StaffShift{},
+		&models.StaffEvent{},
 		&models.EventMessage{},
 		&models.ReservationMessage{},
 		&models.PrestationImage{},

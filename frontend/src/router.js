@@ -72,6 +72,7 @@ const router = createRouter({
         { path: 'admins/create', component: () => import('@/pages/AdminFormPage.vue'),      meta: { title: 'Nouvel administrateur', requiresRole: 'super_admin' } },
         { path: 'admins/:id/edit', component: () => import('@/pages/AdminFormPage.vue'),    meta: { title: 'Modifier l\'administrateur', requiresRole: 'super_admin' } },
         { path: 'employees',     component: () => import('@/pages/EmployeeListPage.vue'),   meta: { title: 'Employés' } },
+        { path: 'planning',      component: () => import('@/pages/PlanningAdminPage.vue'),  meta: { title: 'Planning', staff: true } },
         { path: 'categories',        component: () => import('@/pages/CategoryListPage.vue'),    meta: { title: 'Catégories' } },
         { path: 'categories/create', component: () => import('@/pages/CategoryFormPage.vue'),    meta: { title: 'Nouvelle catégorie' } },
         { path: 'categories/:id/edit', component: () => import('@/pages/CategoryFormPage.vue'), meta: { title: 'Modifier la catégorie' } },

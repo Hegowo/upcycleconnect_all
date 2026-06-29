@@ -141,6 +141,7 @@ const navItems = computed(() => [
   { to: '/admin/categories',        icon: TagIcon,                    label: t('nav.categories') },
   { to: '/admin/prestations',       icon: ClipboardDocumentListIcon,  label: t('nav.prestations') },
   { to: '/admin/events',            icon: CalendarIcon,               label: t('nav.events'), staff: true },
+  { to: '/admin/planning',          icon: CalendarIcon,               label: 'Planning', staff: true },
   { to: '/admin/forum',             icon: ChatBubbleLeftEllipsisIcon, label: t('nav.forum'), staff: true },
   { to: '/admin/monetization',      icon: BanknotesIcon,              label: 'Monétisation' },
   { to: '/admin/locales',           icon: LanguageIcon,               label: 'Langues' },
