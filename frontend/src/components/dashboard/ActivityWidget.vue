@@ -33,7 +33,7 @@
             </p>
             <div class="flex items-center gap-2 shrink-0">
               <span class="text-xs px-2 py-0.5 rounded-full font-medium" :class="actionBadgeClass(log.action)">
-                {{ log.resource_type || '—' }}
+                {{ log.resource_type ? resourceLabel(log.resource_type) : '—' }}
               </span>
               <span class="text-xs px-2 py-0.5 rounded-full font-medium" :class="statusBadgeClass(log.action)">
                 {{ statusLabel(log.action) }}
@@ -48,7 +48,7 @@
             <div class="flex items-center gap-1.5 mt-1 flex-wrap">
               <span class="text-[10px] text-gray-400">{{ formatDate(log.created_at) }}</span>
               <span class="text-[10px] px-1.5 py-0.5 rounded-full font-medium" :class="actionBadgeClass(log.action)">
-                {{ log.resource_type || '—' }}
+                {{ log.resource_type ? resourceLabel(log.resource_type) : '—' }}
               </span>
               <span class="text-[10px] px-1.5 py-0.5 rounded-full font-medium" :class="statusBadgeClass(log.action)">
                 {{ statusLabel(log.action) }}
@@ -125,7 +125,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
+const { t, te } = useI18n()
 defineProps({
   logs:    { type: Array, default: () => [] },
   loading: { type: Boolean, default: false },
@@ -144,14 +144,21 @@ function avatarColor(name) {
   return avatarColors[name.charCodeAt(0) % avatarColors.length]
 }
 function actionLabel(action) {
-  const labels = {
-    'user.banned': 'a banni un utilisateur', 'user.activated': 'a activé un utilisateur',
-    'user.deleted': 'a supprimé un utilisateur', 'provider.approved': 'a approuvé un prestataire',
-    'provider.suspended': 'a suspendu un prestataire', 'admin.created': 'a créé un administrateur',
-    'admin.deleted': 'a supprimé un administrateur', 'category.created': 'a créé une catégorie',
-    'category.deleted': 'a supprimé une catégorie', 'category.toggled': 'a modifié une catégorie',
-  }
-  return labels[action] || action
+  if (!action) return '—'
+  const sep = action.indexOf('.')
+  if (sep === -1) return action
+  const resource = action.slice(0, sep)
+  const verb = action.slice(sep + 1)
+  const verbKey = `logs.verbs.${verb}`
+  const nounKey = `logs.nouns.${resource}`
+  if (te(verbKey) && te(nounKey)) return t(verbKey, { n: t(nounKey) })
+  if (te(verbKey)) return t(verbKey, { n: resource.replace(/_/g, ' ') })
+  return action.replace(/[._]/g, ' ').replace(/^\w/, c => c.toUpperCase())
+}
+function resourceLabel(resourceType) {
+  if (!resourceType) return resourceType
+  const key = `logs.resources.${resourceType}`
+  return te(key) ? t(key) : resourceType
 }
 function actionBadgeClass(action) {
   if (action.includes('deleted') || action.includes('banned')) return 'bg-[#fee2e2] text-[#991b1b]'
