@@ -5,7 +5,7 @@
       <RouterLink to="/admin/logs" class="text-xs font-medium hover:underline" style="color:#006d35;">{{ t('common.seeAll') }}</RouterLink>
     </div>
 
-    <div class="flex-1 overflow-y-auto">
+    <div class="flex-1 overflow-y-auto" tabindex="0" role="region" :aria-label="t('dashboard.recentActivity')">
     <div v-if="loading" class="p-4 space-y-3">
       <div v-for="n in 5" :key="n" class="h-10 bg-gray-50 rounded-lg animate-pulse"></div>
     </div>

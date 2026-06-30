@@ -46,7 +46,7 @@
               <button v-if="!l.builtin" @click="toggle(l)" class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs rounded-lg border border-[#e5e7eb] hover:border-[#006d35] transition">
                 {{ l.enabled ? 'Désactiver' : 'Activer' }}
               </button>
-              <button v-if="!l.builtin" @click="destroy(l)" class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs rounded-lg border border-red-200 text-red-600 hover:bg-red-50 transition">
+              <button v-if="!l.builtin" @click="destroy(l)" aria-label="Supprimer la langue" class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs rounded-lg border border-red-200 text-red-600 hover:bg-red-50 transition">
                 <TrashIcon class="w-3.5 h-3.5" />
               </button>
               <span v-if="l.builtin" class="text-xs text-gray-500">—</span>

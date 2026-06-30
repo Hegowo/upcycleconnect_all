@@ -6,7 +6,7 @@
         <h2 class="text-xl sm:text-2xl font-bold text-[#001d32] truncate">{{ t('providers.title') }}</h2>
         <p class="text-sm text-[#40617f] mt-0.5 hidden sm:block">{{ t('providers.headerSubtitle') }}</p>
       </div>
-      <span class="text-xs sm:text-sm font-semibold px-3 py-1 rounded-full shrink-0" style="background:#dcfce7; color:#166634;">
+      <span class="text-xs sm:text-sm font-semibold px-3 py-1 rounded-full shrink-0" style="background:#dcfce7; color:#166534;">
         {{ meta.total ?? providers.length }} {{ t('providers.registered') }}
       </span>
     </div>
