@@ -274,4 +274,13 @@ onBeforeUnmount(() => editor.value?.destroy())
   pointer-events: none;
   height: 0;
 }
+
+.admin-dark .tiptap-content .tiptap-inner { color: #e2e8f0; }
+.admin-dark .tiptap-content .tiptap-inner h1,
+.admin-dark .tiptap-content .tiptap-inner h2,
+.admin-dark .tiptap-content .tiptap-inner h3 { color: #f1f5f9; }
+.admin-dark .tiptap-content .tiptap-inner blockquote { color: #94a3b8; border-left-color: #4ade80; }
+.admin-dark .tiptap-content .tiptap-inner code { background: #334155; color: #e2e8f0; }
+.admin-dark .tiptap-content .tiptap-inner a { color: #4ade80; }
+.admin-dark .tiptap-content .tiptap-inner hr { border-top-color: #334155; }
 </style>
