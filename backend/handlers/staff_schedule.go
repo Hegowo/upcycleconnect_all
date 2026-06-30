@@ -82,6 +82,16 @@ func (h *StaffScheduleHandler) CreateShift(c *gin.Context) {
 		return
 	}
 
+	var overlap int64
+	h.DB.Model(&models.StaffShift{}).
+		Where("employee_id = ? AND weekday = ? AND start_time < ? AND ? < end_time",
+			req.EmployeeID, req.Weekday, req.EndTime, req.StartTime).
+		Count(&overlap)
+	if overlap > 0 {
+		c.JSON(http.StatusConflict, gin.H{"message": "Ce créneau chevauche un créneau déjà existant pour cet employé ce jour-là."})
+		return
+	}
+
 	shift := models.StaffShift{
 		EmployeeID: req.EmployeeID, Weekday: req.Weekday,
 		StartTime: req.StartTime, EndTime: req.EndTime, Label: req.Label,
