@@ -2,13 +2,13 @@
   <div class="min-h-screen flex flex-col" :style="{ backgroundColor: route.meta.hideNav ? '#f7f9ff' : '#f8fafc' }">
 
     <header v-if="!route.meta.hideNav" class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-[#e2e8f0]">
-      <div class="max-w-[1280px] mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="max-w-[1280px] mx-auto px-6 py-4 flex items-center gap-4 lg:gap-6">
 
-        <RouterLink to="/" class="flex items-center">
+        <RouterLink to="/" class="flex items-center shrink-0">
           <img src="/logoentier.png" :alt="t('public.layout.logoAlt')" class="h-12 w-auto" />
         </RouterLink>
 
-        <nav class="hidden md:flex items-center gap-8">
+        <nav class="hidden md:flex flex-1 items-center justify-center gap-5 xl:gap-8">
           <RouterLink
             v-for="link in navLinks"
             :key="link.path"
@@ -22,10 +22,10 @@
           </RouterLink>
         </nav>
 
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 shrink-0 ml-auto md:ml-0">
           <button
             @click="searchRef?.open()"
-            class="relative hidden lg:flex items-center gap-2 bg-[#edf4ff] hover:bg-[#e0eeff] pl-3 pr-3 py-2 rounded-xl text-sm text-gray-400 w-56 transition group"
+            class="relative hidden lg:flex items-center gap-2 bg-[#edf4ff] hover:bg-[#e0eeff] pl-3 pr-3 py-2 rounded-xl text-sm text-gray-400 w-44 xl:w-56 transition group"
           >
             <MagnifyingGlassIcon class="w-[18px] h-[18px] shrink-0 text-gray-400" />
             <span class="flex-1 text-left text-[13px]">{{ t('public.layout.searchPlaceholder') }}</span>
@@ -34,7 +34,7 @@
 
           <RouterLink
             to="/depot"
-            class="hidden md:flex items-center gap-1.5 text-sm font-bold font-jakarta px-4 py-2 rounded-full text-[#006d35] border-2 border-[#006d35]/15 hover:border-[#006d35]/40 hover:bg-[#006d35]/5 transition"
+            class="hidden md:flex items-center gap-1.5 whitespace-nowrap shrink-0 text-sm font-bold font-jakarta px-4 py-2 rounded-full text-[#006d35] border-2 border-[#006d35]/15 hover:border-[#006d35]/40 hover:bg-[#006d35]/5 transition"
           >
             <PlusCircleIcon class="w-4 h-4" />
             {{ t('public.layout.btnDeposit') }}
