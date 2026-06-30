@@ -61,7 +61,8 @@
       <p class="text-[#64748b] text-sm mb-6">L'équipe de direction du siège qui porte le projet UpcycleConnect au quotidien.</p>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <div v-for="m in leadership" :key="m.name" class="bg-white rounded-2xl border border-[#e2e8f0] p-5 flex items-center gap-4">
-          <div class="w-14 h-14 rounded-full flex items-center justify-center text-white text-base font-bold shrink-0" :style="{ background: m.color }">
+          <img v-if="m.photo" :src="m.photo" :alt="m.name" class="w-14 h-14 rounded-full object-cover shrink-0" />
+          <div v-else class="w-14 h-14 rounded-full flex items-center justify-center text-white text-base font-bold shrink-0" :style="{ background: m.color }">
             {{ initials(m.name) }}
           </div>
           <div class="min-w-0">
@@ -74,7 +75,8 @@
       <h3 class="text-lg font-bold text-[#001d32] mt-8 mb-4">Sur nos autres sites</h3>
       <div class="grid sm:grid-cols-2 gap-4">
         <div v-for="m in sites" :key="m.name" class="bg-white rounded-2xl border border-[#e2e8f0] p-5 flex items-center gap-4">
-          <div class="w-14 h-14 rounded-full flex items-center justify-center text-white text-base font-bold shrink-0" :style="{ background: m.color }">
+          <img v-if="m.photo" :src="m.photo" :alt="m.name" class="w-14 h-14 rounded-full object-cover shrink-0" />
+          <div v-else class="w-14 h-14 rounded-full flex items-center justify-center text-white text-base font-bold shrink-0" :style="{ background: m.color }">
             {{ initials(m.name) }}
           </div>
           <div class="min-w-0">
@@ -102,6 +104,7 @@ import {
   MegaphoneIcon, ArchiveBoxIcon, MagnifyingGlassIcon, ChartBarIcon,
   UsersIcon, AcademicCapIcon,
 } from '@heroicons/vue/24/outline'
+import photos from './aboutPhotos'
 
 const actions = [
   { title: 'Annonces & dépôts', desc: 'Déposez vos objets dans nos points de collecte après validation, ou publiez une annonce de don ou de vente.', icon: MegaphoneIcon },
@@ -120,16 +123,16 @@ const stats = [
 ]
 
 const leadership = [
-  { name: 'Sylvain Levy', role: 'Président-Directeur Général', color: '#006d35' },
-  { name: 'Pierre Chabrier', role: 'Directeur des Ressources Humaines', color: '#1b8848' },
-  { name: 'Ronnand Peuplus', role: 'Directeur Commercial', color: '#40617f' },
-  { name: 'Laink Terracid', role: 'Directrice Marketing', color: '#7c3aed' },
-  { name: 'Norman Thavaud', role: 'Directeur des Systèmes d\'Information', color: '#0e7490' },
+  { name: 'Sylvain Levy', role: 'Président-Directeur Général', color: '#006d35', photo: photos.sylvain_levy },
+  { name: 'Pierre Chabrier', role: 'Directeur des Ressources Humaines', color: '#1b8848', photo: photos.pierre_chabrier },
+  { name: 'Ronnand Peuplus', role: 'Directeur Commercial', color: '#40617f', photo: photos.ronnand_peuplus },
+  { name: 'Laink Terracid', role: 'Directrice Marketing', color: '#7c3aed', photo: photos.laink_terracid },
+  { name: 'Norman Thavaud', role: 'Directeur des Systèmes d\'Information', color: '#0e7490', photo: photos.norman_thavaud },
 ]
 
 const sites = [
-  { name: 'Antoine Maclair', role: 'Happiness Manager — Montreuil', color: '#b45309' },
-  { name: 'Frédéric Molas', role: 'Directeur régional — Suisse', color: '#001d32' },
+  { name: 'Antoine Maclair', role: 'Happiness Manager — Montreuil', color: '#b45309', photo: photos.antoine_maclair },
+  { name: 'Frédéric Molas', role: 'Directeur régional — Suisse', color: '#001d32', photo: photos.frederic_molas },
 ]
 
 function initials(name) {
