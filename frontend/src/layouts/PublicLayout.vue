@@ -358,10 +358,10 @@ const footerCommunaute = computed(() => [
 ])
 
 const footerLegal = computed(() => [
-  { label: t('public.layout.footerLinkLegalNotice'), path: '/' },
-  { label: t('public.layout.footerLinkTerms'),       path: '/' },
-  { label: t('public.layout.footerLinkPrivacy'),     path: '/' },
-  { label: t('public.layout.footerLinkContact'),     path: '/' },
+  { label: t('public.layout.footerLinkLegalNotice'), path: '/mentions-legales' },
+  { label: t('public.layout.footerLinkTerms'),       path: '/cgu-cgv' },
+  { label: t('public.layout.footerLinkPrivacy'),     path: '/confidentialite' },
+  { label: t('public.layout.footerLinkContact'),     path: '/contact' },
 ])
 
 const vClickOutside = {

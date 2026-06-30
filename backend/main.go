@@ -59,6 +59,9 @@ func main() {
 		&models.ProjectStep{},
 		&models.ProjectImage{},
 		&models.ProjectStepImage{},
+		&models.LegalDocument{},
+		&models.Ticket{},
+		&models.TicketMessage{},
 	); err != nil {
 		log.Fatalf("Failed to migrate database: %v", err)
 	}
@@ -69,6 +72,8 @@ func main() {
 
 	database.SeedSubscriptionPlans(db)
 	models.LoadSubscriptionPlans(db)
+
+	database.SeedLegalDocuments(db)
 
 	r := router.Setup(db, cfg)
 

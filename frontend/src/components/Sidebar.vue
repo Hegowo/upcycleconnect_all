@@ -122,6 +122,8 @@ import {
   LanguageIcon,
   BellAlertIcon,
   ArrowDownTrayIcon,
+  LifebuoyIcon,
+  ScaleIcon,
 } from '@heroicons/vue/24/outline'
 
 const { t } = useI18n()
@@ -143,6 +145,8 @@ const navItems = computed(() => [
   { to: '/admin/events',            icon: CalendarIcon,               label: t('nav.events'), staff: true },
   { to: '/admin/planning',          icon: CalendarIcon,               label: 'Mon planning', staff: true, employeeOnly: true },
   { to: '/admin/forum',             icon: ChatBubbleLeftEllipsisIcon, label: t('nav.forum'), staff: true },
+  { to: '/admin/tickets',           icon: LifebuoyIcon,               label: 'Tickets', staff: true },
+  { to: '/admin/legal',             icon: ScaleIcon,                  label: 'Légal' },
   { to: '/admin/monetization',      icon: BanknotesIcon,              label: 'Monétisation' },
   { to: '/admin/locales',           icon: LanguageIcon,               label: 'Langues' },
   { to: '/admin/notifications',     icon: BellAlertIcon,              label: 'Notifications' },

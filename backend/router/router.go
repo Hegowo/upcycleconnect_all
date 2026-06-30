@@ -83,6 +83,8 @@ func Setup(db *gorm.DB, cfg *config.Config) *gin.Engine {
 	marketplaceHandler := &handlers.MarketplaceHandler{DB: db, Stripe: stripeService, Audit: audit, Notifications: notifications}
 	projectHandler := &handlers.UpcyclingProjectHandler{DB: db, Audit: audit}
 	providerDashHandler := &handlers.ProviderDashboardHandler{DB: db}
+	legalHandler := &handlers.LegalHandler{DB: db, Audit: audit}
+	ticketHandler := &handlers.TicketHandler{DB: db, Audit: audit, Notifications: notifications}
 
 	r.Static("/uploads", "/uploads")
 
@@ -123,6 +125,8 @@ func Setup(db *gorm.DB, cfg *config.Config) *gin.Engine {
 		public.GET("/campaigns/:id", campaignHandler.PublicShow)
 		public.GET("/projects", projectHandler.PublicIndex)
 		public.GET("/projects/:id", projectHandler.PublicShow)
+
+		public.GET("/legal/:slug", legalHandler.Show)
 	}
 
 	userAPI := r.Group("/api/v1")
@@ -163,6 +167,12 @@ func Setup(db *gorm.DB, cfg *config.Config) *gin.Engine {
 			userProtected.DELETE("/deposits/:id", userDepositHandler.Destroy)
 
 			userProtected.GET("/upcycling-score", userDepositHandler.Score)
+
+			userProtected.GET("/tickets", ticketHandler.UserIndex)
+			userProtected.POST("/tickets", ticketHandler.UserCreate)
+			userProtected.GET("/tickets/:id", ticketHandler.UserShow)
+			userProtected.POST("/tickets/:id/messages", ticketHandler.UserReply)
+			userProtected.POST("/ticket-attachments", ticketHandler.UserUploadImage)
 
 			userProtected.POST("/prestations/:id/reserve", paymentHandler.Reserve)
 			userProtected.GET("/prestations/:id/contract-preview", contractHandler.Preview)
@@ -316,6 +326,12 @@ func Setup(db *gorm.DB, cfg *config.Config) *gin.Engine {
 
 			staff.GET("/staff/shifts", staffScheduleHandler.ListShifts)
 			staff.GET("/staff/events", staffScheduleHandler.ListEvents)
+
+			staff.GET("/tickets", ticketHandler.AdminIndex)
+			staff.GET("/tickets/:id", ticketHandler.AdminShow)
+			staff.POST("/tickets/:id/messages", ticketHandler.AdminReply)
+			staff.PATCH("/tickets/:id/status", ticketHandler.AdminUpdateStatus)
+			staff.POST("/ticket-attachments", ticketHandler.StaffUploadImage)
 		}
 
 		protected := api.Group("")
@@ -324,6 +340,9 @@ func Setup(db *gorm.DB, cfg *config.Config) *gin.Engine {
 		{
 			protected.GET("/notifications/sent", adminNotifHandler.SentList)
 			protected.POST("/notifications/broadcast", adminNotifHandler.Broadcast)
+
+			protected.GET("/legal", legalHandler.AdminIndex)
+			protected.PUT("/legal/:slug", legalHandler.AdminUpdate)
 			protected.GET("/notifications/recipients", adminNotifHandler.RecipientSearch)
 			protected.GET("/notifications/link-targets", adminNotifHandler.LinkTargets)
 
