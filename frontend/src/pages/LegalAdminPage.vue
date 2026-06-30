@@ -59,6 +59,7 @@ const LABELS = {
   'mentions-legales': 'Mentions légales',
   'cgu-cgv': 'CGU / CGV',
   'confidentialite': 'Confidentialité',
+  'accessibilite': 'Accessibilité',
 }
 function tabLabel(slug) { return LABELS[slug] || slug }
 

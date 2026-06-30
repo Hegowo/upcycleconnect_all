@@ -362,6 +362,7 @@ const footerLegal = computed(() => [
   { label: t('public.layout.footerLinkTerms'),       path: '/cgu-cgv' },
   { label: t('public.layout.footerLinkPrivacy'),     path: '/confidentialite' },
   { label: t('public.layout.footerLinkContact'),     path: '/contact' },
+  { label: t('public.layout.footerLinkAccessibility'), path: '/accessibilite' },
 ])
 
 const vClickOutside = {

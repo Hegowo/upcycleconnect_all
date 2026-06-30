@@ -49,6 +49,7 @@ const router = createRouter({
         { path: 'mentions-legales', component: () => import('@/pages/PublicLegalPage.vue'),      meta: { title: 'Mentions légales', slug: 'mentions-legales' } },
         { path: 'cgu-cgv',          component: () => import('@/pages/PublicLegalPage.vue'),      meta: { title: 'CGU / CGV', slug: 'cgu-cgv' } },
         { path: 'confidentialite',  component: () => import('@/pages/PublicLegalPage.vue'),      meta: { title: 'Politique de confidentialité', slug: 'confidentialite' } },
+        { path: 'accessibilite',    component: () => import('@/pages/PublicLegalPage.vue'),      meta: { title: 'Accessibilité', slug: 'accessibilite' } },
         { path: 'depot',                component: () => import('@/pages/PublicDepotPage.vue'),                meta: { title: 'Déposer un objet' } },
         { path: 'confirmation-depot',   component: () => import('@/pages/PublicConfirmationDepotPage.vue'),    meta: { title: 'Confirmation de Dépôt' } },
         { path: 'communaute/categories-forum', redirect: '/communaute' },

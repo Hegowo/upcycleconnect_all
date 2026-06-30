@@ -21,6 +21,7 @@ var legalSlugs = map[string]bool{
 	"mentions-legales": true,
 	"cgu-cgv":          true,
 	"confidentialite":  true,
+	"accessibilite":    true,
 }
 
 func (h *LegalHandler) Show(c *gin.Context) {
