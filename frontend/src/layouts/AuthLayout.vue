@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-    <div class="w-full max-w-md">
+    <main class="w-full max-w-md">
       <div class="text-center mb-8">
         <img
           src="/logoentier.png"
@@ -9,10 +9,10 @@
           @error="onLogoError"
           ref="logoImg"
         />
-        <p class="text-gray-500 text-sm mt-2">{{ t('nav.administration') }}</p>
+        <p class="text-gray-600 text-sm mt-2">{{ t('nav.administration') }}</p>
       </div>
       <slot />
-    </div>
+    </main>
   </div>
 </template>
 

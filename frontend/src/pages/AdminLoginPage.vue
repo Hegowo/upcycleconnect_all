@@ -1,7 +1,7 @@
 <template>
   <AuthLayout>
     <div class="card p-8">
-      <h2 class="text-xl font-bold text-gray-900 mb-6 text-center">{{ t('login.title') }}</h2>
+      <h1 class="text-xl font-bold text-gray-900 mb-6 text-center">{{ t('login.title') }}</h1>
 
       <div v-if="error" class="mb-4 p-3 bg-red-50 border border-red-200 rounded-md text-sm text-red-700">
         {{ error }}
@@ -39,7 +39,7 @@
         </button>
       </form>
 
-      <p class="mt-4 text-center text-xs text-gray-400">
+      <p class="mt-4 text-center text-xs text-gray-600">
         {{ t('login.subtitle') }}
       </p>
     </div>
