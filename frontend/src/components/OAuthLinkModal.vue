@@ -42,7 +42,7 @@
                 class="w-full px-4 py-3 border border-[#e2e8f0] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/20 focus:border-[#006d35] transition bg-white pr-11"
                 @keyup.enter="confirm"
               />
-              <button type="button" @click="showPwd = !showPwd" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition">
+              <button type="button" @click="showPwd = !showPwd" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-600 transition">
                 <EyeSlashIcon v-if="showPwd" class="w-4 h-4" />
                 <EyeIcon v-else class="w-4 h-4" />
               </button>

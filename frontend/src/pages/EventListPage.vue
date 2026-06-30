@@ -21,7 +21,7 @@
       <div class="lg:col-span-2 bg-white rounded-2xl p-5 border border-[#f1f5f9] shadow-sm">
         <div class="flex items-center justify-between mb-4">
           <h3 class="font-semibold text-[#001d32]">{{ t('events.nextWorkshop') }}</h3>
-          <span class="text-xs text-gray-400">{{ t('events.comingSoon') }}</span>
+          <span class="text-xs text-gray-500">{{ t('events.comingSoon') }}</span>
         </div>
         <div v-if="nextEvent">
           <div class="flex items-start gap-4">
@@ -50,7 +50,7 @@
                 </span>
               </div>
               <div v-if="nextEvent.max_participants">
-                <div class="flex justify-between text-xs text-gray-400 mb-1">
+                <div class="flex justify-between text-xs text-gray-500 mb-1">
                   <span>{{ t('events.capacity') }}</span>
                   <span>{{ nextEvent.registrations_count ?? 0 }} / {{ nextEvent.max_participants }}</span>
                 </div>
@@ -58,11 +58,11 @@
                   <div class="h-full rounded-full" :style="{ width: capacityPct(nextEvent) + '%', background: '#006d35' }"></div>
                 </div>
               </div>
-              <div v-else class="text-xs text-gray-400">{{ t('events.noLimit') }}</div>
+              <div v-else class="text-xs text-gray-500">{{ t('events.noLimit') }}</div>
             </div>
           </div>
         </div>
-        <div v-else class="py-6 text-center text-gray-400 text-sm">
+        <div v-else class="py-6 text-center text-gray-500 text-sm">
           {{ t('events.noEvent') }}
         </div>
       </div>
@@ -122,7 +122,7 @@
       <div class="flex items-start gap-2 mb-3">
         <div class="flex-1 min-w-0">
           <h4 class="text-sm font-semibold text-[#001d32] leading-tight truncate">{{ e.title }}</h4>
-          <div class="flex items-center gap-3 mt-1 text-xs text-gray-400">
+          <div class="flex items-center gap-3 mt-1 text-xs text-gray-500">
             <span class="flex items-center gap-1">
               <MapPinIcon class="w-3 h-3" />
               {{ e.location || t('events.online') }}
@@ -185,7 +185,7 @@
         >
           {{ t('common.edit') }}
         </RouterLink>
-        <button @click="openDelete(e)" class="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition">
+        <button @click="openDelete(e)" class="p-1.5 rounded-lg text-gray-500 hover:text-red-500 hover:bg-red-50 transition">
           <TrashIcon class="w-4 h-4" />
         </button>
       </div>
@@ -228,7 +228,7 @@
             <tr v-else-if="!events.length">
               <td :colspan="6" class="px-6 py-16 text-center">
                 <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-3">
-                  <CalendarIcon class="w-6 h-6 text-gray-400" />
+                  <CalendarIcon class="w-6 h-6 text-gray-500" />
                 </div>
                 <p class="text-gray-500 font-medium">{{ t('events.noFound') }}</p>
               </td>
@@ -238,7 +238,7 @@
               <td class="px-6 py-4 text-sm text-gray-500">{{ e.location || '—' }}</td>
               <td class="px-6 py-4">
                 <span class="text-sm font-medium text-[#001d32]">{{ formatDateShort(e.start_date) }}</span>
-                <span class="text-xs text-gray-400 ml-1">{{ formatTime(e.start_date) }}</span>
+                <span class="text-xs text-gray-500 ml-1">{{ formatTime(e.start_date) }}</span>
               </td>
               <td class="px-6 py-4 text-sm text-gray-500">{{ e.max_participants ?? '∞' }}</td>
               <td class="px-6 py-4">
@@ -282,12 +282,12 @@
                   </button>
                   <RouterLink
                     :to="`/admin/events/${e.id}/edit`"
-                    class="p-1.5 rounded-lg text-gray-400 hover:text-[#40617f] hover:bg-blue-50 transition"
+                    class="p-1.5 rounded-lg text-gray-500 hover:text-[#40617f] hover:bg-blue-50 transition"
                     :title="t('common.edit')"
                   >
                     <PencilIcon class="w-4 h-4" />
                   </RouterLink>
-                  <button @click="openDelete(e)" class="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition" :title="t('events.actionDelete')">
+                  <button @click="openDelete(e)" class="p-1.5 rounded-lg text-gray-500 hover:text-red-500 hover:bg-red-50 transition" :title="t('events.actionDelete')">
                     <TrashIcon class="w-4 h-4" />
                   </button>
                 </div>

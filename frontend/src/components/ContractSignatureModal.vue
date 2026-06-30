@@ -30,11 +30,11 @@
 
           <div class="grid grid-cols-2 gap-4 text-xs mb-6 pb-4 border-b border-gray-100">
             <div>
-              <p class="uppercase text-gray-400 font-semibold mb-1 tracking-wide">Numéro</p>
+              <p class="uppercase text-gray-500 font-semibold mb-1 tracking-wide">Numéro</p>
               <p class="text-gray-800 font-mono">CONTRAT-{{ year }}-{{ String(data.prestation.id).padStart(6, '0') }}-* </p>
             </div>
             <div>
-              <p class="uppercase text-gray-400 font-semibold mb-1 tracking-wide">Date</p>
+              <p class="uppercase text-gray-500 font-semibold mb-1 tracking-wide">Date</p>
               <p class="text-gray-800">{{ today }}</p>
             </div>
           </div>

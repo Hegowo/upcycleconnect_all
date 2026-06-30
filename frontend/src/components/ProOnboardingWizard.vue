@@ -58,7 +58,7 @@
               placeholder="Ex : Spécialiste de la rénovation de meubles anciens depuis 15 ans, je redonne vie au mobilier en bois massif grâce à des techniques traditionnelles d'ébénisterie..."
               class="w-full px-4 py-3 bg-[#f8fafc] border-2 border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30 focus:border-[#006d35] transition resize-none"
             />
-            <p class="text-xs text-[#94a3b8]">{{ form.description.length }} caractères — minimum 50 recommandé.</p>
+            <p class="text-xs text-gray-500">{{ form.description.length }} caractères — minimum 50 recommandé.</p>
           </div>
 
           <div v-else-if="current.key === 'website'" class="space-y-4">
@@ -66,7 +66,7 @@
               Si vous avez un site web, un portfolio ou une page Instagram, partagez-le pour que la communauté puisse découvrir votre univers en détail.
             </p>
             <div class="relative">
-              <GlobeAltIcon class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-[#94a3b8]" />
+              <GlobeAltIcon class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" />
               <input
                 v-model="form.website"
                 type="url"
@@ -74,7 +74,7 @@
                 class="w-full pl-12 pr-4 py-3 bg-[#f8fafc] border-2 border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30 focus:border-[#006d35] transition"
               />
             </div>
-            <p class="text-xs text-[#94a3b8]">Optionnel — vous pouvez passer cette étape.</p>
+            <p class="text-xs text-gray-500">Optionnel — vous pouvez passer cette étape.</p>
           </div>
 
           <div v-else-if="current.key === 'prestation'" class="space-y-4">
@@ -136,7 +136,7 @@
                 <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
               </select>
             </div>
-            <p class="text-xs text-[#94a3b8]">Optionnel — vous pouvez passer cette étape pour le faire plus tard.</p>
+            <p class="text-xs text-gray-500">Optionnel — vous pouvez passer cette étape pour le faire plus tard.</p>
           </div>
 
           <div v-else-if="current.key === 'done'" class="text-center py-4">

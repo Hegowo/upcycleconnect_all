@@ -17,7 +17,7 @@
 
     <div class="card p-4 flex flex-wrap items-center gap-3">
       <div class="relative flex-1 min-w-[200px]">
-        <MagnifyingGlassIcon class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#94a3b8]" />
+        <MagnifyingGlassIcon class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
         <input v-model="search" type="search" placeholder="Rechercher par nom, ville, code postal…"
           class="w-full pl-9 pr-3 py-2 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
       </div>
@@ -44,7 +44,7 @@
       <div class="w-6 h-6 border-2 border-[#006d35] border-t-transparent rounded-full animate-spin" />
     </div>
 
-    <div v-else-if="!filtered.length" class="bg-white rounded-2xl border border-[#f1f5f9] p-12 text-center text-gray-400">
+    <div v-else-if="!filtered.length" class="bg-white rounded-2xl border border-[#f1f5f9] p-12 text-center text-gray-500">
       <MapPinIcon class="w-12 h-12 mx-auto mb-3 text-gray-300" />
       <p class="font-medium">Aucun point de collecte</p>
       <p class="text-sm mt-1">Aucun résultat pour ces filtres</p>
@@ -71,7 +71,7 @@
               </div>
             </td>
             <td class="px-4 py-2.5 text-[#40617f] hidden md:table-cell">{{ pt.address }}</td>
-            <td class="px-4 py-2.5 text-[#40617f]"><span class="font-mono text-xs text-[#94a3b8]">{{ pt.postal_code }}</span> {{ pt.city }}</td>
+            <td class="px-4 py-2.5 text-[#40617f]"><span class="font-mono text-xs text-gray-500">{{ pt.postal_code }}</span> {{ pt.city }}</td>
             <td class="px-4 py-2.5 text-[#64748b] text-xs hidden lg:table-cell">{{ pt.opening_hours || '—' }}</td>
             <td class="px-4 py-2.5">
               <div class="flex flex-col gap-1 items-start">
@@ -83,23 +83,23 @@
                   :class="pt.is_active ? 'bg-[#dcfce7] text-[#166534] hover:bg-[#bbf7d0]' : 'bg-[#f1f5f9] text-[#6b7280] hover:bg-[#e5e7eb]'">
                   {{ pt.is_active ? 'Actif' : 'Inactif' }}
                 </button>
-                <span v-if="pt.out_of_service && pt.out_of_service_until" class="text-[10px] text-[#94a3b8]">
+                <span v-if="pt.out_of_service && pt.out_of_service_until" class="text-[10px] text-gray-500">
                   jusqu'au {{ formatDate(pt.out_of_service_until) }}
                 </span>
-                <span v-else-if="pt.out_of_service" class="text-[10px] text-[#94a3b8]">durée indéterminée</span>
+                <span v-else-if="pt.out_of_service" class="text-[10px] text-gray-500">durée indéterminée</span>
               </div>
             </td>
             <td class="px-4 py-2.5 text-right whitespace-nowrap">
-              <button v-if="!pt.out_of_service" @click="openOOS(pt)" class="p-1.5 rounded-lg text-gray-400 hover:text-amber-600 hover:bg-amber-50 transition" title="Déclarer hors service">
+              <button v-if="!pt.out_of_service" @click="openOOS(pt)" class="p-1.5 rounded-lg text-gray-500 hover:text-amber-600 hover:bg-amber-50 transition" title="Déclarer hors service">
                 <NoSymbolIcon class="w-4 h-4" />
               </button>
-              <button v-else @click="restore(pt)" class="p-1.5 rounded-lg text-gray-400 hover:text-[#006d35] hover:bg-[#f0fdf4] transition" title="Remettre en service">
+              <button v-else @click="restore(pt)" class="p-1.5 rounded-lg text-gray-500 hover:text-[#006d35] hover:bg-[#f0fdf4] transition" title="Remettre en service">
                 <ArrowPathIcon class="w-4 h-4" />
               </button>
-              <button @click="openEdit(pt)" class="p-1.5 rounded-lg text-gray-400 hover:text-[#006d35] hover:bg-[#f0fdf4] transition" title="Modifier">
+              <button @click="openEdit(pt)" class="p-1.5 rounded-lg text-gray-500 hover:text-[#006d35] hover:bg-[#f0fdf4] transition" title="Modifier">
                 <PencilSquareIcon class="w-4 h-4" />
               </button>
-              <button @click="confirmDelete(pt)" class="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition" title="Supprimer">
+              <button @click="confirmDelete(pt)" class="p-1.5 rounded-lg text-gray-500 hover:text-red-500 hover:bg-red-50 transition" title="Supprimer">
                 <TrashIcon class="w-4 h-4" />
               </button>
             </td>
@@ -109,7 +109,7 @@
 
       <div v-if="lastPage > 1" class="flex items-center justify-between px-4 py-3 border-t border-[#f1f5f9]">
         <button @click="page--" :disabled="page <= 1" class="text-sm text-[#40617f] disabled:opacity-40 hover:text-[#006d35]">← Précédent</button>
-        <span class="text-xs text-[#94a3b8]">Page {{ page }} / {{ lastPage }} · {{ filtered.length }} points</span>
+        <span class="text-xs text-gray-500">Page {{ page }} / {{ lastPage }} · {{ filtered.length }} points</span>
         <button @click="page++" :disabled="page >= lastPage" class="text-sm text-[#40617f] disabled:opacity-40 hover:text-[#006d35]">Suivant →</button>
       </div>
     </div>
@@ -121,7 +121,7 @@
             <div class="sticky top-0 bg-white border-b border-[#f1f5f9] px-6 py-4 flex items-center justify-between rounded-t-2xl">
               <h3 class="font-bold text-[#001d32]">{{ editTarget ? 'Modifier le point' : 'Nouveau point de collecte' }}</h3>
               <button @click="closeModal" class="p-1 rounded-lg hover:bg-gray-100 transition">
-                <XMarkIcon class="w-5 h-5 text-gray-400" />
+                <XMarkIcon class="w-5 h-5 text-gray-500" />
               </button>
             </div>
 
@@ -160,7 +160,7 @@
                   <input v-model="form.address" type="text" placeholder="Adresse" class="px-3 py-2 text-xs border border-[#e5e7eb] rounded-lg focus:outline-none" />
                   <input v-model="form.postal_code" type="text" placeholder="Code postal" class="px-3 py-2 text-xs border border-[#e5e7eb] rounded-lg focus:outline-none" />
                   <input v-model="form.city" type="text" placeholder="Ville" class="px-3 py-2 text-xs border border-[#e5e7eb] rounded-lg col-span-2 focus:outline-none" />
-                  <div class="col-span-2 text-xs text-gray-400 flex gap-4">
+                  <div class="col-span-2 text-xs text-gray-500 flex gap-4">
                     <span>Lat: {{ form.latitude.toFixed(6) }}</span>
                     <span>Lng: {{ form.longitude.toFixed(6) }}</span>
                   </div>
@@ -228,7 +228,7 @@
             <div>
               <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1.5">Jusqu'au (facultatif)</label>
               <input v-model="oosUntil" type="date" :min="todayStr" class="w-full px-3 py-2.5 text-sm border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
-              <p class="text-xs text-[#94a3b8] mt-1.5">Laissez vide pour une durée indéterminée. Le box redeviendra disponible automatiquement à la date choisie.</p>
+              <p class="text-xs text-gray-500 mt-1.5">Laissez vide pour une durée indéterminée. Le box redeviendra disponible automatiquement à la date choisie.</p>
             </div>
             <div class="flex gap-3">
               <button @click="oosTarget = null" class="flex-1 py-2.5 rounded-xl text-sm font-semibold text-[#40617f] bg-[#f8fafc] hover:bg-[#edf4ff] transition">Annuler</button>

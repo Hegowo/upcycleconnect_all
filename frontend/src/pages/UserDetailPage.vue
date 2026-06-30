@@ -27,7 +27,7 @@
             </div>
             <div>
               <h2 class="text-xl font-bold text-gray-900">{{ user.first_name }} {{ user.last_name }}</h2>
-              <p class="text-sm text-gray-400 mt-0.5">{{ user.email }}</p>
+              <p class="text-sm text-gray-500 mt-0.5">{{ user.email }}</p>
             </div>
           </div>
           <AppBadge :label="user.status" />
@@ -35,21 +35,21 @@
 
         <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-sm border-t border-gray-100 pt-6">
           <div>
-            <dt class="text-xs text-gray-400 uppercase font-medium mb-1">{{ t('users.fieldPhone') }}</dt>
+            <dt class="text-xs text-gray-500 uppercase font-medium mb-1">{{ t('users.fieldPhone') }}</dt>
             <dd class="text-gray-900 font-medium">{{ user.phone || '—' }}</dd>
           </div>
           <div>
-            <dt class="text-xs text-gray-400 uppercase font-medium mb-1">{{ t('users.fieldVerified') }}</dt>
-            <dd class="font-medium" :class="user.email_verified_at ? 'text-green-600' : 'text-gray-400'">
+            <dt class="text-xs text-gray-500 uppercase font-medium mb-1">{{ t('users.fieldVerified') }}</dt>
+            <dd class="font-medium" :class="user.email_verified_at ? 'text-green-600' : 'text-gray-500'">
               {{ user.email_verified_at ? `✓ ${t('users.verified')}` : t('users.notVerified') }}
             </dd>
           </div>
           <div>
-            <dt class="text-xs text-gray-400 uppercase font-medium mb-1">{{ t('users.fieldJoined') }}</dt>
+            <dt class="text-xs text-gray-500 uppercase font-medium mb-1">{{ t('users.fieldJoined') }}</dt>
             <dd class="text-gray-900 font-medium">{{ formatDate(user.created_at) }}</dd>
           </div>
           <div>
-            <dt class="text-xs text-gray-400 uppercase font-medium mb-1">{{ t('users.fieldStatus') }}</dt>
+            <dt class="text-xs text-gray-500 uppercase font-medium mb-1">{{ t('users.fieldStatus') }}</dt>
             <dd>
               <span class="text-xs px-2 py-1 rounded-full font-semibold"
                 :class="{

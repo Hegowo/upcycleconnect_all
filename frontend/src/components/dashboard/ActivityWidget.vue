@@ -9,7 +9,7 @@
     <div v-if="loading" class="p-4 space-y-3">
       <div v-for="n in 5" :key="n" class="h-10 bg-gray-50 rounded-lg animate-pulse"></div>
     </div>
-    <div v-else-if="logs.length === 0" class="text-center py-12 text-gray-400 text-sm">
+    <div v-else-if="logs.length === 0" class="text-center py-12 text-gray-500 text-sm">
       {{ t('dashboard.activityEmpty') }}
     </div>
     <div v-else class="divide-y divide-[#f8fafc]">
@@ -29,7 +29,7 @@
             <p class="text-sm text-gray-800 flex-1 min-w-0 truncate">
               <span class="font-medium">{{ log.admin_name?.trim() || 'Système' }}</span>
               — {{ actionLabel(log.action) }}
-              <span v-if="log.resource_id" class="text-gray-400"> #{{ log.resource_id }}</span>
+              <span v-if="log.resource_id" class="text-gray-500"> #{{ log.resource_id }}</span>
             </p>
             <div class="flex items-center gap-2 shrink-0">
               <span class="text-xs px-2 py-0.5 rounded-full font-medium" :class="actionBadgeClass(log.action)">
@@ -46,7 +46,7 @@
               — {{ actionLabel(log.action) }}
             </p>
             <div class="flex items-center gap-1.5 mt-1 flex-wrap">
-              <span class="text-[10px] text-gray-400">{{ formatDate(log.created_at) }}</span>
+              <span class="text-[10px] text-gray-500">{{ formatDate(log.created_at) }}</span>
               <span class="text-[10px] px-1.5 py-0.5 rounded-full font-medium" :class="actionBadgeClass(log.action)">
                 {{ log.resource_type ? resourceLabel(log.resource_type) : '—' }}
               </span>
@@ -55,7 +55,7 @@
               </span>
             </div>
           </div>
-          <p class="hidden sm:block text-xs text-gray-400 mt-0.5">{{ formatDate(log.created_at) }}</p>
+          <p class="hidden sm:block text-xs text-gray-500 mt-0.5">{{ formatDate(log.created_at) }}</p>
         </div>
       </div>
     </div>
@@ -71,7 +71,7 @@
             <button @click="closeModal" class="w-3 h-3 rounded-full bg-red-500 hover:bg-red-400 transition-colors"></button>
             <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
             <div class="w-3 h-3 rounded-full bg-green-500"></div>
-            <span class="ml-3 text-xs font-mono text-gray-400 truncate">upcycleconnect — log#{{ selectedLog.id }}</span>
+            <span class="ml-3 text-xs font-mono text-gray-500 truncate">upcycleconnect — log#{{ selectedLog.id }}</span>
             <button @click="closeModal" class="ml-auto text-gray-500 hover:text-gray-300 transition-colors shrink-0">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>

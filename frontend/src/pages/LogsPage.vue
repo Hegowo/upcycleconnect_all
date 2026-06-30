@@ -33,7 +33,7 @@
             <div v-if="adminLoading" class="p-4 space-y-3">
               <div v-for="n in 6" :key="n" class="h-12 bg-gray-50 rounded-lg animate-pulse"></div>
             </div>
-            <div v-else-if="!adminLogs.length" class="py-12 text-center text-gray-400 text-sm">
+            <div v-else-if="!adminLogs.length" class="py-12 text-center text-gray-500 text-sm">
               <ClockIcon class="w-8 h-8 mx-auto mb-2 text-gray-300" />
               {{ t('logs.adminEmpty') }}
             </div>
@@ -72,7 +72,7 @@
                       {{ resourceLabel(log.resource_type) }}
                       <span v-if="log.resource_id" class="opacity-60"> #{{ log.resource_id }}</span>
                     </span>
-                    <span v-else class="text-xs text-gray-400">—</span>
+                    <span v-else class="text-xs text-gray-500">—</span>
                   </td>
                   <td class="px-6 py-3.5">
                     <span class="text-xs font-semibold px-2 py-0.5 rounded-full" :class="statusBadge(log.action)">
@@ -106,7 +106,7 @@
                     <span v-if="log.resource_type" class="text-xs font-medium px-1.5 py-0.5 rounded-full" :class="actionBadgeClass(log.action)">
                       {{ resourceLabel(log.resource_type) }}<span v-if="log.resource_id" class="opacity-60"> #{{ log.resource_id }}</span>
                     </span>
-                    <span class="text-xs text-gray-400 font-mono">{{ formatDateShort(log.created_at) }}</span>
+                    <span class="text-xs text-gray-500 font-mono">{{ formatDateShort(log.created_at) }}</span>
                   </div>
                 </div>
               </div>
@@ -117,7 +117,7 @@
             <div v-if="platformLoading" class="p-4 space-y-3">
               <div v-for="n in 5" :key="n" class="h-12 bg-gray-50 rounded-lg animate-pulse"></div>
             </div>
-            <div v-else-if="!platformLogs.length" class="py-12 text-center text-gray-400 text-sm">
+            <div v-else-if="!platformLogs.length" class="py-12 text-center text-gray-500 text-sm">
               <UsersIcon class="w-8 h-8 mx-auto mb-2 text-gray-300" />
               {{ t('logs.platformEmpty') }}
             </div>
@@ -134,7 +134,7 @@
                 </div>
                 <div class="flex-1 min-w-0">
                   <p class="text-sm font-medium text-[#001d32]">{{ entry.name }}</p>
-                  <p class="text-xs text-gray-400">{{ entry.email }} · {{ formatDate(entry.created_at) }}</p>
+                  <p class="text-xs text-gray-500">{{ entry.email }} · {{ formatDate(entry.created_at) }}</p>
                 </div>
                 <span class="text-xs font-semibold px-2 py-0.5 rounded-full"
                   :class="entry.type === 'provider' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'">
@@ -156,7 +156,7 @@
               <button @click="closeModal" class="w-3 h-3 rounded-full bg-red-500 hover:bg-red-400 transition-colors"></button>
               <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
               <div class="w-3 h-3 rounded-full bg-green-500"></div>
-              <span class="ml-3 text-xs font-mono text-gray-400">upcycleconnect — log#{{ selectedLog.id }}</span>
+              <span class="ml-3 text-xs font-mono text-gray-500">upcycleconnect — log#{{ selectedLog.id }}</span>
               <button @click="closeModal" class="ml-auto text-gray-500 hover:text-gray-300 transition-colors">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
               </button>

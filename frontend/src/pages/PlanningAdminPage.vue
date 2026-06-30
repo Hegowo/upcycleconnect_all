@@ -35,12 +35,12 @@
           <div class="border-b border-[#f1f5f9]"></div>
           <div v-for="(d, i) in weekDays" :key="i" class="border-b border-l border-[#f1f5f9] px-2 py-2 text-center">
             <p class="text-xs font-bold text-[#001d32]">{{ dayNames[i] }}</p>
-            <p class="text-xs text-[#94a3b8]">{{ d.getDate() }}/{{ d.getMonth() + 1 }}</p>
+            <p class="text-xs text-gray-500">{{ d.getDate() }}/{{ d.getMonth() + 1 }}</p>
           </div>
         </div>
         <div class="grid relative" style="grid-template-columns: 56px repeat(7, 1fr);">
           <div>
-            <div v-for="h in hours" :key="h" class="text-[10px] text-[#94a3b8] text-right pr-1.5 border-b border-[#f8fafc]" :style="{ height: hourHeight + 'px' }">{{ h }}h</div>
+            <div v-for="h in hours" :key="h" class="text-[10px] text-gray-500 text-right pr-1.5 border-b border-[#f8fafc]" :style="{ height: hourHeight + 'px' }">{{ h }}h</div>
           </div>
           <div v-for="(d, i) in weekDays" :key="i" class="relative border-l border-[#f1f5f9]">
             <div v-for="h in hours" :key="h" class="border-b border-[#f8fafc]" :style="{ height: hourHeight + 'px' }"></div>
@@ -116,7 +116,7 @@
                 <label v-for="e in employees" :key="e.id" class="flex items-center gap-2 text-sm text-[#001d32]">
                   <input type="checkbox" :value="e.id" v-model="eventForm.employee_ids" /> {{ e.first_name }} {{ e.last_name }}
                 </label>
-                <p v-if="!employees.length" class="text-xs text-[#94a3b8]">Aucun employé. Créez-en d'abord dans « Employés ».</p>
+                <p v-if="!employees.length" class="text-xs text-gray-500">Aucun employé. Créez-en d'abord dans « Employés ».</p>
               </div>
             </div>
           </div>

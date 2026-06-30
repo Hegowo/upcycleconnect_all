@@ -9,15 +9,15 @@
     <div class="bg-white rounded-2xl border border-[#f1f5f9] shadow-sm p-4">
       <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
         <div class="text-center">
-          <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Prévision Revenus</p>
+          <p class="text-xs text-gray-500 uppercase tracking-wider mb-1">Prévision Revenus</p>
           <p class="text-lg font-bold text-[#001d32]">12 400 €</p>
         </div>
         <div class="text-center">
-          <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Apprenants Actifs</p>
+          <p class="text-xs text-gray-500 uppercase tracking-wider mb-1">Apprenants Actifs</p>
           <p class="text-lg font-bold text-[#001d32]">{{ meta.total ?? 0 }}</p>
         </div>
         <div class="text-center">
-          <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Total Prestations</p>
+          <p class="text-xs text-gray-500 uppercase tracking-wider mb-1">Total Prestations</p>
           <p class="text-lg font-bold text-[#001d32]">{{ meta.total ?? 0 }}</p>
         </div>
       </div>
@@ -44,7 +44,7 @@
 
           <div class="mb-4">
             <div class="relative">
-              <MagnifyingGlassIcon class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <MagnifyingGlassIcon class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
               <input
                 v-model="filters.search"
                 @input="debouncedFetch"
@@ -105,10 +105,10 @@
 
         <div v-else-if="!prestations.length" class="bg-white rounded-2xl border border-[#f1f5f9] shadow-sm py-16 text-center">
           <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-3">
-            <MagnifyingGlassIcon class="w-6 h-6 text-gray-400" />
+            <MagnifyingGlassIcon class="w-6 h-6 text-gray-500" />
           </div>
           <p class="text-gray-500 font-medium">Aucune prestation trouvée</p>
-          <p class="text-gray-400 text-sm mt-1">Modifiez vos critères de filtrage</p>
+          <p class="text-gray-500 text-sm mt-1">Modifiez vos critères de filtrage</p>
         </div>
 
         <div v-else class="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -135,13 +135,13 @@
 
               <div class="space-y-1.5 mb-4">
                 <div class="flex items-center gap-2 text-xs text-gray-500">
-                  <UserIcon class="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                  <UserIcon class="w-3.5 h-3.5 text-gray-500 shrink-0" />
                   <span>{{ p.provider?.first_name }} {{ p.provider?.last_name }}</span>
                 </div>
                 <div class="flex items-center gap-2 text-xs text-gray-500">
-                  <CurrencyEuroIcon class="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                  <CurrencyEuroIcon class="w-3.5 h-3.5 text-gray-500 shrink-0" />
                   <span class="font-semibold text-[#001d32]">{{ p.price ? `${p.price} €` : 'Sur devis' }}</span>
-                  <span class="text-gray-400">({{ priceTypeLabel(p.price_type) }})</span>
+                  <span class="text-gray-500">({{ priceTypeLabel(p.price_type) }})</span>
                 </div>
               </div>
 
@@ -185,7 +185,7 @@
                 >
                   Modifier
                 </RouterLink>
-                <button @click="openDelete(p)" class="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition">
+                <button @click="openDelete(p)" class="p-1.5 rounded-lg text-gray-500 hover:text-red-500 hover:bg-red-50 transition">
                   <TrashIcon class="w-4 h-4" />
                 </button>
               </div>

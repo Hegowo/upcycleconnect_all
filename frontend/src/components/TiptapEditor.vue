@@ -3,7 +3,7 @@
 
     <div class="tiptap-toolbar flex flex-wrap items-center gap-0.5 p-2 bg-[#f8fafc] border-b border-[#e5e7eb]">
 
-      <select @change="setHeading($event.target.value)" class="h-7 px-2 text-xs border border-[#e5e7eb] rounded-lg bg-white text-[#374151] focus:outline-none cursor-pointer mr-1">
+      <select @change="setHeading($event.target.value)" aria-label="Niveau de titre" class="h-7 px-2 text-xs border border-[#e5e7eb] rounded-lg bg-white text-[#374151] focus:outline-none cursor-pointer mr-1">
         <option value="p">Paragraphe</option>
         <option value="1">Titre 1</option>
         <option value="2">Titre 2</option>
@@ -40,12 +40,12 @@
       <div class="h-5 w-px bg-[#e5e7eb] mx-1" />
 
       <div class="relative flex items-center" title="Couleur du texte">
-        <input type="color" :value="currentColor" @input="e => editor.chain().focus().setColor(e.target.value).run()"
+        <input type="color" :value="currentColor" @input="e => editor.chain().focus().setColor(e.target.value).run()" aria-label="Couleur du texte"
           class="w-7 h-7 rounded-lg cursor-pointer border border-[#e5e7eb] p-0.5 bg-white" />
       </div>
 
       <div class="relative flex items-center" title="Surlignage">
-        <input type="color" value="#fef08a" @input="e => editor.chain().focus().toggleHighlight({ color: e.target.value }).run()"
+        <input type="color" value="#fef08a" @input="e => editor.chain().focus().toggleHighlight({ color: e.target.value }).run()" aria-label="Couleur de surlignage"
           class="w-7 h-7 rounded-lg cursor-pointer border border-[#e5e7eb] p-0.5 bg-[#fef08a]" />
       </div>
 
@@ -69,7 +69,7 @@
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m15 15 6-6m0 0-6-6m6 6H9a6 6 0 0 0 0 12h3"/></svg>
       </ToolBtn>
 
-      <span v-if="uploading" class="ml-2 text-xs text-[#94a3b8] flex items-center gap-1">
+      <span v-if="uploading" class="ml-2 text-xs text-gray-500 flex items-center gap-1">
         <div class="w-3 h-3 border-2 border-[#006d35] border-t-transparent rounded-full animate-spin" />
         Upload...
       </span>

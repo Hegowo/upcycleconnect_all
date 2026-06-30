@@ -13,7 +13,7 @@
         class="flex flex-col items-center justify-center gap-1 px-4 py-2.5 min-w-[68px] shrink-0 transition-colors relative"
         :class="isActive(item.to)
           ? (theme.isDark ? 'text-[#4ade80]' : 'text-[#006d35]')
-          : (theme.isDark ? 'text-[#475569]' : 'text-gray-400')"
+          : (theme.isDark ? 'text-[#475569]' : 'text-gray-500')"
       >
         <div
           v-if="isActive(item.to)"
@@ -24,7 +24,7 @@
           class="w-5 h-5 shrink-0"
           :class="isActive(item.to)
             ? (theme.isDark ? 'text-[#4ade80]' : 'text-[#006d35]')
-            : (theme.isDark ? 'text-[#475569]' : 'text-gray-400')"
+            : (theme.isDark ? 'text-[#475569]' : 'text-gray-500')"
         />
         <span :class="['text-[9px] font-semibold leading-tight text-center whitespace-nowrap', theme.isDark ? 'text-current' : '']">
           {{ item.label }}

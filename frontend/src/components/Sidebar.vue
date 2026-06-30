@@ -27,7 +27,7 @@
                   ? 'bg-[#006d35]/20 text-[#4ade80] border-[#4ade80]'
                   : 'bg-[#f0fdf4] text-[#006d35] border-[#006d35]')
               : (theme.isDark
-                  ? 'text-[#94a3b8] hover:bg-[#263244] border-transparent hover:text-[#f1f5f9]'
+                  ? 'text-gray-500 hover:bg-[#263244] border-transparent hover:text-[#f1f5f9]'
                   : 'text-[#374151] hover:bg-[#f9fafb] border-transparent')
           ]"
         >
@@ -36,14 +36,14 @@
             class="w-5 h-5 shrink-0"
             :class="isActive
               ? (theme.isDark ? 'text-[#4ade80]' : 'text-[#006d35]')
-              : (theme.isDark ? 'text-[#64748b]' : 'text-[#9ca3af]')"
+              : (theme.isDark ? 'text-[#64748b]' : 'text-gray-500')"
           />
           <span>{{ item.label }}</span>
         </button>
       </RouterLink>
 
       <div v-if="auth.isSuperAdmin" class="pt-3 pb-1">
-        <p :class="['px-3 text-[10px] font-semibold uppercase tracking-widest mb-1', theme.isDark ? 'text-[#475569]' : 'text-gray-400']">
+        <p :class="['px-3 text-[10px] font-semibold uppercase tracking-widest mb-1', theme.isDark ? 'text-[#475569]' : 'text-gray-500']">
           Super Admin
         </p>
       </div>
@@ -65,7 +65,7 @@
                     ? 'bg-[#006d35]/20 text-[#4ade80] border-[#4ade80]'
                     : 'bg-[#f0fdf4] text-[#006d35] border-[#006d35]')
                 : (theme.isDark
-                    ? 'text-[#94a3b8] hover:bg-[#263244] border-transparent hover:text-[#f1f5f9]'
+                    ? 'text-gray-500 hover:bg-[#263244] border-transparent hover:text-[#f1f5f9]'
                     : 'text-[#374151] hover:bg-[#f9fafb] border-transparent')
             ]"
           >
@@ -74,7 +74,7 @@
               class="w-5 h-5 shrink-0"
               :class="isActive
                 ? (theme.isDark ? 'text-[#4ade80]' : 'text-[#006d35]')
-                : (theme.isDark ? 'text-[#64748b]' : 'text-[#9ca3af]')"
+                : (theme.isDark ? 'text-[#64748b]' : 'text-gray-500')"
             />
             <span>{{ item.label }}</span>
           </button>

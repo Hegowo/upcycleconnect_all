@@ -12,7 +12,7 @@
       <div class="flex items-center justify-between py-3 border-b border-[#f8fafc]">
         <div>
           <p class="text-sm font-medium text-[#001d32]">{{ t('settings.autoValidation') }}</p>
-          <p class="text-xs text-gray-400 mt-0.5">{{ t('settings.autoValidationDesc') }}</p>
+          <p class="text-xs text-gray-500 mt-0.5">{{ t('settings.autoValidationDesc') }}</p>
         </div>
         <button
           @click="toggleAutoValidation"
@@ -25,7 +25,7 @@
       <div class="flex items-center justify-between py-3 border-b border-[#f8fafc]">
         <div>
           <p class="text-sm font-medium text-[#001d32]">{{ t('settings.emailNotif') }}</p>
-          <p class="text-xs text-gray-400 mt-0.5">{{ t('settings.emailNotifDesc') }}</p>
+          <p class="text-xs text-gray-500 mt-0.5">{{ t('settings.emailNotifDesc') }}</p>
         </div>
         <button
           @click="emailNotifications = !emailNotifications"
@@ -39,19 +39,19 @@
         <p class="text-sm font-medium text-[#001d32] mb-3">{{ t('settings.profileInfo') }}</p>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ t('settings.fieldFirstName') }}</label>
+            <label class="text-xs font-medium text-gray-500 uppercase tracking-wider">{{ t('settings.fieldFirstName') }}</label>
             <p class="text-sm text-[#001d32] mt-1 px-3 py-2 bg-[#f8fafc] rounded-lg">{{ auth.user?.first_name || '—' }}</p>
           </div>
           <div>
-            <label class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ t('settings.fieldLastName') }}</label>
+            <label class="text-xs font-medium text-gray-500 uppercase tracking-wider">{{ t('settings.fieldLastName') }}</label>
             <p class="text-sm text-[#001d32] mt-1 px-3 py-2 bg-[#f8fafc] rounded-lg">{{ auth.user?.last_name || '—' }}</p>
           </div>
           <div>
-            <label class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ t('settings.fieldEmail') }}</label>
+            <label class="text-xs font-medium text-gray-500 uppercase tracking-wider">{{ t('settings.fieldEmail') }}</label>
             <p class="text-sm text-[#001d32] mt-1 px-3 py-2 bg-[#f8fafc] rounded-lg">{{ auth.user?.email || '—' }}</p>
           </div>
           <div>
-            <label class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ t('settings.fieldRole') }}</label>
+            <label class="text-xs font-medium text-gray-500 uppercase tracking-wider">{{ t('settings.fieldRole') }}</label>
             <p class="text-sm capitalize mt-1 px-3 py-2 bg-[#f8fafc] rounded-lg font-medium" style="color:#006d35;">{{ auth.user?.role?.replace('_', ' ') || '—' }}</p>
           </div>
         </div>

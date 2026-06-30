@@ -20,7 +20,7 @@
                 class="w-full text-left px-3 py-2 rounded-lg text-sm text-[#001d32] hover:bg-[#f0fdf4] transition">
                 {{ widgetLabel(h.id) }}
               </button>
-              <p v-if="hiddenWidgets.length === 0" class="px-3 py-2 text-xs text-gray-400">{{ t('dashboard.allWidgetsShown') }}</p>
+              <p v-if="hiddenWidgets.length === 0" class="px-3 py-2 text-xs text-gray-500">{{ t('dashboard.allWidgetsShown') }}</p>
             </div>
           </div>
           <button @click="resetLayout" class="px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg text-gray-500 hover:bg-gray-50 transition">
@@ -54,7 +54,7 @@
       {{ t('dashboard.editHint') }}
     </div>
 
-    <div v-if="visibleTiles.length === 0" class="text-center py-16 text-gray-400 text-sm border border-dashed border-[#e2e8f0] rounded-2xl">
+    <div v-if="visibleTiles.length === 0" class="text-center py-16 text-gray-500 text-sm border border-dashed border-[#e2e8f0] rounded-2xl">
       {{ t('dashboard.emptyLayout') }}
       <button @click="editMode = true" class="block mx-auto mt-2 text-[#006d35] font-semibold hover:underline">{{ t('dashboard.customize') }}</button>
     </div>

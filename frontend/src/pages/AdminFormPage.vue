@@ -42,7 +42,7 @@
             <span v-if="!isEditing" class="text-red-500">*</span>
           </label>
           <input v-model="form.password" type="password" class="input" :required="!isEditing" minlength="8" />
-          <p v-if="!isEditing" class="text-xs text-gray-400 mt-1">{{ t('admins.fieldPasswordNew') }}</p>
+          <p v-if="!isEditing" class="text-xs text-gray-500 mt-1">{{ t('admins.fieldPasswordNew') }}</p>
         </div>
 
         <div>

@@ -5,8 +5,8 @@
       :class="[
         'relative p-2 rounded-lg transition',
         isDark
-          ? 'text-[#94a3b8] hover:text-[#f1f5f9] hover:bg-[#263244]'
-          : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
+          ? 'text-gray-500 hover:text-[#f1f5f9] hover:bg-[#263244]'
+          : 'text-gray-500 hover:text-gray-600 hover:bg-gray-50'
       ]"
       :title="'Notifications'"
     >
@@ -43,7 +43,7 @@
             <div :class="['w-6 h-6 border-2 rounded-full animate-spin mx-auto', isDark ? 'border-[#4ade80] border-t-transparent' : 'border-[#006d35] border-t-transparent']" />
           </div>
 
-          <div v-else-if="items.length === 0" :class="['px-4 py-10 text-center text-sm', isDark ? 'text-[#64748b]' : 'text-gray-400']">
+          <div v-else-if="items.length === 0" :class="['px-4 py-10 text-center text-sm', isDark ? 'text-[#64748b]' : 'text-gray-500']">
             <BellSlashIcon class="w-8 h-8 mx-auto mb-2 opacity-40" />
             Aucune notification pour le moment.
           </div>
@@ -69,10 +69,10 @@
                 <p :class="['text-sm font-semibold leading-tight', isDark ? 'text-[#f1f5f9]' : 'text-gray-900']">
                   {{ n.title }}
                 </p>
-                <p :class="['text-xs leading-snug mt-0.5 line-clamp-2', isDark ? 'text-[#94a3b8]' : 'text-gray-500']">
+                <p :class="['text-xs leading-snug mt-0.5 line-clamp-2', isDark ? 'text-gray-500' : 'text-gray-500']">
                   {{ n.body }}
                 </p>
-                <p :class="['text-[10px] mt-1', isDark ? 'text-[#64748b]' : 'text-gray-400']">{{ formatTime(n.created_at) }}</p>
+                <p :class="['text-[10px] mt-1', isDark ? 'text-[#64748b]' : 'text-gray-500']">{{ formatTime(n.created_at) }}</p>
               </div>
               <span v-if="!n.read" class="w-2 h-2 rounded-full bg-red-500 shrink-0 mt-2" />
             </button>

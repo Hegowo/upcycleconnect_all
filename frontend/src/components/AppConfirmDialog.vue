@@ -9,11 +9,11 @@
           : 'bg-white border-gray-200'
       ]">
         <h3 :class="['text-lg font-semibold mb-2', isDark ? 'text-[#f1f5f9]' : 'text-gray-900']">{{ title }}</h3>
-        <p :class="['text-sm mb-6', isDark ? 'text-[#94a3b8]' : 'text-gray-500']">{{ message }}</p>
+        <p :class="['text-sm mb-6', isDark ? 'text-gray-500' : 'text-gray-500']">{{ message }}</p>
         <div class="flex justify-end gap-3">
           <button @click="$emit('cancel')" :class="[
             'btn-secondary',
-            isDark ? '!bg-[#263244] !border-[#334155] !text-[#94a3b8] hover:!bg-[#2d3f55]' : ''
+            isDark ? '!bg-[#263244] !border-[#334155] !text-gray-500 hover:!bg-[#2d3f55]' : ''
           ]">
             Annuler
           </button>

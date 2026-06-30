@@ -27,7 +27,7 @@
         <div>
           <label class="label">{{ t('categories.fieldSlug') }}</label>
           <input v-model="form.slug" type="text" class="input font-mono" placeholder="mobilier" />
-          <p class="text-xs text-gray-400 mt-1">{{ t('categories.fieldSlugHint') }}</p>
+          <p class="text-xs text-gray-500 mt-1">{{ t('categories.fieldSlugHint') }}</p>
         </div>
 
         <div>

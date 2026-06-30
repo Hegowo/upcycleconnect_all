@@ -22,7 +22,7 @@
           </div>
         </div>
       </div>
-      <p class="text-xs text-[#94a3b8]">Sans dates, l'export contient toutes les données. Le filtre s'applique à la date de création.</p>
+      <p class="text-xs text-gray-500">Sans dates, l'export contient toutes les données. Le filtre s'applique à la date de création.</p>
     </div>
 
     <div v-if="loading" class="py-16 text-center">
@@ -32,7 +32,7 @@
       <div v-for="ds in datasets" :key="ds.key" class="card p-5 flex items-center justify-between gap-4">
         <div class="min-w-0">
           <p class="font-jakarta font-bold text-[#001d32]">{{ ds.label }}</p>
-          <p class="text-xs text-[#94a3b8] mt-0.5">{{ ds.columns }} colonnes</p>
+          <p class="text-xs text-gray-500 mt-0.5">{{ ds.columns }} colonnes</p>
         </div>
         <div class="flex gap-2 shrink-0">
           <button @click="download(ds.key, 'csv')" :disabled="busy === ds.key+'csv'"

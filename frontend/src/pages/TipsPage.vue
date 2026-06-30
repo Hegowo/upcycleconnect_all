@@ -56,7 +56,7 @@
           <tr v-for="t in tips" :key="t.id" class="border-t border-[#f1f5f9] hover:bg-[#f8fafc]">
             <td class="px-5 py-3">
               <p class="font-semibold text-[#001d32] line-clamp-1">{{ t.title }}</p>
-              <p v-if="t.summary" class="text-[#94a3b8] text-xs line-clamp-1">{{ t.summary }}</p>
+              <p v-if="t.summary" class="text-gray-500 text-xs line-clamp-1">{{ t.summary }}</p>
             </td>
             <td class="px-5 py-3 hidden md:table-cell text-xs text-[#40617f]">{{ t.category || '—' }}</td>
             <td class="px-5 py-3 hidden md:table-cell">

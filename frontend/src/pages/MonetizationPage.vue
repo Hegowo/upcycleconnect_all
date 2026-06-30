@@ -119,7 +119,7 @@
               <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2 mb-1 flex-wrap">
                   <span :class="badgeClass(c.status)" class="text-xs font-bold px-2 py-0.5 rounded-full">{{ statusLabel(c.status) }}</span>
-                  <span class="text-xs text-gray-400">par {{ c.provider_name }}</span>
+                  <span class="text-xs text-gray-500">par {{ c.provider_name }}</span>
                   <span v-if="c.paid_at" class="text-xs text-green-600 font-semibold">✓ Payée</span>
                 </div>
                 <h3 class="font-bold text-[#001d32]">{{ c.title }}</h3>
@@ -223,7 +223,7 @@
               <li>Campagnes : {{ limitLabel(p.max_campaigns) }}</li>
               <li>Événements/mois : {{ limitLabel(p.max_events_per_month) }}</li>
             </ul>
-            <p class="text-[10px] text-[#94a3b8] mt-2">{{ p.active_subscribers || 0 }} abonné(s) actif(s)</p>
+            <p class="text-[10px] text-gray-500 mt-2">{{ p.active_subscribers || 0 }} abonné(s) actif(s)</p>
             <div class="flex gap-2 mt-3">
               <button @click="openPlanForm(p)" class="flex-1 px-3 py-1.5 rounded-lg bg-[#edf4ff] text-[#1a73e8] text-xs font-semibold hover:bg-[#d0e8ff] transition">Modifier</button>
               <button v-if="!p.is_default" @click="deletePlan(p)" class="px-3 py-1.5 rounded-lg bg-red-50 text-red-600 text-xs font-semibold hover:bg-red-100 transition">Suppr.</button>
@@ -253,7 +253,7 @@
             <tr v-for="s in subscriptions" :key="s.id" class="border-t border-[#f1f5f9]">
               <td class="px-5 py-3">
                 <p class="font-semibold text-[#001d32]">{{ s.user_name }}</p>
-                <p class="text-xs text-gray-400">{{ s.user_email }}</p>
+                <p class="text-xs text-gray-500">{{ s.user_email }}</p>
               </td>
               <td class="px-5 py-3 font-medium">{{ s.plan_label }}</td>
               <td class="px-5 py-3">

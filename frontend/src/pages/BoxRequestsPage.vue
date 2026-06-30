@@ -13,7 +13,7 @@
 
     <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
       <div class="relative flex-1">
-        <MagnifyingGlassIcon class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+        <MagnifyingGlassIcon class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
         <input
           v-model="search"
           @input="onSearchInput"
@@ -41,14 +41,14 @@
         <div class="bg-white rounded-2xl border border-[#f1f5f9] shadow-sm overflow-hidden">
           <div class="px-5 py-4 border-b border-[#f1f5f9]">
             <h3 class="font-semibold text-[#001d32]">File d'attente</h3>
-            <p class="text-xs text-gray-400 mt-0.5">{{ meta.total }} demandes au total</p>
+            <p class="text-xs text-gray-500 mt-0.5">{{ meta.total }} demandes au total</p>
           </div>
 
           <div v-if="loading" class="flex items-center justify-center py-12">
             <div class="w-6 h-6 border-2 border-[#006d35] border-t-transparent rounded-full animate-spin"></div>
           </div>
 
-          <div v-else-if="requests.length === 0" class="flex flex-col items-center justify-center py-12 text-gray-400">
+          <div v-else-if="requests.length === 0" class="flex flex-col items-center justify-center py-12 text-gray-500">
             <InboxIcon class="w-10 h-10 mb-2 text-gray-300" />
             <p class="text-sm">Aucune demande</p>
           </div>
@@ -63,15 +63,15 @@
             >
               <div class="w-10 h-10 rounded-xl overflow-hidden shrink-0 bg-gray-100 flex items-center justify-center">
                 <img v-if="req.photo1" :src="req.photo1" class="w-full h-full object-cover" />
-                <PhotoIcon v-else class="w-5 h-5 text-gray-400" />
+                <PhotoIcon v-else class="w-5 h-5 text-gray-500" />
               </div>
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-semibold text-[#001d32] truncate">{{ req.title }}</p>
-                <p class="text-xs text-gray-400 mt-0.5">
+                <p class="text-xs text-gray-500 mt-0.5">
                   {{ req.user?.name || '—' }} · {{ req.category?.name || 'Sans catégorie' }}
                 </p>
                 <div class="flex items-center justify-between mt-1.5">
-                  <span class="text-[10px] text-gray-400">{{ formatDate(req.created_at) }}</span>
+                  <span class="text-[10px] text-gray-500">{{ formatDate(req.created_at) }}</span>
                   <span class="text-xs font-semibold px-2 py-0.5 rounded-full" :class="statusBadge(req.status)">
                     {{ statusText(req.status) }}
                   </span>
@@ -82,7 +82,7 @@
 
           <div v-if="meta.last_page > 1" class="flex items-center justify-between px-5 py-3 border-t border-[#f1f5f9]">
             <button @click="changePage(meta.current_page - 1)" :disabled="meta.current_page <= 1" class="text-xs text-[#40617f] disabled:opacity-40 hover:text-[#006d35] transition">← Précédent</button>
-            <span class="text-xs text-gray-400">{{ meta.current_page }} / {{ meta.last_page }}</span>
+            <span class="text-xs text-gray-500">{{ meta.current_page }} / {{ meta.last_page }}</span>
             <button @click="changePage(meta.current_page + 1)" :disabled="meta.current_page >= meta.last_page" class="text-xs text-[#40617f] disabled:opacity-40 hover:text-[#006d35] transition">Suivant →</button>
           </div>
         </div>
@@ -90,7 +90,7 @@
 
       <div class="lg:col-span-3" ref="detailPanel">
         <div v-if="!selectedRequest" class="bg-white rounded-2xl border border-[#f1f5f9] shadow-sm flex items-center justify-center h-96">
-          <div class="text-center text-gray-400">
+          <div class="text-center text-gray-500">
             <InboxIcon class="w-12 h-12 mx-auto mb-3 text-gray-300" />
             <p class="text-sm font-medium">Sélectionnez une demande</p>
             <p class="text-xs mt-1">Cliquez sur une demande pour voir les détails</p>
@@ -109,7 +109,7 @@
           <div class="px-6 py-4 border-b border-[#f1f5f9] flex items-center justify-between">
             <div>
               <h3 class="font-semibold text-[#001d32]">{{ selectedRequest.title }}</h3>
-              <p class="text-xs text-gray-400 mt-0.5">Demande #{{ selectedRequest.id }} · {{ formatDate(selectedRequest.created_at) }}</p>
+              <p class="text-xs text-gray-500 mt-0.5">Demande #{{ selectedRequest.id }} · {{ formatDate(selectedRequest.created_at) }}</p>
             </div>
             <span class="text-xs font-semibold px-2.5 py-1 rounded-full" :class="statusBadge(selectedRequest.status)">
               {{ statusText(selectedRequest.status) }}
@@ -122,20 +122,20 @@
               <p class="text-xs font-semibold text-[#6b7280] uppercase tracking-wider mb-3">Informations</p>
               <div class="grid grid-cols-2 sm:grid-cols-2 gap-3">
                 <div class="bg-[#f8fafc] rounded-xl p-3">
-                  <p class="text-xs text-gray-400 mb-1">Utilisateur</p>
+                  <p class="text-xs text-gray-500 mb-1">Utilisateur</p>
                   <p class="text-sm font-semibold text-[#001d32]">{{ selectedRequest.user?.name || '—' }}</p>
-                  <p class="text-xs text-gray-400">{{ selectedRequest.user?.email || '' }}</p>
+                  <p class="text-xs text-gray-500">{{ selectedRequest.user?.email || '' }}</p>
                 </div>
                 <div class="bg-[#f8fafc] rounded-xl p-3">
-                  <p class="text-xs text-gray-400 mb-1">Catégorie</p>
+                  <p class="text-xs text-gray-500 mb-1">Catégorie</p>
                   <p class="text-sm font-semibold text-[#001d32]">{{ selectedRequest.category?.name || 'Sans catégorie' }}</p>
                 </div>
                 <div class="bg-[#f8fafc] rounded-xl p-3">
-                  <p class="text-xs text-gray-400 mb-1">État de l'objet</p>
+                  <p class="text-xs text-gray-500 mb-1">État de l'objet</p>
                   <p class="text-sm font-semibold text-[#001d32]">{{ conditionText(selectedRequest.condition) }}</p>
                 </div>
                 <div v-if="selectedRequest.estimated_weight" class="bg-[#f8fafc] rounded-xl p-3">
-                  <p class="text-xs text-gray-400 mb-1">Poids estimé</p>
+                  <p class="text-xs text-gray-500 mb-1">Poids estimé</p>
                   <p class="text-sm font-semibold text-[#001d32]">{{ selectedRequest.estimated_weight }} kg</p>
                 </div>
               </div>
@@ -168,7 +168,7 @@
               <p class="text-xs font-semibold text-[#6b7280] uppercase tracking-wider mb-3">Impact Environnemental</p>
               <div class="rounded-xl p-3 text-center" style="background:#f0fdf4;">
                 <p class="text-lg font-bold" style="color:#006d35;">{{ selectedRequest.carbon_savings }} kg</p>
-                <p class="text-[10px] text-gray-400 mt-0.5">CO₂ économisé</p>
+                <p class="text-[10px] text-gray-500 mt-0.5">CO₂ économisé</p>
               </div>
             </div>
 

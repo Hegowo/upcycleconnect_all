@@ -33,9 +33,9 @@
             <div class="flex-1 min-w-0">
               <p class="text-sm font-semibold text-[#001d32] truncate">
                 {{ admin.first_name }} {{ admin.last_name }}
-                <span v-if="admin.id === currentUserId" class="text-xs text-gray-400 ml-1">(moi)</span>
+                <span v-if="admin.id === currentUserId" class="text-xs text-gray-500 ml-1">(moi)</span>
               </p>
-              <p class="text-xs text-gray-400 truncate">{{ admin.email }}</p>
+              <p class="text-xs text-gray-500 truncate">{{ admin.email }}</p>
             </div>
             <AppBadge :label="admin.status" />
           </div>
@@ -106,7 +106,7 @@
                   <div>
                     <p class="text-sm font-medium text-gray-900">
                       {{ admin.first_name }} {{ admin.last_name }}
-                      <span v-if="admin.id === currentUserId" class="text-xs text-gray-400 ml-1">(moi)</span>
+                      <span v-if="admin.id === currentUserId" class="text-xs text-gray-500 ml-1">(moi)</span>
                     </p>
                   </div>
                 </div>

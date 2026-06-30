@@ -22,10 +22,10 @@
 
     <div v-else-if="!categories.length" class="bg-white rounded-2xl border border-[#f1f5f9] shadow-sm py-16 text-center">
       <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-3">
-        <TagIcon class="w-6 h-6 text-gray-400" />
+        <TagIcon class="w-6 h-6 text-gray-500" />
       </div>
       <p class="text-gray-500 font-medium">{{ t('categories.noCategories') }}</p>
-      <p class="text-gray-400 text-sm mt-1">{{ t('categories.createFirst') }}</p>
+      <p class="text-gray-500 text-sm mt-1">{{ t('categories.createFirst') }}</p>
     </div>
 
     <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -51,13 +51,13 @@
           </div>
 
           <h4 class="text-sm font-bold text-[#001d32] mb-1">{{ cat.name }}</h4>
-          <p class="text-xs text-gray-400 mb-3 line-clamp-2">{{ cat.description || t('categories.noDescription') }}</p>
+          <p class="text-xs text-gray-500 mb-3 line-clamp-2">{{ cat.description || t('categories.noDescription') }}</p>
 
           <div class="flex items-center justify-between mb-4">
             <span class="text-xs font-semibold px-2 py-0.5 rounded-full" :class="cat.is_active ? 'bg-[#dcfce7] text-[#166534]' : 'bg-gray-100 text-gray-500'">
               {{ cat.is_active ? t('categories.active') : t('categories.inactive') }}
             </span>
-            <span class="text-xs text-gray-400 font-medium">
+            <span class="text-xs text-gray-500 font-medium">
               {{ cat.prestations_count ?? 0 }} {{ t('categories.articles') }}
             </span>
           </div>
@@ -72,7 +72,7 @@
             </RouterLink>
             <button
               @click="openDelete(cat)"
-              class="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition"
+              class="p-1.5 rounded-lg text-gray-500 hover:text-red-500 hover:bg-red-50 transition"
               :title="t('categories.actionDelete')"
             >
               <TrashIcon class="w-4 h-4" />
@@ -85,16 +85,16 @@
     <div v-if="categories.length" class="bg-white rounded-2xl border border-[#f1f5f9] shadow-sm p-4">
       <div class="grid grid-cols-3 gap-3 sm:gap-6">
         <div class="text-center">
-          <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">{{ t('categories.totalCategories') }}</p>
+          <p class="text-xs text-gray-500 uppercase tracking-wider mb-1">{{ t('categories.totalCategories') }}</p>
           <p class="text-lg font-bold text-[#001d32]">{{ categories.length }}</p>
         </div>
         <div class="text-center">
-          <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">{{ t('categories.activeCount') }}</p>
+          <p class="text-xs text-gray-500 uppercase tracking-wider mb-1">{{ t('categories.activeCount') }}</p>
           <p class="text-lg font-bold text-[#006d35]">{{ categories.filter(c => c.is_active).length }}</p>
         </div>
         <div class="text-center">
-          <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">{{ t('categories.inactiveCount') }}</p>
-          <p class="text-lg font-bold text-gray-400">{{ categories.filter(c => !c.is_active).length }}</p>
+          <p class="text-xs text-gray-500 uppercase tracking-wider mb-1">{{ t('categories.inactiveCount') }}</p>
+          <p class="text-lg font-bold text-gray-500">{{ categories.filter(c => !c.is_active).length }}</p>
         </div>
       </div>
     </div>

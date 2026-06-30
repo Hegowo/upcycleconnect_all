@@ -49,7 +49,7 @@
               <button v-if="!l.builtin" @click="destroy(l)" class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs rounded-lg border border-red-200 text-red-600 hover:bg-red-50 transition">
                 <TrashIcon class="w-3.5 h-3.5" />
               </button>
-              <span v-if="l.builtin" class="text-xs text-[#94a3b8]">—</span>
+              <span v-if="l.builtin" class="text-xs text-gray-500">—</span>
             </td>
           </tr>
         </tbody>
@@ -107,7 +107,7 @@
 
           <div class="px-6 py-3 border-b border-gray-100 shrink-0 flex flex-wrap items-center gap-3">
             <div class="relative flex-1 min-w-[200px]">
-              <MagnifyingGlassIcon class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#94a3b8]" />
+              <MagnifyingGlassIcon class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
               <input v-model="search" type="search" placeholder="Rechercher dans les textes..." class="w-full pl-9 pr-3 py-2 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
             </div>
             <div class="flex gap-1.5">
@@ -127,7 +127,7 @@
                   activeSection === s.name ? 'bg-[#f0fdf4]' : 'hover:bg-white']">
                 <div class="flex items-center justify-between gap-2">
                   <span class="text-sm font-medium truncate" :class="activeSection === s.name ? 'text-[#006d35]' : 'text-[#001d32]'">{{ sectionLabel(s.name) }}</span>
-                  <span class="text-[10px] font-bold shrink-0" :class="s.done === s.total ? 'text-[#16a34a]' : 'text-[#94a3b8]'">{{ s.done }}/{{ s.total }}</span>
+                  <span class="text-[10px] font-bold shrink-0" :class="s.done === s.total ? 'text-[#16a34a]' : 'text-gray-500'">{{ s.done }}/{{ s.total }}</span>
                 </div>
                 <div class="w-full h-1 bg-gray-200 rounded-full mt-1.5 overflow-hidden">
                   <div class="h-full rounded-full transition-all" :class="s.done === s.total ? 'bg-[#16a34a]' : 'bg-[#006d35]'" :style="{ width: (s.total ? (s.done/s.total*100) : 0) + '%' }" />
@@ -136,14 +136,14 @@
             </div>
 
             <div class="flex-1 overflow-y-auto p-5 space-y-3">
-              <div v-if="!visibleKeys.length" class="text-center py-16 text-[#94a3b8] text-sm">
+              <div v-if="!visibleKeys.length" class="text-center py-16 text-gray-500 text-sm">
                 Aucun texte ne correspond à ce filtre.
               </div>
               <div v-for="k in visibleKeys" :key="k"
                 class="rounded-xl border p-3.5 transition"
                 :class="isTranslated(k) ? 'border-[#e5e7eb] bg-white' : 'border-amber-200 bg-amber-50/40'">
                 <div class="flex items-center justify-between gap-2 mb-2">
-                  <span class="font-mono text-[10px] text-[#94a3b8] truncate">{{ k }}</span>
+                  <span class="font-mono text-[10px] text-gray-500 truncate">{{ k }}</span>
                   <span v-if="!isTranslated(k)" class="shrink-0 text-[10px] font-bold uppercase tracking-wide text-amber-600 bg-amber-100 px-2 py-0.5 rounded-full">À traduire</span>
                   <span v-else class="shrink-0 text-[10px] font-bold uppercase tracking-wide text-[#16a34a] bg-[#dcfce7] px-2 py-0.5 rounded-full">Traduit</span>
                 </div>

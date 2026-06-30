@@ -24,14 +24,14 @@
 
       <div v-if="current" class="p-5 space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1">Titre</label>
-          <input v-model="current.title" type="text" class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
+          <label for="legal-title" class="block text-xs font-semibold text-[#40617f] uppercase mb-1">Titre</label>
+          <input id="legal-title" v-model="current.title" type="text" class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
         </div>
         <div>
           <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1">Contenu</label>
           <TiptapEditor v-model="current.content" min-height="320px" placeholder="Rédigez le document..." />
         </div>
-        <p v-if="current.updated_at" class="text-xs text-[#94a3b8]">Dernière mise à jour : {{ formatDate(current.updated_at) }}</p>
+        <p v-if="current.updated_at" class="text-xs text-gray-500">Dernière mise à jour : {{ formatDate(current.updated_at) }}</p>
 
         <div class="flex items-center justify-end gap-3">
           <span v-if="savedMsg" class="text-sm text-[#16a34a] font-medium">{{ savedMsg }}</span>

@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between mb-4 sm:mb-5 shrink-0">
       <div>
         <h3 class="font-semibold text-[#001d32] text-sm sm:text-base">{{ t('dashboard.trends') }}</h3>
-        <p class="text-[10px] sm:text-xs text-gray-400 mt-0.5">{{ t('dashboard.trendsSubtitle') }} — {{ year }}</p>
+        <p class="text-[10px] sm:text-xs text-gray-500 mt-0.5">{{ t('dashboard.trendsSubtitle') }} — {{ year }}</p>
       </div>
       <span class="text-xs border border-[#e5e7eb] rounded-lg px-2 py-1 text-gray-500 bg-[#f8fafc]">{{ year }}</span>
     </div>
@@ -20,11 +20,11 @@
           }"
           :title="`${bar.label} : ${bar.value}`"
         ></div>
-        <span class="text-[8px] sm:text-[9px] text-gray-400">{{ bar.label }}</span>
+        <span class="text-[8px] sm:text-[9px] text-gray-500">{{ bar.label }}</span>
       </div>
     </div>
 
-    <p v-if="!loading && totalSignups === 0" class="text-center text-[11px] text-gray-400 mt-3 shrink-0">
+    <p v-if="!loading && totalSignups === 0" class="text-center text-[11px] text-gray-500 mt-3 shrink-0">
       {{ t('dashboard.trendsEmpty') }}
     </p>
   </div>

@@ -64,7 +64,7 @@
             </div>
           </div>
           <p v-if="cat.description" class="text-[#64748b] text-xs line-clamp-2">{{ cat.description }}</p>
-          <div class="flex items-center gap-4 text-xs text-[#94a3b8] border-t border-[#f1f5f9] pt-2">
+          <div class="flex items-center gap-4 text-xs text-gray-500 border-t border-[#f1f5f9] pt-2">
             <span>{{ cat.thread_count }} sujets</span>
             <span>{{ cat.reply_count }} réponses</span>
             <span class="ml-auto text-[10px] font-mono text-[#c4b5fd]">{{ cat.slug }}</span>
@@ -167,15 +167,15 @@
               <span :class="['text-xs font-bold px-2 py-0.5 rounded-full', report.type === 'thread' ? 'bg-[#edf4ff] text-[#1a73e8]' : 'bg-[#fef3c7] text-[#92400e]']">
                 {{ report.type === 'thread' ? 'Discussion' : 'Réponse' }} #{{ report.target_id }}
               </span>
-              <span class="text-xs text-[#94a3b8]">Signalé par
+              <span class="text-xs text-gray-500">Signalé par
                 <strong class="text-[#374151]">{{ report.reporter?.first_name || report.reporter?.email?.split('@')[0] }}</strong>
               </span>
-              <span class="text-xs text-[#94a3b8]">· {{ formatDate(report.created_at) }}</span>
+              <span class="text-xs text-gray-500">· {{ formatDate(report.created_at) }}</span>
             </div>
             <p v-if="report.reason" class="text-sm text-[#374151] bg-[#f8fafc] rounded-lg px-3 py-2 italic">
               "{{ report.reason }}"
             </p>
-            <p v-else class="text-sm text-[#94a3b8] italic">Aucune raison fournie</p>
+            <p v-else class="text-sm text-gray-500 italic">Aucune raison fournie</p>
           </div>
 
           <div class="shrink-0 flex flex-col gap-2">
@@ -200,7 +200,7 @@
       <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl">
         <div class="flex items-center justify-between mb-5">
           <h3 class="font-bold text-[#001d32] text-lg">{{ catModal.id ? 'Modifier la catégorie' : 'Nouvelle catégorie' }}</h3>
-          <button @click="catModal.show = false" class="text-[#94a3b8] hover:text-[#001d32] p-1">
+          <button @click="catModal.show = false" class="text-gray-500 hover:text-[#001d32] p-1">
             <XMarkIcon class="w-5 h-5" />
           </button>
         </div>

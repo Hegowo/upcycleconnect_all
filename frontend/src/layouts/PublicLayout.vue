@@ -85,7 +85,7 @@
                 >
                   <div class="px-4 py-3 border-b border-[#f1f5f9]">
                     <p class="text-sm font-semibold text-[#001d32] truncate">{{ userAuth.fullName }}</p>
-                    <p class="text-xs text-gray-400 truncate">{{ userAuth.user?.email }}</p>
+                    <p class="text-xs text-gray-500 truncate">{{ userAuth.user?.email }}</p>
                   </div>
 
                   <RouterLink

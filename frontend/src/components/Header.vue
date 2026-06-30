@@ -12,7 +12,7 @@
 
     <div class="hidden md:flex items-center flex-1 max-w-md mx-8">
       <div class="relative w-full">
-        <MagnifyingGlassIcon :class="['absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4', theme.isDark ? 'text-[#475569]' : 'text-gray-400']" />
+        <MagnifyingGlassIcon :class="['absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4', theme.isDark ? 'text-[#475569]' : 'text-gray-500']" />
         <input
           type="text"
           :placeholder="t('common.search')"
@@ -34,7 +34,7 @@
           'p-2 rounded-lg transition',
           theme.isDark
             ? 'text-yellow-400 hover:text-yellow-300 hover:bg-[#263244]'
-            : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
+            : 'text-gray-500 hover:text-gray-600 hover:bg-gray-50'
         ]"
         :title="theme.isDark ? 'Passer en mode clair' : 'Passer en mode sombre'"
       >
@@ -63,7 +63,7 @@
           'p-2 rounded-lg transition',
           theme.isDark
             ? 'text-[#64748b] hover:text-red-400 hover:bg-red-900/20'
-            : 'text-gray-400 hover:text-red-500 hover:bg-red-50'
+            : 'text-gray-500 hover:text-red-500 hover:bg-red-50'
         ]"
         :title="t('nav.logout')"
       >

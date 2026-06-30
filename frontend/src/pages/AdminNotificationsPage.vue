@@ -42,7 +42,7 @@
             </td>
             <td class="px-5 py-3 hidden sm:table-cell">
               <p class="text-[#001d32]">{{ n.recipient }}</p>
-              <p class="text-[#94a3b8] text-xs">{{ n.email }}</p>
+              <p class="text-gray-500 text-xs">{{ n.email }}</p>
             </td>
             <td class="px-5 py-3 hidden md:table-cell">
               <span class="text-xs font-mono text-[#40617f] bg-[#f1f5f9] px-2 py-0.5 rounded">{{ n.type }}</span>
@@ -53,7 +53,7 @@
       </table>
       <div v-if="meta.last_page > 1" class="flex items-center justify-between px-5 py-3 border-t border-[#f1f5f9]">
         <button @click="fetchSent(meta.current_page - 1)" :disabled="meta.current_page <= 1" class="text-sm text-[#40617f] disabled:opacity-40">← Précédent</button>
-        <span class="text-xs text-[#94a3b8]">Page {{ meta.current_page }} / {{ meta.last_page }}</span>
+        <span class="text-xs text-gray-500">Page {{ meta.current_page }} / {{ meta.last_page }}</span>
         <button @click="fetchSent(meta.current_page + 1)" :disabled="meta.current_page >= meta.last_page" class="text-sm text-[#40617f] disabled:opacity-40">Suivant →</button>
       </div>
     </div>
@@ -78,8 +78,8 @@
               <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1">Destinataire</label>
               <div v-if="selectedUser" class="flex items-center justify-between gap-2 px-3 py-2 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl">
                 <div class="min-w-0">
-                  <p class="text-sm font-medium text-[#001d32] truncate">{{ selectedUser.name }}<span v-if="selectedUser.company" class="text-gray-400"> · {{ selectedUser.company }}</span></p>
-                  <p class="text-xs text-gray-400 truncate">{{ selectedUser.email }}</p>
+                  <p class="text-sm font-medium text-[#001d32] truncate">{{ selectedUser.name }}<span v-if="selectedUser.company" class="text-gray-500"> · {{ selectedUser.company }}</span></p>
+                  <p class="text-xs text-gray-500 truncate">{{ selectedUser.email }}</p>
                 </div>
                 <button @click="clearUser" class="text-xs font-semibold text-[#006d35] shrink-0">Changer</button>
               </div>
@@ -87,11 +87,11 @@
                 <input v-model="userQuery" @input="searchUsers" type="text" placeholder="Email, nom, prénom ou société…" class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
                 <div v-if="userResults.length" class="absolute z-10 left-0 right-0 mt-1 bg-white border border-[#e5e7eb] rounded-xl shadow-lg max-h-52 overflow-y-auto">
                   <button v-for="u in userResults" :key="u.id" @click="pickUser(u)" class="w-full text-left px-3 py-2 hover:bg-[#f0fdf4] transition">
-                    <p class="text-sm text-[#001d32] truncate">{{ u.name }}<span v-if="u.company" class="text-gray-400"> · {{ u.company }}</span></p>
-                    <p class="text-xs text-gray-400 truncate">{{ u.email }}</p>
+                    <p class="text-sm text-[#001d32] truncate">{{ u.name }}<span v-if="u.company" class="text-gray-500"> · {{ u.company }}</span></p>
+                    <p class="text-xs text-gray-500 truncate">{{ u.email }}</p>
                   </button>
                 </div>
-                <p v-else-if="userQuery.length >= 2 && !userSearching" class="text-xs text-gray-400 mt-1">Aucun utilisateur trouvé.</p>
+                <p v-else-if="userQuery.length >= 2 && !userSearching" class="text-xs text-gray-500 mt-1">Aucun utilisateur trouvé.</p>
               </div>
             </div>
 
@@ -130,7 +130,7 @@
                 <div v-if="itemResults.length" class="absolute z-10 left-0 right-0 mt-1 bg-white border border-[#e5e7eb] rounded-xl shadow-lg max-h-52 overflow-y-auto">
                   <button v-for="(it, i) in itemResults" :key="i" @click="pickItem(it)" class="block w-full text-left px-3 py-2 text-sm text-[#001d32] hover:bg-[#f0fdf4] transition truncate">{{ it.label }}</button>
                 </div>
-                <p v-else-if="itemQuery.length >= 1 && !itemSearching" class="text-xs text-gray-400 mt-1">Aucun résultat.</p>
+                <p v-else-if="itemQuery.length >= 1 && !itemSearching" class="text-xs text-gray-500 mt-1">Aucun résultat.</p>
               </div>
             </div>
 

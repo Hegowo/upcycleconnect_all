@@ -15,19 +15,19 @@
 
       <div class="lg:col-span-1 card p-3 flex flex-col" style="max-height: calc(100vh - 180px);">
         <div class="relative mb-2">
-          <MagnifyingGlassIcon class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#94a3b8]" />
+          <MagnifyingGlassIcon class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
           <input v-model="search" type="text" placeholder="Rechercher un employé…" class="w-full pl-9 pr-3 py-2 bg-[#f8fafc] border border-[#e5e7eb] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
         </div>
         <div class="overflow-y-auto flex-1 -mx-1 px-1">
           <div v-if="loading" class="py-8 text-center text-[#64748b] text-sm">Chargement…</div>
-          <div v-else-if="!filteredEmployees.length" class="py-8 text-center text-[#94a3b8] text-sm">Aucun employé.</div>
+          <div v-else-if="!filteredEmployees.length" class="py-8 text-center text-gray-500 text-sm">Aucun employé.</div>
           <button v-for="e in filteredEmployees" :key="e.id" @click="selectEmployee(e)"
             class="w-full text-left px-3 py-2.5 rounded-lg mb-1 flex items-center gap-3 transition border"
             :class="selectedId === e.id ? 'bg-[#f0fdf4] border-[#006d35]' : 'border-transparent hover:bg-[#f8fafc]'">
             <div class="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0" style="background:linear-gradient(135deg,#006d35,#1b8848);">{{ initials(e) }}</div>
             <div class="min-w-0 flex-1">
               <p class="font-semibold text-[#001d32] text-sm truncate">{{ e.first_name }} {{ e.last_name }}</p>
-              <p class="text-xs text-[#94a3b8] truncate">{{ e.email }}</p>
+              <p class="text-xs text-gray-500 truncate">{{ e.email }}</p>
             </div>
             <span v-if="e.status !== 'active'" class="text-[10px] font-bold text-gray-500 bg-gray-200 px-1.5 py-0.5 rounded-full shrink-0">susp.</span>
           </button>
@@ -59,7 +59,7 @@
           <div class="card p-5">
             <div class="flex items-center justify-between mb-3">
               <h3 class="font-bold text-[#001d32]">Emploi du temps récurrent</h3>
-              <span class="text-xs text-[#94a3b8]">Répété chaque semaine</span>
+              <span class="text-xs text-gray-500">Répété chaque semaine</span>
             </div>
             <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
               <div v-for="(day, di) in dayNames" :key="di" class="border border-[#f1f5f9] rounded-xl p-2 min-h-[90px] flex flex-col">
@@ -78,13 +78,13 @@
 
           <div class="card p-5">
             <h3 class="font-bold text-[#001d32] mb-3">Événements à venir</h3>
-            <div v-if="!events.length" class="text-sm text-[#94a3b8] py-2">Aucun événement à venir pour cet employé.</div>
+            <div v-if="!events.length" class="text-sm text-gray-500 py-2">Aucun événement à venir pour cet employé.</div>
             <div v-else class="space-y-2">
               <div v-for="ev in events" :key="ev.id" class="flex items-start justify-between gap-3 border border-[#f1f5f9] rounded-xl p-3">
                 <div class="min-w-0">
                   <p class="font-semibold text-[#001d32] text-sm">{{ ev.title }}</p>
                   <p class="text-xs text-[#40617f]">{{ formatDT(ev.start_at) }} → {{ formatTime(ev.end_at) }}<span v-if="ev.location"> · {{ ev.location }}</span></p>
-                  <p v-if="ev.members.length > 1" class="text-[11px] text-[#94a3b8] mt-0.5">Avec : {{ ev.members.map(m => m.name).join(', ') }}</p>
+                  <p v-if="ev.members.length > 1" class="text-[11px] text-gray-500 mt-0.5">Avec : {{ ev.members.map(m => m.name).join(', ') }}</p>
                 </div>
                 <button @click="deleteEvent(ev)" class="text-xs font-semibold text-red-600 hover:underline shrink-0">Suppr.</button>
               </div>
@@ -160,7 +160,7 @@
                 <label v-for="e in eventFilteredEmployees" :key="e.id" class="flex items-center gap-2 text-sm text-[#001d32]">
                   <input type="checkbox" :value="e.id" v-model="eventForm.employee_ids" /> {{ e.first_name }} {{ e.last_name }}
                 </label>
-                <p v-if="!employees.length" class="text-xs text-[#94a3b8]">Aucun employé.</p>
+                <p v-if="!employees.length" class="text-xs text-gray-500">Aucun employé.</p>
               </div>
             </div>
           </div>

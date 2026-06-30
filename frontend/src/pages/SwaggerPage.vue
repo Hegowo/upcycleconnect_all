@@ -11,7 +11,7 @@
     <div v-if="loading" class="flex-1 flex items-center justify-center">
       <div class="text-center space-y-3">
         <div class="w-8 h-8 border-2 border-[#006d35] border-t-transparent rounded-full animate-spin mx-auto"></div>
-        <p class="text-sm text-gray-400">Chargement de la documentation…</p>
+        <p class="text-sm text-gray-500">Chargement de la documentation…</p>
       </div>
     </div>
 

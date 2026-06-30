@@ -26,7 +26,7 @@
           </div>
         </div>
         <p class="text-2xl font-bold text-[#001d32]">{{ meta.total }}</p>
-        <p class="text-xs text-gray-400 mt-1">{{ t('users.totalMembers') }}</p>
+        <p class="text-xs text-gray-500 mt-1">{{ t('users.totalMembers') }}</p>
       </div>
       <div class="bg-white rounded-2xl p-5 border border-[#f1f5f9] shadow-sm">
         <div class="flex items-center justify-between mb-3">
@@ -35,7 +35,7 @@
           </div>
         </div>
         <p class="text-2xl font-bold text-[#001d32]">{{ activeCount }}</p>
-        <p class="text-xs text-gray-400 mt-1">{{ t('users.activeUsers') }}</p>
+        <p class="text-xs text-gray-500 mt-1">{{ t('users.activeUsers') }}</p>
       </div>
       <div class="bg-white rounded-2xl p-5 border border-[#f1f5f9] shadow-sm">
         <div class="flex items-center justify-between mb-3">
@@ -44,17 +44,17 @@
           </div>
         </div>
         <p class="text-2xl font-bold text-[#001d32]">—</p>
-        <p class="text-xs text-gray-400 mt-1">{{ t('users.verifiedProviders') }}</p>
+        <p class="text-xs text-gray-500 mt-1">{{ t('users.verifiedProviders') }}</p>
       </div>
       <div class="bg-white rounded-2xl p-5 border border-[#f1f5f9] shadow-sm" :class="pendingCount > 0 ? 'border-red-200' : ''">
         <div class="flex items-center justify-between mb-3">
           <div class="w-9 h-9 rounded-xl flex items-center justify-center" :class="pendingCount > 0 ? 'bg-red-50' : 'bg-gray-50'">
-            <ClockIcon class="w-5 h-5" :class="pendingCount > 0 ? 'text-red-500' : 'text-gray-400'" />
+            <ClockIcon class="w-5 h-5" :class="pendingCount > 0 ? 'text-red-500' : 'text-gray-500'" />
           </div>
           <span v-if="pendingCount > 0" class="text-xs font-semibold px-2 py-0.5 rounded-full bg-red-100 text-red-700">{{ t('users.actionRequired') }}</span>
         </div>
         <p class="text-2xl font-bold" :class="pendingCount > 0 ? 'text-red-600' : 'text-[#001d32]'">{{ pendingCount }}</p>
-        <p class="text-xs text-gray-400 mt-1">{{ t('users.pendingApproval') }}</p>
+        <p class="text-xs text-gray-500 mt-1">{{ t('users.pendingApproval') }}</p>
       </div>
     </div>
 
@@ -84,7 +84,7 @@
 
     <div class="bg-white rounded-2xl p-4 border border-[#f1f5f9] shadow-sm flex flex-wrap gap-3 items-center">
       <div class="relative flex-1 max-w-sm">
-        <MagnifyingGlassIcon class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+        <MagnifyingGlassIcon class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
         <input
           v-model="filters.search"
           @input="debouncedFetch"
@@ -110,7 +110,7 @@
       <div v-else-if="!users.length" class="bg-white rounded-2xl border border-[#f1f5f9] shadow-sm py-12 text-center">
         <MagnifyingGlassIcon class="w-8 h-8 text-gray-300 mx-auto mb-2" />
         <p class="text-gray-500 font-medium text-sm">{{ t('common.noResults') }}</p>
-        <p class="text-gray-400 text-xs mt-1">{{ t('common.searchCriteria') }}</p>
+        <p class="text-gray-500 text-xs mt-1">{{ t('common.searchCriteria') }}</p>
       </div>
 
       <div v-else class="space-y-3">
@@ -126,7 +126,7 @@
             </div>
             <div class="flex-1 min-w-0">
               <p class="text-sm font-semibold text-[#001d32] truncate">{{ user.first_name }} {{ user.last_name }}</p>
-              <p class="text-xs text-gray-400 truncate">{{ user.email }}</p>
+              <p class="text-xs text-gray-500 truncate">{{ user.email }}</p>
             </div>
             <span class="text-xs font-semibold px-2 py-0.5 rounded-full shrink-0" :class="statusBadge(user.status)">
               {{ statusText(user.status) }}
@@ -137,23 +137,23 @@
               <span class="text-xs font-medium px-2 py-0.5 rounded-full" :class="hasProviderRole(user) ? 'bg-[#dbeafe] text-blue-700' : 'bg-[#f1f5f9] text-[#475569]'">
                 {{ hasProviderRole(user) ? t('users.professional') : t('users.individual') }}
               </span>
-              <span class="text-xs text-gray-400">{{ formatDate(user.created_at) }}</span>
+              <span class="text-xs text-gray-500">{{ formatDate(user.created_at) }}</span>
             </div>
             <div class="flex items-center gap-1" @click.stop>
-              <button @click.stop="router.push(`/admin/users/${user.id}`)" class="p-2 rounded-lg text-gray-400 hover:text-[#40617f] hover:bg-blue-50 transition">
+              <button @click.stop="router.push(`/admin/users/${user.id}`)" class="p-2 rounded-lg text-gray-500 hover:text-[#40617f] hover:bg-blue-50 transition">
                 <EyeIcon class="w-4 h-4" />
               </button>
               <button
                 v-if="user.status !== 'banned'"
                 @click.stop="openConfirm('ban', user)"
-                class="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition"
+                class="p-2 rounded-lg text-gray-500 hover:text-red-500 hover:bg-red-50 transition"
               >
                 <NoSymbolIcon class="w-4 h-4" />
               </button>
               <button
                 v-else
                 @click.stop="openConfirm('activate', user)"
-                class="p-2 rounded-lg text-gray-400 hover:text-green-600 hover:bg-green-50 transition"
+                class="p-2 rounded-lg text-gray-500 hover:text-green-600 hover:bg-green-50 transition"
               >
                 <CheckCircleIcon class="w-4 h-4" />
               </button>
@@ -196,10 +196,10 @@
             <tr v-else-if="!users.length">
               <td :colspan="6" class="px-6 py-16 text-center">
                 <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-3">
-                  <MagnifyingGlassIcon class="w-6 h-6 text-gray-400" />
+                  <MagnifyingGlassIcon class="w-6 h-6 text-gray-500" />
                 </div>
                 <p class="text-gray-500 font-medium">{{ t('common.noResults') }}</p>
-                <p class="text-gray-400 text-sm mt-1">{{ t('common.searchCriteria') }}</p>
+                <p class="text-gray-500 text-sm mt-1">{{ t('common.searchCriteria') }}</p>
               </td>
             </tr>
             <tr
@@ -216,7 +216,7 @@
                   </div>
                   <div>
                     <p class="text-sm font-semibold text-[#001d32]">{{ user.first_name }} {{ user.last_name }}</p>
-                    <p class="text-xs text-gray-400">{{ user.email }}</p>
+                    <p class="text-xs text-gray-500">{{ user.email }}</p>
                   </div>
                 </div>
               </td>
@@ -231,7 +231,7 @@
                   {{ statusText(user.status) }}
                 </span>
               </td>
-              <td class="px-6 py-4 text-xs font-mono text-gray-400">
+              <td class="px-6 py-4 text-xs font-mono text-gray-500">
                 #{{ user.id }}
               </td>
               <td class="px-6 py-4 text-sm text-gray-500">
@@ -239,16 +239,16 @@
               </td>
               <td class="px-6 py-4 text-right" @click.stop>
                 <div class="flex justify-end gap-1.5">
-                  <button @click="router.push(`/admin/users/${user.id}`)" class="p-1.5 rounded-lg text-gray-400 hover:text-[#40617f] hover:bg-blue-50 transition" :title="t('common.edit')">
+                  <button @click="router.push(`/admin/users/${user.id}`)" class="p-1.5 rounded-lg text-gray-500 hover:text-[#40617f] hover:bg-blue-50 transition" :title="t('common.edit')">
                     <EyeIcon class="w-4 h-4" />
                   </button>
-                  <button class="p-1.5 rounded-lg text-gray-400 hover:text-[#006d35] hover:bg-green-50 transition" :title="t('common.edit')">
+                  <button class="p-1.5 rounded-lg text-gray-500 hover:text-[#006d35] hover:bg-green-50 transition" :title="t('common.edit')">
                     <PencilIcon class="w-4 h-4" />
                   </button>
                   <button
                     v-if="user.status !== 'banned'"
                     @click="openConfirm('ban', user)"
-                    class="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition"
+                    class="p-1.5 rounded-lg text-gray-500 hover:text-red-500 hover:bg-red-50 transition"
                     :title="t('users.actionBan')"
                   >
                     <NoSymbolIcon class="w-4 h-4" />
@@ -256,7 +256,7 @@
                   <button
                     v-else
                     @click="openConfirm('activate', user)"
-                    class="p-1.5 rounded-lg text-gray-400 hover:text-green-600 hover:bg-green-50 transition"
+                    class="p-1.5 rounded-lg text-gray-500 hover:text-green-600 hover:bg-green-50 transition"
                     :title="t('users.actionActivate')"
                   >
                     <CheckCircleIcon class="w-4 h-4" />
@@ -268,7 +268,7 @@
         </table>
       </div>
       <div class="px-6 py-4 border-t border-[#f1f5f9] flex items-center justify-between">
-        <p class="text-xs text-gray-400">{{ meta.total }} {{ t('users.membersList').toLowerCase() }} {{ t('common.total') }}</p>
+        <p class="text-xs text-gray-500">{{ meta.total }} {{ t('users.membersList').toLowerCase() }} {{ t('common.total') }}</p>
         <AppPagination :current-page="meta.current_page" :last-page="meta.last_page" :total="meta.total" @page-change="changePage" />
       </div>
     </div>
