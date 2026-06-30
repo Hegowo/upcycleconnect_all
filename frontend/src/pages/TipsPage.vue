@@ -89,20 +89,20 @@
 
           <div class="flex-1 overflow-y-auto p-6 space-y-4">
             <div>
-              <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1.5">Titre *</label>
+              <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1.5" for="lftipspa-title">Titre *</label>
               <input v-model="form.title" type="text" maxlength="200"
-                class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
+                class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30"  id="lftipspa-title"/>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1.5">Catégorie</label>
+                <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1.5" for="lftipspa-category">Catégorie</label>
                 <input v-model="form.category" type="text" maxlength="60" placeholder="Ex: Bricolage"
-                  class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
+                  class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30"  id="lftipspa-category"/>
               </div>
               <div>
                 <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1.5">Statut</label>
-                <select v-model="form.status"
+                <select v-model="form.status" aria-label="Statut"
                   class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30">
                   <option value="draft">Brouillon</option>
                   <option value="published">Publié</option>
@@ -111,15 +111,15 @@
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1.5">URL image de couverture</label>
+              <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1.5" for="lftipspa-cover_image">URL image de couverture</label>
               <input v-model="form.cover_image" type="text" placeholder="https://..."
-                class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
+                class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30"  id="lftipspa-cover_image"/>
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1.5">Résumé</label>
+              <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1.5" for="lftipspa-summary">Résumé</label>
               <textarea v-model="form.summary" rows="2" maxlength="500" placeholder="Phrase d'accroche affichée dans la liste"
-                class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30 resize-none"></textarea>
+                class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30 resize-none" id="lftipspa-summary"></textarea>
             </div>
 
             <div>

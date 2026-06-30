@@ -64,12 +64,12 @@
           <p class="text-xs text-[#64748b] mb-4">La langue sera pré-remplie avec les textes français, prêts à traduire.</p>
           <div class="space-y-3">
             <div>
-              <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1">Code (ex: es, de, pt-BR)</label>
-              <input v-model="addForm.code" type="text" placeholder="es" class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
+              <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1" for="lflocale-code">Code (ex: es, de, pt-BR)</label>
+              <input v-model="addForm.code" type="text" placeholder="es" class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#006d35]/30"  id="lflocale-code"/>
             </div>
             <div>
-              <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1">Nom affiché</label>
-              <input v-model="addForm.name" type="text" placeholder="Español" class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
+              <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1" for="lflocale-name">Nom affiché</label>
+              <input v-model="addForm.name" type="text" placeholder="Español" class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30"  id="lflocale-name"/>
             </div>
             <p v-if="addError" class="text-red-600 text-sm">{{ addError }}</p>
           </div>

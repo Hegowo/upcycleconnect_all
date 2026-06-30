@@ -207,14 +207,14 @@
 
         <div class="flex flex-col gap-4">
           <div>
-            <label class="text-xs font-semibold text-[#40617f] uppercase tracking-wide mb-1 block">Nom *</label>
+            <label class="text-xs font-semibold text-[#40617f] uppercase tracking-wide mb-1 block" for="lfforuma-name">Nom *</label>
             <input v-model="catModal.name" type="text" placeholder="Ex: Techniques & Matériaux"
-              class="w-full border border-[#e5e7eb] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
+              class="w-full border border-[#e5e7eb] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30"  id="lfforuma-name"/>
           </div>
           <div>
-            <label class="text-xs font-semibold text-[#40617f] uppercase tracking-wide mb-1 block">Description</label>
+            <label class="text-xs font-semibold text-[#40617f] uppercase tracking-wide mb-1 block" for="lfforuma-description">Description</label>
             <textarea v-model="catModal.description" rows="3" placeholder="Description de la catégorie..."
-              class="w-full border border-[#e5e7eb] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30 resize-none" />
+              class="w-full border border-[#e5e7eb] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30 resize-none"  id="lfforuma-description"/>
           </div>
           <div class="grid grid-cols-2 gap-3">
             <div>
@@ -226,9 +226,9 @@
               </div>
             </div>
             <div>
-              <label class="text-xs font-semibold text-[#40617f] uppercase tracking-wide mb-1 block">Ordre</label>
+              <label class="text-xs font-semibold text-[#40617f] uppercase tracking-wide mb-1 block" for="lfforuma-sort_order">Ordre</label>
               <input v-model.number="catModal.sort_order" type="number" min="0"
-                class="w-full border border-[#e5e7eb] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
+                class="w-full border border-[#e5e7eb] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30"  id="lfforuma-sort_order"/>
             </div>
           </div>
           <p v-if="catModal.error" class="text-red-500 text-xs">{{ catModal.error }}</p>

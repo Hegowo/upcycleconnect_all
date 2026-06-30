@@ -83,30 +83,30 @@
             </p>
 
             <div>
-              <label class="block text-xs font-semibold text-[#40617f] uppercase tracking-wider mb-1.5">Titre de la prestation</label>
+              <label class="block text-xs font-semibold text-[#40617f] uppercase tracking-wider mb-1.5" for="lfproonb-prestationTitle">Titre de la prestation</label>
               <input
                 v-model="form.prestationTitle"
                 type="text"
                 placeholder="Ex : Restauration de meubles en bois massif"
                 class="w-full px-3 py-2.5 bg-[#f8fafc] border-2 border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30 focus:border-[#006d35] transition"
-              />
+               id="lfproonb-prestationTitle"/>
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-[#40617f] uppercase tracking-wider mb-1.5">Description</label>
+              <label class="block text-xs font-semibold text-[#40617f] uppercase tracking-wider mb-1.5" for="lfproonb-prestationDescription">Description</label>
               <textarea
                 v-model="form.prestationDescription"
                 rows="3"
                 placeholder="Décrivez en quelques lignes ce que comprend cette prestation..."
                 class="w-full px-3 py-2.5 bg-[#f8fafc] border-2 border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30 focus:border-[#006d35] transition resize-none"
-              />
+               id="lfproonb-prestationDescription"/>
             </div>
 
             <div class="grid grid-cols-2 gap-3">
               <div>
                 <label class="block text-xs font-semibold text-[#40617f] uppercase tracking-wider mb-1.5">Type de tarification</label>
                 <select
-                  v-model="form.priceType"
+                  v-model="form.priceType" aria-label="Type de tarif"
                   class="w-full px-3 py-2.5 bg-[#f8fafc] border-2 border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30 focus:border-[#006d35] transition"
                 >
                   <option value="fixed">Prix fixe</option>
@@ -115,21 +115,21 @@
                 </select>
               </div>
               <div v-if="form.priceType !== 'quote'">
-                <label class="block text-xs font-semibold text-[#40617f] uppercase tracking-wider mb-1.5">Prix (€)</label>
+                <label class="block text-xs font-semibold text-[#40617f] uppercase tracking-wider mb-1.5" for="lfproonb-price">Prix (€)</label>
                 <input
                   v-model="form.price"
                   type="number"
                   step="0.01"
                   placeholder="0.00"
                   class="w-full px-3 py-2.5 bg-[#f8fafc] border-2 border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30 focus:border-[#006d35] transition"
-                />
+                 id="lfproonb-price"/>
               </div>
             </div>
 
             <div>
               <label class="block text-xs font-semibold text-[#40617f] uppercase tracking-wider mb-1.5">Catégorie</label>
               <select
-                v-model="form.categoryId"
+                v-model="form.categoryId" aria-label="Catégorie"
                 class="w-full px-3 py-2.5 bg-[#f8fafc] border-2 border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30 focus:border-[#006d35] transition"
               >
                 <option :value="null">— Sans catégorie —</option>

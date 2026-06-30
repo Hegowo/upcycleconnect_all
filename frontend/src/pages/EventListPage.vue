@@ -96,7 +96,7 @@
     </div>
 
     <div class="bg-white rounded-2xl p-4 border border-[#f1f5f9] shadow-sm flex flex-wrap gap-3 items-center">
-      <select v-model="filters.status" @change="fetchEvents" class="text-sm border border-[#e5e7eb] rounded-lg px-3 py-2 bg-[#f8fafc] text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#006d35]/30">
+      <select v-model="filters.status" aria-label="Filtrer par statut" @change="fetchEvents" class="text-sm border border-[#e5e7eb] rounded-lg px-3 py-2 bg-[#f8fafc] text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#006d35]/30">
         <option value="">{{ t('events.allStatuses') }}</option>
         <option value="draft">{{ t('events.statusDraft') }}</option>
         <option value="pending">À valider</option>

@@ -21,7 +21,7 @@
         <input v-model="search" type="search" placeholder="Rechercher par nom, ville, code postal…"
           class="w-full pl-9 pr-3 py-2 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
       </div>
-      <select v-model="deptFilter" class="text-sm border border-[#e5e7eb] rounded-lg px-3 py-2 bg-[#f8fafc] text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#006d35]/30">
+      <select v-model="deptFilter" aria-label="Filtrer par département" class="text-sm border border-[#e5e7eb] rounded-lg px-3 py-2 bg-[#f8fafc] text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#006d35]/30">
         <option value="">Tous les départements</option>
         <option v-for="d in departments" :key="d" :value="d">{{ d }} — {{ deptName(d) }}</option>
       </select>
@@ -129,8 +129,8 @@
               <div v-if="formError" class="text-sm text-red-600 bg-red-50 rounded-xl px-3 py-2">{{ formError }}</div>
 
               <div>
-                <label class="block text-xs font-semibold text-[#001d32] mb-1.5">Nom du point <span class="text-red-500">*</span></label>
-                <input v-model="form.name" type="text" required placeholder="Ex: Recyclerie du 11e" class="w-full px-3 py-2.5 text-sm border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
+                <label class="block text-xs font-semibold text-[#001d32] mb-1.5" for="lfcollec-name">Nom du point <span class="text-red-500">*</span></label>
+                <input v-model="form.name" type="text" required placeholder="Ex: Recyclerie du 11e" class="w-full px-3 py-2.5 text-sm border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#006d35]/30"  id="lfcollec-name"/>
               </div>
 
               <div>
@@ -168,13 +168,13 @@
               </div>
 
               <div>
-                <label class="block text-xs font-semibold text-[#001d32] mb-1.5">Téléphone</label>
-                <input v-model="form.phone" type="text" placeholder="01 23 45 67 89" class="w-full px-3 py-2.5 text-sm border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
+                <label class="block text-xs font-semibold text-[#001d32] mb-1.5" for="lfcollec-phone">Téléphone</label>
+                <input v-model="form.phone" type="text" placeholder="01 23 45 67 89" class="w-full px-3 py-2.5 text-sm border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#006d35]/30"  id="lfcollec-phone"/>
               </div>
 
               <div>
-                <label class="block text-xs font-semibold text-[#001d32] mb-1.5">Horaires d'ouverture</label>
-                <textarea v-model="form.opening_hours" rows="2" placeholder="Ex: Lun-Ven 9h-18h, Sam 10h-16h" class="w-full px-3 py-2.5 text-sm border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#006d35]/30 resize-none" />
+                <label class="block text-xs font-semibold text-[#001d32] mb-1.5" for="lfcollec-opening_hours">Horaires d'ouverture</label>
+                <textarea v-model="form.opening_hours" rows="2" placeholder="Ex: Lun-Ven 9h-18h, Sam 10h-16h" class="w-full px-3 py-2.5 text-sm border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#006d35]/30 resize-none"  id="lfcollec-opening_hours"/>
               </div>
 
               <div class="flex items-center gap-3">

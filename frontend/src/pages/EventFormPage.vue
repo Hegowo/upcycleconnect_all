@@ -20,18 +20,18 @@
 
       <form @submit.prevent="handleSubmit" class="space-y-5">
         <div>
-          <label class="label">{{ t('events.fieldTitle') }} <span class="text-red-500">*</span></label>
-          <input v-model="form.title" type="text" class="input" required />
+          <label class="label" for="lfeventf-title">{{ t('events.fieldTitle') }} <span class="text-red-500">*</span></label>
+          <input v-model="form.title" type="text" class="input" required  id="lfeventf-title"/>
         </div>
 
         <div>
-          <label class="label">{{ t('events.fieldDescription') }} <span class="text-red-500">*</span></label>
-          <textarea v-model="form.description" class="input min-h-24" rows="4" required />
+          <label class="label" for="lfeventf-description">{{ t('events.fieldDescription') }} <span class="text-red-500">*</span></label>
+          <textarea v-model="form.description" class="input min-h-24" rows="4" required  id="lfeventf-description"/>
         </div>
 
         <div>
-          <label class="label">{{ t('events.fieldLocation') }}</label>
-          <input v-model="form.location" type="text" class="input" placeholder="Ex: Paris 11e — Salle communautaire" />
+          <label class="label" for="lfeventf-location">{{ t('events.fieldLocation') }}</label>
+          <input v-model="form.location" type="text" class="input" placeholder="Ex: Paris 11e — Salle communautaire"  id="lfeventf-location"/>
         </div>
 
         <div>
@@ -51,19 +51,19 @@
         <div v-if="dateError" class="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">{{ dateError }}</div>
 
         <div>
-          <label class="label">Prix (€)</label>
-          <input v-model.number="form.price" type="number" min="0" step="0.01" class="input" placeholder="0 = gratuit" />
+          <label class="label" for="lfeventf-price">Prix (€)</label>
+          <input v-model.number="form.price" type="number" min="0" step="0.01" class="input" placeholder="0 = gratuit"  id="lfeventf-price"/>
           <p class="text-xs text-gray-500 mt-1">Laissez 0 pour un événement/formation gratuit. Sinon, les participants paient à l'inscription.</p>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="label">{{ t('events.fieldMaxParticipants') }}</label>
-            <input v-model.number="form.max_participants" type="number" min="1" class="input" placeholder="Illimité si vide" />
+            <label class="label" for="lfeventf-max_participants">{{ t('events.fieldMaxParticipants') }}</label>
+            <input v-model.number="form.max_participants" type="number" min="1" class="input" placeholder="Illimité si vide"  id="lfeventf-max_participants"/>
           </div>
           <div>
             <label class="label">{{ t('events.fieldCategory') }}</label>
-            <select v-model="form.category_id" class="input">
+            <select v-model="form.category_id" aria-label="Catégorie" class="input">
               <option :value="null">{{ t('events.selectCategory') }}</option>
               <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
             </select>
@@ -72,7 +72,7 @@
 
         <div>
           <label class="label">{{ t('events.fieldStatus') }} <span class="text-red-500">*</span></label>
-          <select v-model="form.status" class="input" required>
+          <select v-model="form.status" aria-label="Statut" class="input" required>
             <option value="draft">Brouillon</option>
             <option value="published">Publié</option>
             <option value="cancelled">Annulé</option>

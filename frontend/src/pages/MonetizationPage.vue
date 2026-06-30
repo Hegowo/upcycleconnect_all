@@ -163,32 +163,32 @@
           <h4 class="font-bold text-[#001d32] mb-3">{{ planForm.key ? 'Modifier la formule' : 'Nouvelle formule' }}</h4>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs text-[#64748b] mb-1">Nom *</label>
-              <input v-model="planForm.label" type="text" class="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-lg text-sm" />
+              <label class="block text-xs text-[#64748b] mb-1" for="lfmoneti-label">Nom *</label>
+              <input v-model="planForm.label" type="text" class="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-lg text-sm"  id="lfmoneti-label"/>
             </div>
             <div>
-              <label class="block text-xs text-[#64748b] mb-1">Prix mensuel (€)</label>
-              <input v-model.number="planForm.euros" type="number" min="0" step="0.01" class="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-lg text-sm" />
+              <label class="block text-xs text-[#64748b] mb-1" for="lfmoneti-euros">Prix mensuel (€)</label>
+              <input v-model.number="planForm.euros" type="number" min="0" step="0.01" class="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-lg text-sm"  id="lfmoneti-euros"/>
             </div>
             <div>
-              <label class="block text-xs text-[#64748b] mb-1">Prestations publiées max</label>
-              <input v-model="planForm.max_prestations" type="number" min="0" placeholder="illimité" class="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-lg text-sm" />
+              <label class="block text-xs text-[#64748b] mb-1" for="lfmoneti-max_prestations">Prestations publiées max</label>
+              <input v-model="planForm.max_prestations" type="number" min="0" placeholder="illimité" class="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-lg text-sm"  id="lfmoneti-max_prestations"/>
             </div>
             <div>
-              <label class="block text-xs text-[#64748b] mb-1">Projets / mois max</label>
-              <input v-model="planForm.max_projects_per_month" type="number" min="0" placeholder="illimité" class="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-lg text-sm" />
+              <label class="block text-xs text-[#64748b] mb-1" for="lfmoneti-max_projects_per_month">Projets / mois max</label>
+              <input v-model="planForm.max_projects_per_month" type="number" min="0" placeholder="illimité" class="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-lg text-sm"  id="lfmoneti-max_projects_per_month"/>
             </div>
             <div>
-              <label class="block text-xs text-[#64748b] mb-1">Campagnes max</label>
-              <input v-model="planForm.max_campaigns" type="number" min="0" placeholder="illimité" class="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-lg text-sm" />
+              <label class="block text-xs text-[#64748b] mb-1" for="lfmoneti-max_campaigns">Campagnes max</label>
+              <input v-model="planForm.max_campaigns" type="number" min="0" placeholder="illimité" class="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-lg text-sm"  id="lfmoneti-max_campaigns"/>
             </div>
             <div>
-              <label class="block text-xs text-[#64748b] mb-1">Événements / mois max</label>
-              <input v-model="planForm.max_events_per_month" type="number" min="0" placeholder="illimité" class="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-lg text-sm" />
+              <label class="block text-xs text-[#64748b] mb-1" for="lfmoneti-max_events_per_month">Événements / mois max</label>
+              <input v-model="planForm.max_events_per_month" type="number" min="0" placeholder="illimité" class="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-lg text-sm"  id="lfmoneti-max_events_per_month"/>
             </div>
             <div class="sm:col-span-2">
-              <label class="block text-xs text-[#64748b] mb-1">Avantages affichés (un par ligne)</label>
-              <textarea v-model="planForm.featuresText" rows="3" class="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-lg text-sm resize-none"></textarea>
+              <label class="block text-xs text-[#64748b] mb-1" for="lfmoneti-featuresText">Avantages affichés (un par ligne)</label>
+              <textarea v-model="planForm.featuresText" rows="3" class="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-lg text-sm resize-none" id="lfmoneti-featuresText"></textarea>
             </div>
           </div>
           <div class="flex flex-wrap gap-4 mt-3 text-sm text-[#001d32]">

@@ -89,7 +89,7 @@
 
           <div>
             <p class="text-xs font-semibold text-[#6b7280] uppercase tracking-wider mb-2">Catégorie</p>
-            <select v-model="filters.category_id" @change="fetchPrestations" class="w-full text-sm border border-[#e5e7eb] rounded-lg px-3 py-2 bg-[#f8fafc] text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#006d35]/30">
+            <select v-model="filters.category_id" aria-label="Filtrer par catégorie" @change="fetchPrestations" class="w-full text-sm border border-[#e5e7eb] rounded-lg px-3 py-2 bg-[#f8fafc] text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#006d35]/30">
               <option value="">Toutes</option>
               <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
             </select>

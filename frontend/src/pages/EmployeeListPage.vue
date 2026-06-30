@@ -101,11 +101,11 @@
         <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
           <h3 class="font-bold text-[#001d32] text-lg mb-4">{{ empForm.id ? 'Modifier l\'employé' : 'Nouvel employé' }}</h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div><label class="label">Prénom</label><input v-model="empForm.first_name" type="text" class="input" /></div>
-            <div><label class="label">Nom</label><input v-model="empForm.last_name" type="text" class="input" /></div>
-            <div v-if="!empForm.id" class="sm:col-span-2"><label class="label">Email</label><input v-model="empForm.email" type="email" class="input" /></div>
-            <div><label class="label">{{ empForm.id ? 'Nouveau mot de passe' : 'Mot de passe' }}</label><input v-model="empForm.password" type="password" class="input" placeholder="Min. 8 caractères" /></div>
-            <div v-if="empForm.id"><label class="label">Statut</label><select v-model="empForm.status" class="input"><option value="active">Actif</option><option value="suspended">Suspendu</option></select></div>
+            <div><label class="label" for="lfemploy-first_name">Prénom</label><input v-model="empForm.first_name" type="text" class="input"  id="lfemploy-first_name"/></div>
+            <div><label class="label" for="lfemploy-last_name">Nom</label><input v-model="empForm.last_name" type="text" class="input"  id="lfemploy-last_name"/></div>
+            <div v-if="!empForm.id" class="sm:col-span-2"><label class="label" for="lfemploy-email">Email</label><input v-model="empForm.email" type="email" class="input"  id="lfemploy-email"/></div>
+            <div><label class="label" for="lfemploy-password">{{ empForm.id ? 'Nouveau mot de passe' : 'Mot de passe' }}</label><input v-model="empForm.password" type="password" class="input" placeholder="Min. 8 caractères"  id="lfemploy-password"/></div>
+            <div v-if="empForm.id"><label class="label">Statut</label><select v-model="empForm.status" aria-label="Statut" class="input"><option value="active">Actif</option><option value="suspended">Suspendu</option></select></div>
           </div>
           <p v-if="empForm.error" class="text-red-600 text-sm mt-3">{{ empForm.error }}</p>
           <div class="flex gap-2 mt-5">
@@ -123,13 +123,13 @@
           <div class="space-y-3">
             <div>
               <label class="label">Jour</label>
-              <select v-model.number="shiftForm.weekday" class="input"><option v-for="(n, i) in dayNames" :key="i" :value="i + 1">{{ n }}</option></select>
+              <select v-model.number="shiftForm.weekday" aria-label="Jour de la semaine" class="input"><option v-for="(n, i) in dayNames" :key="i" :value="i + 1">{{ n }}</option></select>
             </div>
             <div class="grid grid-cols-2 gap-3">
-              <div><label class="label">Début</label><input v-model="shiftForm.start_time" type="time" class="input" /></div>
-              <div><label class="label">Fin</label><input v-model="shiftForm.end_time" type="time" class="input" /></div>
+              <div><label class="label" for="lfemploy-start_time">Début</label><input v-model="shiftForm.start_time" type="time" class="input"  id="lfemploy-start_time"/></div>
+              <div><label class="label" for="lfemploy-end_time">Fin</label><input v-model="shiftForm.end_time" type="time" class="input"  id="lfemploy-end_time"/></div>
             </div>
-            <div><label class="label">Libellé (optionnel)</label><input v-model="shiftForm.label" type="text" class="input" placeholder="Ex: Atelier" /></div>
+            <div><label class="label" for="lfemploy-label">Libellé (optionnel)</label><input v-model="shiftForm.label" type="text" class="input" placeholder="Ex: Atelier"  id="lfemploy-label"/></div>
           </div>
           <p v-if="shiftForm.error" class="text-red-600 text-sm mt-3">{{ shiftForm.error }}</p>
           <div class="flex gap-2 mt-5">
@@ -144,11 +144,11 @@
         <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 max-h-[92vh] overflow-y-auto">
           <h3 class="font-bold text-[#001d32] text-lg mb-4">Événement (plusieurs employés)</h3>
           <div class="space-y-3">
-            <div><label class="label">Titre</label><input v-model="eventForm.title" type="text" class="input" /></div>
-            <div><label class="label">Lieu (optionnel)</label><input v-model="eventForm.location" type="text" class="input" /></div>
+            <div><label class="label" for="lfemploy-title">Titre</label><input v-model="eventForm.title" type="text" class="input"  id="lfemploy-title"/></div>
+            <div><label class="label" for="lfemploy-location">Lieu (optionnel)</label><input v-model="eventForm.location" type="text" class="input"  id="lfemploy-location"/></div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div><label class="label">Début</label><input v-model="eventForm.start_at" type="datetime-local" class="input" /></div>
-              <div><label class="label">Fin</label><input v-model="eventForm.end_at" type="datetime-local" class="input" /></div>
+              <div><label class="label" for="lfemploy-start_at">Début</label><input v-model="eventForm.start_at" type="datetime-local" class="input"  id="lfemploy-start_at"/></div>
+              <div><label class="label" for="lfemploy-end_at">Fin</label><input v-model="eventForm.end_at" type="datetime-local" class="input"  id="lfemploy-end_at"/></div>
             </div>
             <div>
               <div class="flex items-center justify-between mb-1">

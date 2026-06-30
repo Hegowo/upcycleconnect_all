@@ -16,7 +16,7 @@
     <div class="flex items-center justify-between gap-3 flex-wrap">
       <div v-if="isAdmin" class="flex items-center gap-2">
         <label class="text-sm text-[#64748b]">Employé :</label>
-        <select v-model="selectedEmployee" @change="reload" class="px-3 py-1.5 bg-white border border-[#e5e7eb] rounded-lg text-sm">
+        <select v-model="selectedEmployee" aria-label="Employé" @change="reload" class="px-3 py-1.5 bg-white border border-[#e5e7eb] rounded-lg text-sm">
           <option value="">Tous les employés</option>
           <option v-for="e in employees" :key="e.id" :value="e.id">{{ e.first_name }} {{ e.last_name }}</option>
         </select>
@@ -73,22 +73,22 @@
           <div class="space-y-3">
             <div>
               <label class="label">Employé</label>
-              <select v-model="shiftForm.employee_id" class="input">
+              <select v-model="shiftForm.employee_id" aria-label="Employé" class="input">
                 <option :value="null">— Choisir —</option>
                 <option v-for="e in employees" :key="e.id" :value="e.id">{{ e.first_name }} {{ e.last_name }}</option>
               </select>
             </div>
             <div>
               <label class="label">Jour</label>
-              <select v-model.number="shiftForm.weekday" class="input">
+              <select v-model.number="shiftForm.weekday" aria-label="Jour de la semaine" class="input">
                 <option v-for="(n, i) in dayNames" :key="i" :value="i + 1">{{ n }}</option>
               </select>
             </div>
             <div class="grid grid-cols-2 gap-3">
-              <div><label class="label">Début</label><input v-model="shiftForm.start_time" type="time" class="input" /></div>
-              <div><label class="label">Fin</label><input v-model="shiftForm.end_time" type="time" class="input" /></div>
+              <div><label class="label" for="lfplanni-start_time">Début</label><input v-model="shiftForm.start_time" type="time" class="input"  id="lfplanni-start_time"/></div>
+              <div><label class="label" for="lfplanni-end_time">Fin</label><input v-model="shiftForm.end_time" type="time" class="input"  id="lfplanni-end_time"/></div>
             </div>
-            <div><label class="label">Libellé (optionnel)</label><input v-model="shiftForm.label" type="text" class="input" placeholder="Ex: Atelier couture" /></div>
+            <div><label class="label" for="lfplanni-label">Libellé (optionnel)</label><input v-model="shiftForm.label" type="text" class="input" placeholder="Ex: Atelier couture"  id="lfplanni-label"/></div>
           </div>
           <p v-if="shiftForm.error" class="text-red-600 text-sm mt-3">{{ shiftForm.error }}</p>
           <div class="flex gap-2 mt-5">
@@ -103,13 +103,13 @@
         <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 max-h-[92vh] overflow-y-auto">
           <h3 class="font-bold text-[#001d32] text-lg mb-4">Événement exceptionnel</h3>
           <div class="space-y-3">
-            <div><label class="label">Titre</label><input v-model="eventForm.title" type="text" class="input" /></div>
-            <div><label class="label">Lieu (optionnel)</label><input v-model="eventForm.location" type="text" class="input" /></div>
+            <div><label class="label" for="lfplanni-title">Titre</label><input v-model="eventForm.title" type="text" class="input"  id="lfplanni-title"/></div>
+            <div><label class="label" for="lfplanni-location">Lieu (optionnel)</label><input v-model="eventForm.location" type="text" class="input"  id="lfplanni-location"/></div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div><label class="label">Début</label><input v-model="eventForm.start_at" type="datetime-local" class="input" /></div>
-              <div><label class="label">Fin</label><input v-model="eventForm.end_at" type="datetime-local" class="input" /></div>
+              <div><label class="label" for="lfplanni-start_at">Début</label><input v-model="eventForm.start_at" type="datetime-local" class="input"  id="lfplanni-start_at"/></div>
+              <div><label class="label" for="lfplanni-end_at">Fin</label><input v-model="eventForm.end_at" type="datetime-local" class="input"  id="lfplanni-end_at"/></div>
             </div>
-            <div><label class="label">Description (optionnel)</label><textarea v-model="eventForm.description" rows="2" class="input resize-none" /></div>
+            <div><label class="label" for="lfplanni-description">Description (optionnel)</label><textarea v-model="eventForm.description" rows="2" class="input resize-none"  id="lfplanni-description"/></div>
             <div>
               <label class="label">Employés concernés</label>
               <div class="max-h-40 overflow-y-auto border border-[#e5e7eb] rounded-lg p-2 space-y-1">

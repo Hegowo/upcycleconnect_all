@@ -21,33 +21,33 @@
       <form @submit.prevent="handleSubmit" class="space-y-5">
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="label">{{ t('admins.fieldFirstName') }} <span class="text-red-500">*</span></label>
-            <input v-model="form.first_name" type="text" class="input" required />
+            <label class="label" for="lfadminf-first_name">{{ t('admins.fieldFirstName') }} <span class="text-red-500">*</span></label>
+            <input v-model="form.first_name" type="text" class="input" required  id="lfadminf-first_name"/>
           </div>
           <div>
-            <label class="label">{{ t('admins.fieldLastName') }} <span class="text-red-500">*</span></label>
-            <input v-model="form.last_name" type="text" class="input" required />
+            <label class="label" for="lfadminf-last_name">{{ t('admins.fieldLastName') }} <span class="text-red-500">*</span></label>
+            <input v-model="form.last_name" type="text" class="input" required  id="lfadminf-last_name"/>
           </div>
         </div>
 
         <div>
-          <label class="label">{{ t('admins.fieldEmail') }} <span class="text-red-500">*</span></label>
-          <input v-model="form.email" type="email" class="input" :disabled="isEditing" required />
+          <label class="label" for="lfadminf-email">{{ t('admins.fieldEmail') }} <span class="text-red-500">*</span></label>
+          <input v-model="form.email" type="email" class="input" :disabled="isEditing" required  id="lfadminf-email"/>
         </div>
 
         <div>
-          <label class="label">
+          <label class="label" for="lfadminf-password">
             {{ t('admins.fieldPassword') }}
             {{ isEditing ? `(${t('admins.fieldPasswordHint')})` : '' }}
             <span v-if="!isEditing" class="text-red-500">*</span>
           </label>
-          <input v-model="form.password" type="password" class="input" :required="!isEditing" minlength="8" />
+          <input v-model="form.password" type="password" class="input" :required="!isEditing" minlength="8"  id="lfadminf-password"/>
           <p v-if="!isEditing" class="text-xs text-gray-500 mt-1">{{ t('admins.fieldPasswordNew') }}</p>
         </div>
 
         <div>
           <label class="label">{{ t('admins.fieldRole') }} <span class="text-red-500">*</span></label>
-          <select v-model="form.role" class="input" required>
+          <select v-model="form.role" aria-label="Rôle" class="input" required>
             <option value="admin">{{ t('admins.roleAdmin') }}</option>
             <option value="super_admin">{{ t('admins.roleSuperAdmin') }}</option>
           </select>

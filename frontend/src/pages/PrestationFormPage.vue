@@ -20,26 +20,26 @@
 
       <form @submit.prevent="handleSubmit" class="space-y-5">
         <div>
-          <label class="label">{{ t('prestations.fieldTitle') }} <span class="text-red-500">*</span></label>
-          <input v-model="form.title" type="text" class="input" required />
+          <label class="label" for="lfpresta-title">{{ t('prestations.fieldTitle') }} <span class="text-red-500">*</span></label>
+          <input v-model="form.title" type="text" class="input" required  id="lfpresta-title"/>
         </div>
 
         <div>
-          <label class="label">{{ t('prestations.fieldDescription') }} <span class="text-red-500">*</span></label>
-          <textarea v-model="form.description" class="input min-h-24" rows="4" required />
+          <label class="label" for="lfpresta-description">{{ t('prestations.fieldDescription') }} <span class="text-red-500">*</span></label>
+          <textarea v-model="form.description" class="input min-h-24" rows="4" required  id="lfpresta-description"/>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="label">{{ t('prestations.fieldCategory') }}</label>
-            <select v-model="form.category_id" class="input">
+            <select v-model="form.category_id" aria-label="Catégorie" class="input">
               <option :value="null">{{ t('prestations.selectCategory') }}</option>
               <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
             </select>
           </div>
           <div>
             <label class="label">{{ t('prestations.fieldProvider') }} <span class="text-red-500">*</span></label>
-            <select v-model="form.provider_id" class="input" required>
+            <select v-model="form.provider_id" aria-label="Prestataire" class="input" required>
               <option :value="null" disabled>{{ t('prestations.selectProvider') }}</option>
               <option v-for="p in providers" :key="p.id" :value="p.id">
                 {{ p.profile?.company_name || `${p.first_name} ${p.last_name}` }}
@@ -50,12 +50,12 @@
 
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="label">{{ t('prestations.fieldPrice') }}</label>
-            <input v-model.number="form.price" type="number" step="0.01" min="0" class="input" placeholder="0.00" />
+            <label class="label" for="lfpresta-price">{{ t('prestations.fieldPrice') }}</label>
+            <input v-model.number="form.price" type="number" step="0.01" min="0" class="input" placeholder="0.00"  id="lfpresta-price"/>
           </div>
           <div>
             <label class="label">{{ t('prestations.fieldPriceType') }} <span class="text-red-500">*</span></label>
-            <select v-model="form.price_type" class="input" required>
+            <select v-model="form.price_type" aria-label="Type de tarif" class="input" required>
               <option value="fixed">{{ t('prestations.priceTypeFixed') }}</option>
               <option value="hourly">{{ t('prestations.priceTypeHourly') }}</option>
               <option value="quote">{{ t('prestations.priceTypeQuote') }}</option>
@@ -65,7 +65,7 @@
 
         <div>
           <label class="label">{{ t('prestations.fieldStatus') }} <span class="text-red-500">*</span></label>
-          <select v-model="form.status" class="input" required>
+          <select v-model="form.status" aria-label="Statut" class="input" required>
             <option value="draft">Brouillon</option>
             <option value="published">Publié</option>
             <option value="suspended">Suspendu</option>

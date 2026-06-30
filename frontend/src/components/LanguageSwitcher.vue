@@ -4,7 +4,7 @@
     <div class="relative">
       <LanguageIcon class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
       <select
-        :value="current"
+        :value="current" aria-label="Langue"
         @change="onChange($event.target.value)"
         class="w-full pl-10 pr-4 py-2.5 border border-[#e2e8f0] rounded-xl text-sm bg-white focus:outline-none focus:border-[#006d35] transition-colors appearance-none cursor-pointer"
       >

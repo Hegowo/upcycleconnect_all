@@ -12,7 +12,7 @@
 
     <div class="card p-4 flex flex-wrap gap-3 items-center">
       <input v-model="search" @input="debouncedFetch" type="search" placeholder="Rechercher..." class="flex-1 min-w-[160px] text-sm border border-[#e5e7eb] rounded-lg px-3 py-2 bg-[#f8fafc] focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
-      <select v-model="typeFilter" @change="fetchSent(1)" class="text-sm border border-[#e5e7eb] rounded-lg px-3 py-2 bg-[#f8fafc] text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#006d35]/30">
+      <select v-model="typeFilter" aria-label="Filtrer par type" @change="fetchSent(1)" class="text-sm border border-[#e5e7eb] rounded-lg px-3 py-2 bg-[#f8fafc] text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#006d35]/30">
         <option value="">Tous les types</option>
         <option v-for="t in knownTypes" :key="t" :value="t">{{ t }}</option>
       </select>
@@ -66,7 +66,7 @@
           <div class="space-y-3">
             <div>
               <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1">Audience</label>
-              <select v-model="bcast.audience" @change="onAudienceChange" class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30">
+              <select v-model="bcast.audience" aria-label="Audience du message" @change="onAudienceChange" class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30">
                 <option value="all">Tous les utilisateurs</option>
                 <option value="particuliers">Particuliers</option>
                 <option value="pros">Professionnels / artisans</option>
@@ -96,17 +96,17 @@
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1">Titre</label>
-              <input v-model="bcast.title" type="text" class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
+              <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1" for="lfadminn-title">Titre</label>
+              <input v-model="bcast.title" type="text" class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30"  id="lfadminn-title"/>
             </div>
             <div>
-              <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1">Message</label>
-              <textarea v-model="bcast.body" rows="3" class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30 resize-none" />
+              <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1" for="lfadminn-body">Message</label>
+              <textarea v-model="bcast.body" rows="3" class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30 resize-none"  id="lfadminn-body"/>
             </div>
 
             <div>
               <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1">Destination au clic</label>
-              <select v-model="linkMode" @change="onLinkModeChange" class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30">
+              <select v-model="linkMode" aria-label="Type de lien" @change="onLinkModeChange" class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30">
                 <option value="none">Aucune (pas de lien)</option>
                 <option value="/">Accueil</option>
                 <option value="/prestations">Liste des prestations</option>

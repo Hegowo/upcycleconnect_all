@@ -53,7 +53,7 @@
                   <LinkIcon class="w-3.5 h-3.5" /> {{ refTypeLabel(selected.ref.type) }} : {{ selected.ref.label }}
                 </RouterLink>
               </div>
-              <select :value="selected.status" @change="changeStatus($event.target.value)" class="shrink-0 px-3 py-1.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-lg text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#006d35]/30">
+              <select :value="selected.status" aria-label="Statut du ticket" @change="changeStatus($event.target.value)" class="shrink-0 px-3 py-1.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-lg text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#006d35]/30">
                 <option value="open">Ouvert</option>
                 <option value="in_progress">En cours</option>
                 <option value="resolved">Résolu</option>
@@ -90,11 +90,11 @@
               </div>
             </div>
             <div class="flex items-end gap-2">
-              <label class="shrink-0 p-2 rounded-lg text-[#40617f] hover:bg-[#f1f5f9] cursor-pointer">
+              <label class="shrink-0 p-2 rounded-lg text-[#40617f] hover:bg-[#f1f5f9] cursor-pointer" for="lfticket-content">
                 <PhotoIcon class="w-5 h-5" />
                 <input type="file" accept="image/*" class="hidden" @change="onFilePick" :disabled="uploading || reply.images.length >= 6" />
               </label>
-              <textarea v-model="reply.content" rows="1" placeholder="Répondre..." @keydown.enter.exact.prevent="sendReply" class="flex-1 px-3 py-2 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30 resize-none max-h-32" />
+              <textarea v-model="reply.content" rows="1" placeholder="Répondre..." @keydown.enter.exact.prevent="sendReply" class="flex-1 px-3 py-2 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30 resize-none max-h-32"  id="lfticket-content"/>
               <button @click="sendReply" :disabled="sending" class="shrink-0 px-4 py-2 rounded-xl text-white font-bold text-sm hover:opacity-90 disabled:opacity-50 transition" style="background:#006d35;">Envoyer</button>
             </div>
           </div>

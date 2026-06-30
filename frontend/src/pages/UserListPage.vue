@@ -93,7 +93,7 @@
           :placeholder="t('users.searchUser')"
         />
       </div>
-      <select v-model="filters.status" @change="fetchUsers" class="text-sm border border-[#e5e7eb] rounded-lg px-3 py-2 bg-[#f8fafc] text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#006d35]/30">
+      <select v-model="filters.status" aria-label="Filtrer par statut" @change="fetchUsers" class="text-sm border border-[#e5e7eb] rounded-lg px-3 py-2 bg-[#f8fafc] text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#006d35]/30">
         <option value="">{{ t('users.allStatuses') }}</option>
         <option value="active">{{ t('users.statusActive') }}</option>
         <option value="inactive">{{ t('users.statusInactive') }}</option>

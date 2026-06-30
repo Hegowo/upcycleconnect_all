@@ -20,25 +20,25 @@
 
       <form @submit.prevent="handleSubmit" class="space-y-5">
         <div>
-          <label class="label">{{ t('categories.fieldName') }} <span class="text-red-500">*</span></label>
-          <input v-model="form.name" @input="autoSlug" type="text" class="input" placeholder="Ex: Mobilier" required />
+          <label class="label" for="lfcatego-name">{{ t('categories.fieldName') }} <span class="text-red-500">*</span></label>
+          <input v-model="form.name" @input="autoSlug" type="text" class="input" placeholder="Ex: Mobilier" required  id="lfcatego-name"/>
         </div>
 
         <div>
-          <label class="label">{{ t('categories.fieldSlug') }}</label>
-          <input v-model="form.slug" type="text" class="input font-mono" placeholder="mobilier" />
+          <label class="label" for="lfcatego-slug">{{ t('categories.fieldSlug') }}</label>
+          <input v-model="form.slug" type="text" class="input font-mono" placeholder="mobilier"  id="lfcatego-slug"/>
           <p class="text-xs text-gray-500 mt-1">{{ t('categories.fieldSlugHint') }}</p>
         </div>
 
         <div>
-          <label class="label">{{ t('categories.fieldDescription') }}</label>
-          <textarea v-model="form.description" class="input min-h-20" rows="3" placeholder="Description optionnelle..." />
+          <label class="label" for="lfcatego-description">{{ t('categories.fieldDescription') }}</label>
+          <textarea v-model="form.description" class="input min-h-20" rows="3" placeholder="Description optionnelle..."  id="lfcatego-description"/>
         </div>
 
         <div class="flex items-center gap-6">
           <div>
-            <label class="label">{{ t('categories.fieldOrder') }}</label>
-            <input v-model.number="form.sort_order" type="number" class="input w-24" min="0" />
+            <label class="label" for="lfcatego-sort_order">{{ t('categories.fieldOrder') }}</label>
+            <input v-model.number="form.sort_order" type="number" class="input w-24" min="0"  id="lfcatego-sort_order"/>
           </div>
           <div class="flex items-center gap-2 pt-5">
             <input v-model="form.is_active" id="is_active" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-green-600" />
