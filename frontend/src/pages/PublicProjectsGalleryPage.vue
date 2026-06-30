@@ -37,7 +37,7 @@
         <RouterLink v-for="p in filtered" :key="p.id" :to="`/projets/${p.id}`"
           class="group bg-white rounded-[24px] border border-[#edf4ff] overflow-hidden hover:shadow-[0_12px_40px_0_rgba(0,29,50,0.10)] transition">
           <div class="h-48 bg-[#edf4ff] overflow-hidden">
-            <img v-if="cover(p)" :src="cover(p)" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+            <img v-if="cover(p)" :src="cover(p)" :alt="p.title" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
             <div v-else class="w-full h-full flex items-center justify-center">
               <PhotoIcon class="w-12 h-12 text-[#64748b]/40" />
             </div>
@@ -47,7 +47,7 @@
               <span v-if="p.category" class="text-xs font-semibold text-[#006d35] bg-[#f0fdf4] px-2 py-0.5 rounded-full">{{ p.category }}</span>
               <span v-if="p.status === 'showcased'" class="text-xs font-bold text-[#166534] bg-[#dcfce7] px-2 py-0.5 rounded-full">Mis en avant</span>
             </div>
-            <h3 class="font-jakarta font-bold text-[#001d32] text-lg leading-snug line-clamp-2">{{ p.title }}</h3>
+            <h2 class="font-jakarta font-bold text-[#001d32] text-lg leading-snug line-clamp-2">{{ p.title }}</h2>
             <p class="text-[#40617f] text-sm mt-1 line-clamp-2">{{ p.description }}</p>
             <p v-if="p.impact_label" class="text-[#006d35] text-xs font-semibold mt-2">🌱 {{ p.impact_label }}</p>
             <div class="flex items-center justify-between mt-3 pt-3 border-t border-[#f1f5f9]">

@@ -114,6 +114,7 @@
                   v-for="src in [deposit.photo1, deposit.photo2, deposit.photo3].filter(Boolean)"
                   :key="src.slice(0,30)"
                   :src="src"
+                  alt="Photo de l'objet déposé"
                   class="h-32 rounded-xl object-cover flex-shrink-0 cursor-pointer hover:opacity-90 transition"
                   :class="[deposit.photo1, deposit.photo2, deposit.photo3].filter(Boolean).length === 1 ? 'w-full' : 'w-32'"
                   @click="lightboxSrc = src"
@@ -192,7 +193,7 @@
 
   <Teleport to="body">
     <div v-if="lightboxSrc" class="fixed inset-0 z-50 bg-black/80 flex items-center justify-center" @click="lightboxSrc = null">
-      <img :src="lightboxSrc" class="max-w-[90vw] max-h-[90vh] rounded-2xl object-contain shadow-2xl" @click.stop />
+      <img :src="lightboxSrc" alt="Photo de l'objet déposé" class="max-w-[90vw] max-h-[90vh] rounded-2xl object-contain shadow-2xl" @click.stop />
       <button @click="lightboxSrc = null" class="absolute top-4 right-4 p-2 rounded-full bg-white/20 hover:bg-white/40 transition text-white">
         <XMarkIcon class="w-6 h-6" />
       </button>
@@ -315,7 +316,7 @@ async function printVoucher() {
   const qrImg = qrDataUrl.value || barcodeDataUrl(d.qr_code || '', { height: 80 })
   const cp = d.collection_point
   const photos = [d.photo1, d.photo2, d.photo3].filter(Boolean)
-  const photoHtml = photos.map(p => `<img src="${p}" style="width:120px;height:120px;object-fit:cover;border-radius:10px;" />`).join('')
+  const photoHtml = photos.map(p => `<img src="${p}" alt="Photo de l'objet déposé" style="width:120px;height:120px;object-fit:cover;border-radius:10px;" />`).join('')
   const win = window.open('', '_blank', 'width=794,height=1123')
   win.document.write(`<!DOCTYPE html><html lang="fr"><head>
 <meta charset="utf-8" />
@@ -356,7 +357,7 @@ async function printVoucher() {
 <p class="subtitle">Présentez ce document au point de collecte pour déposer votre objet.</p>
 <div class="qr-row">
   <div class="qr-box">
-    <img src="${qrImg}" />
+    <img src="${qrImg}" alt="Code de retrait du dépôt" />
     <span class="qr-code-str">Code-barres pour le professionnel</span>
   </div>
   <div class="info-grid">

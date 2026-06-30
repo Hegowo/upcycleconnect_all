@@ -28,13 +28,13 @@
 
         <div v-if="images.length" class="mt-6">
           <div class="rounded-[24px] overflow-hidden bg-[#edf4ff] aspect-[16/10]">
-            <img :src="images[activeImg]" class="w-full h-full object-cover" />
+            <img :src="images[activeImg]" :alt="project.title" class="w-full h-full object-cover" />
           </div>
           <div v-if="images.length > 1" class="flex gap-2 mt-3 overflow-x-auto pb-1">
             <button v-for="(img, i) in images" :key="i" @click="activeImg = i"
               class="w-20 h-20 rounded-xl overflow-hidden shrink-0 border-2 transition"
               :class="i === activeImg ? 'border-[#006d35]' : 'border-transparent opacity-70 hover:opacity-100'">
-              <img :src="img" class="w-full h-full object-cover" />
+              <img :src="img" :alt="'Vue ' + (i + 1)" class="w-full h-full object-cover" />
             </button>
           </div>
         </div>
@@ -57,7 +57,7 @@
                 <p class="font-semibold text-[#001d32] text-sm">{{ step.title }}</p>
                 <p v-if="step.description" class="text-[#40617f] text-sm mt-0.5 whitespace-pre-line">{{ step.description }}</p>
                 <div v-if="stepImages(step).length" class="flex gap-2 mt-2 flex-wrap">
-                  <img v-for="(src, i) in stepImages(step)" :key="i" :src="src" class="w-32 h-32 rounded-xl object-cover border border-[#edf4ff]" />
+                  <img v-for="(src, i) in stepImages(step)" :key="i" :src="src" :alt="step.title" class="w-32 h-32 rounded-xl object-cover border border-[#edf4ff]" />
                 </div>
               </div>
             </div>

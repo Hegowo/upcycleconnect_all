@@ -55,7 +55,7 @@
               </div>
 
               <div v-else class="relative rounded-xl overflow-hidden h-40 sm:h-52 group">
-                <img :src="slot.preview" class="w-full h-full object-cover" />
+                <img :src="slot.preview" alt="Aperçu de la photo de l'objet" class="w-full h-full object-cover" />
                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
                   <button
                     @click="triggerUpload(slot.id)"
