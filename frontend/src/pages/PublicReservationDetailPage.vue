@@ -132,7 +132,7 @@
                   class="flex-1 min-w-0 px-3 py-2 bg-[#f8fafc] border border-[#e5e7eb] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
                 <input v-model.number="line.amount" type="number" min="0" step="0.01" placeholder="€"
                   class="w-24 px-3 py-2 bg-[#f8fafc] border border-[#e5e7eb] rounded-lg text-sm text-right focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
-                <button @click="removeLine(i)" class="text-[#94a3b8] hover:text-red-500 shrink-0 p-1" title="Supprimer">
+                <button @click="removeLine(i)" class="text-[#64748b] hover:text-red-500 shrink-0 p-1" title="Supprimer">
                   <XMarkIcon class="w-4 h-4" />
                 </button>
               </div>
@@ -257,13 +257,13 @@
           </h2>
           <p class="text-[#40617f] text-xs mb-4 shrink-0">Échangez directement avec {{ isProviderView ? 'le client' : 'le prestataire' }}.</p>
           <div ref="chatBox" class="flex-1 space-y-3 overflow-y-auto px-1 py-2">
-            <p v-if="!messages.length" class="text-center text-[#94a3b8] text-sm py-8">Aucun message pour l'instant. Démarrez la conversation.</p>
+            <p v-if="!messages.length" class="text-center text-[#64748b] text-sm py-8">Aucun message pour l'instant. Démarrez la conversation.</p>
             <div v-for="m in messages" :key="m.id" class="flex" :class="m.sender_id === userAuth.user?.id ? 'justify-end' : 'justify-start'">
               <div class="max-w-[75%] rounded-2xl px-4 py-2"
                 :class="m.sender_id === userAuth.user?.id ? 'bg-[#006d35] text-white' : 'bg-[#f1f5f9] text-[#001d32]'">
                 <p v-if="m.sender_id !== userAuth.user?.id" class="text-[10px] font-semibold opacity-70 mb-0.5">{{ m.sender_name }}</p>
                 <p class="text-sm whitespace-pre-wrap break-words">{{ m.content }}</p>
-                <p class="text-[10px] mt-0.5" :class="m.sender_id === userAuth.user?.id ? 'text-white/70' : 'text-[#94a3b8]'">{{ formatChatTime(m.created_at) }}</p>
+                <p class="text-[10px] mt-0.5" :class="m.sender_id === userAuth.user?.id ? 'text-white/70' : 'text-[#64748b]'">{{ formatChatTime(m.created_at) }}</p>
               </div>
             </div>
           </div>

@@ -12,18 +12,18 @@
         >
 
           <div class="flex items-center gap-3 px-5 py-4 border-b border-[#e5e7eb] shrink-0">
-            <MagnifyingGlassIcon class="w-5 h-5 text-[#94a3b8] shrink-0" />
+            <MagnifyingGlassIcon class="w-5 h-5 text-[#64748b] shrink-0" />
             <input
               ref="inputRef"
               v-model="query"
               type="text"
               :placeholder="t('public.search.placeholder')"
-              class="flex-1 text-[15px] text-[#001d32] placeholder:text-[#94a3b8] outline-none bg-transparent"
+              class="flex-1 text-[15px] text-[#001d32] placeholder:text-[#64748b] outline-none bg-transparent"
               @keydown="handleKey"
             />
             <div class="flex items-center gap-2 shrink-0">
               <span v-if="loading" class="w-4 h-4 border-2 border-[#006d35] border-t-transparent rounded-full animate-spin" />
-              <button @click="close" class="text-[#94a3b8] hover:text-[#001d32] transition">
+              <button @click="close" class="text-[#64748b] hover:text-[#001d32] transition">
                 <XMarkIcon class="w-4 h-4" />
               </button>
             </div>
@@ -35,8 +35,8 @@
 
               <div v-if="recent.length > 0" class="mb-5">
                 <div class="flex items-center justify-between px-3 mb-2">
-                  <p class="text-[10px] font-bold text-[#94a3b8] uppercase tracking-widest">{{ t('public.search.recentTitle') }}</p>
-                  <button @click="clearRecent" class="text-[10px] text-[#94a3b8] hover:text-[#ef4444] transition">{{ t('public.search.clearRecent') }}</button>
+                  <p class="text-[10px] font-bold text-[#64748b] uppercase tracking-widest">{{ t('public.search.recentTitle') }}</p>
+                  <button @click="clearRecent" class="text-[10px] text-[#64748b] hover:text-[#ef4444] transition">{{ t('public.search.clearRecent') }}</button>
                 </div>
                 <div class="flex flex-col gap-0.5">
                   <button
@@ -45,14 +45,14 @@
                     @click="query = r; inputRef?.focus()"
                     class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-[#f8fafc] transition text-left group"
                   >
-                    <ClockIcon class="w-4 h-4 text-[#94a3b8] shrink-0" />
+                    <ClockIcon class="w-4 h-4 text-[#64748b] shrink-0" />
                     <span class="text-sm text-[#374151] flex-1">{{ r }}</span>
                     <XMarkIcon class="w-3.5 h-3.5 text-[#c4c4c4] opacity-0 group-hover:opacity-100 transition" @click.stop="removeRecent(i)" />
                   </button>
                 </div>
               </div>
 
-              <p class="text-[10px] font-bold text-[#94a3b8] uppercase tracking-widest px-3 mb-2">{{ t('public.search.quickNav') }}</p>
+              <p class="text-[10px] font-bold text-[#64748b] uppercase tracking-widest px-3 mb-2">{{ t('public.search.quickNav') }}</p>
               <div class="grid grid-cols-2 gap-1.5">
                 <button
                   v-for="(action, i) in quickActions"
@@ -65,7 +65,7 @@
                   </div>
                   <div class="min-w-0">
                     <p class="text-sm font-semibold text-[#001d32] truncate">{{ action.label }}</p>
-                    <p class="text-xs text-[#94a3b8] truncate">{{ action.sub }}</p>
+                    <p class="text-xs text-[#64748b] truncate">{{ action.sub }}</p>
                   </div>
                 </button>
               </div>
@@ -79,7 +79,7 @@
             <div v-else-if="hasResults" class="p-2">
               <template v-for="section in sections" :key="section.key">
                 <div v-if="results[section.key]?.length > 0" class="mb-3">
-                  <p class="text-[10px] font-bold text-[#94a3b8] uppercase tracking-widest px-3 py-1.5">{{ section.label }}</p>
+                  <p class="text-[10px] font-bold text-[#64748b] uppercase tracking-widest px-3 py-1.5">{{ section.label }}</p>
                   <div class="flex flex-col gap-0.5">
                     <button
                       v-for="(item, j) in results[section.key]"
@@ -106,7 +106,7 @@
                           :class="hoveredKey === `${section.key}-${j}` || flatIndex(section.key, j) === focusedIndex ? 'text-white' : 'text-[#001d32]'"
                           v-html="highlight(item.title)" />
                         <p v-if="item.subtitle" class="text-xs truncate"
-                          :class="hoveredKey === `${section.key}-${j}` || flatIndex(section.key, j) === focusedIndex ? 'text-white/70' : 'text-[#94a3b8]'">
+                          :class="hoveredKey === `${section.key}-${j}` || flatIndex(section.key, j) === focusedIndex ? 'text-white/70' : 'text-[#64748b]'">
                           {{ item.subtitle }}
                         </p>
                       </div>
@@ -125,31 +125,31 @@
 
             <div v-else-if="query.trim().length >= 2 && !loading" class="py-14 text-center">
               <div class="w-14 h-14 rounded-2xl bg-[#f1f5f9] flex items-center justify-center mx-auto mb-3">
-                <MagnifyingGlassIcon class="w-7 h-7 text-[#94a3b8]" />
+                <MagnifyingGlassIcon class="w-7 h-7 text-[#64748b]" />
               </div>
               <p class="text-[#374151] font-semibold text-sm">{{ t('public.search.noResults') }}</p>
-              <p class="text-[#94a3b8] text-xs mt-1">{{ t('public.search.noResultsSub', { q: query }) }}</p>
+              <p class="text-[#64748b] text-xs mt-1">{{ t('public.search.noResultsSub', { q: query }) }}</p>
             </div>
 
-            <div v-else-if="query.trim().length === 1" class="py-10 text-center text-[#94a3b8] text-sm">
+            <div v-else-if="query.trim().length === 1" class="py-10 text-center text-[#64748b] text-sm">
               {{ t('public.search.typeMore') }}
             </div>
           </div>
 
           <div class="shrink-0 border-t border-[#e5e7eb] bg-[#f8fafc] px-5 py-2.5 flex items-center gap-5">
-            <span class="text-[11px] text-[#94a3b8] flex items-center gap-1">
+            <span class="text-[11px] text-[#64748b] flex items-center gap-1">
               <kbd class="bg-white border border-[#e5e7eb] px-1.5 py-0.5 rounded text-[10px] font-mono shadow-sm">↑↓</kbd>
               Naviguer
             </span>
-            <span class="text-[11px] text-[#94a3b8] flex items-center gap-1">
+            <span class="text-[11px] text-[#64748b] flex items-center gap-1">
               <kbd class="bg-white border border-[#e5e7eb] px-1.5 py-0.5 rounded text-[10px] font-mono shadow-sm">↵</kbd>
               Ouvrir
             </span>
-            <span class="text-[11px] text-[#94a3b8] flex items-center gap-1">
+            <span class="text-[11px] text-[#64748b] flex items-center gap-1">
               <kbd class="bg-white border border-[#e5e7eb] px-1.5 py-0.5 rounded text-[10px] font-mono shadow-sm">Esc</kbd>
               Fermer
             </span>
-            <span class="ml-auto text-[11px] text-[#94a3b8]">UpcycleConnect</span>
+            <span class="ml-auto text-[11px] text-[#64748b]">UpcycleConnect</span>
           </div>
         </div>
       </div>

@@ -170,7 +170,7 @@
                   </template>
                 </p>
               </div>
-              <ChevronRightIcon class="w-4 h-4 text-[#94a3b8] shrink-0" />
+              <ChevronRightIcon class="w-4 h-4 text-[#64748b] shrink-0" />
             </button>
           </div>
         </div>

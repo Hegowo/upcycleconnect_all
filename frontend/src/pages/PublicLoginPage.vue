@@ -36,7 +36,7 @@
               :placeholder="t('public.login.passwordPlaceholder')"
               class="w-full px-4 py-3 border border-[#e2e8f0] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/20 focus:border-[#006d35] transition bg-white pr-11"
             />
-            <button type="button" @click="showPassword = !showPassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition">
+            <button type="button" @click="showPassword = !showPassword" :aria-label="showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition">
               <EyeSlashIcon v-if="showPassword" class="w-5 h-5" />
               <EyeIcon v-else class="w-5 h-5" />
             </button>
@@ -81,7 +81,7 @@
 
         <div class="flex items-center gap-3">
           <div class="flex-1 h-px bg-[#e2e8f0]"></div>
-          <span class="text-xs text-gray-400">{{ t('public.login.separator') }}</span>
+          <span class="text-xs text-gray-500">{{ t('public.login.separator') }}</span>
           <div class="flex-1 h-px bg-[#e2e8f0]"></div>
         </div>
 
@@ -110,7 +110,7 @@
         </RouterLink>
       </div>
 
-      <p class="text-center text-xs text-gray-400 mt-6">
+      <p class="text-center text-xs text-gray-500 mt-6">
         {{ t('public.login.termsPrefix') }}
         <a href="#" class="underline underline-offset-2 hover:text-[#006d35]">{{ t('public.login.termsLink') }}</a>
         {{ t('public.login.privacyConjunction') }}

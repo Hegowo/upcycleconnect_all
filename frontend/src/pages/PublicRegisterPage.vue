@@ -10,7 +10,8 @@
       </button>
     </header>
 
-    <main class="flex-1 flex items-center justify-center px-4 py-12">
+    <div class="flex-1 flex items-center justify-center px-4 py-12">
+      <h1 class="sr-only">Inscription</h1>
       <div class="w-full max-w-[896px] flex flex-col gap-12">
 
         <div class="flex items-center justify-center gap-3">
@@ -57,7 +58,7 @@
                   <UserIcon class="w-5 h-5 text-[#40617f]" />
                 </div>
 
-                <h3 class="font-jakarta font-bold text-[#001d32] text-2xl mb-3">{{ t('public.register.typeIndividualTitle') }}</h3>
+                <h2 class="font-jakarta font-bold text-[#001d32] text-2xl mb-3">{{ t('public.register.typeIndividualTitle') }}</h2>
 
                 <p class="text-[#40617f] text-base leading-[26px] mb-8">
                   {{ t('public.register.typeIndividualDesc') }}
@@ -86,7 +87,7 @@
                   <WrenchScrewdriverIcon class="w-6 h-6 text-white" />
                 </div>
 
-                <h3 class="font-jakarta font-bold text-[#001d32] text-2xl mb-3">{{ t('public.register.typeProviderTitle') }}</h3>
+                <h2 class="font-jakarta font-bold text-[#001d32] text-2xl mb-3">{{ t('public.register.typeProviderTitle') }}</h2>
 
                 <p class="text-[#40617f] text-base leading-[26px] mb-8">
                   {{ t('public.register.typeProviderDesc') }}
@@ -113,12 +114,12 @@
 
               <div class="flex items-center gap-3 w-80">
                 <div class="flex-1 h-px bg-[#e2e8f0]"></div>
-                <span class="text-xs text-gray-400">ou</span>
+                <span class="text-xs text-gray-500">ou</span>
                 <div class="flex-1 h-px bg-[#e2e8f0]"></div>
               </div>
 
               <div class="w-80 flex flex-col gap-2">
-                <p class="text-xs text-[#94a3b8] text-center mb-1">Inscription rapide (compte particulier)</p>
+                <p class="text-xs text-[#64748b] text-center mb-1">Inscription rapide (compte particulier)</p>
                 <GoogleSignInButton />
                 <AppleSignInButton />
               </div>
@@ -413,12 +414,12 @@
                         @drop.prevent="onKbisDrop"
                       >
                         <input ref="kbisInput" type="file" accept=".pdf,.jpg,.jpeg,.png" class="hidden" @change="onKbisChange" />
-                        <DocumentArrowUpIcon v-if="!kbisFile" class="w-8 h-8 text-[#94a3b8] mx-auto mb-2" />
+                        <DocumentArrowUpIcon v-if="!kbisFile" class="w-8 h-8 text-[#64748b] mx-auto mb-2" />
                         <CheckCircleIcon v-else class="w-8 h-8 text-[#006d35] mx-auto mb-2" />
                         <p class="text-sm font-medium" :class="kbisFile ? 'text-[#006d35]' : 'text-[#40617f]'">
                           {{ kbisFile ? kbisFile.name : 'Glisse ton Kbis ici ou clique pour choisir' }}
                         </p>
-                        <p class="text-xs text-[#94a3b8] mt-1">PDF, JPG ou PNG — max 10 Mo</p>
+                        <p class="text-xs text-[#64748b] mt-1">PDF, JPG ou PNG — max 10 Mo</p>
                       </div>
                       <p v-if="kbisError" class="text-red-500 text-xs mt-1">{{ kbisError }}</p>
                     </div>
@@ -498,7 +499,7 @@
                     <div class="relative">
                       <input v-model="form.password" :type="showPassword ? 'text' : 'password'" required minlength="8"
                         class="w-full px-3 py-2.5 border border-[#e2e8f0] rounded-xl text-sm focus:outline-none focus:border-[#006d35] transition-colors bg-white pr-10" />
-                      <button type="button" @click="showPassword = !showPassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition">
+                      <button type="button" @click="showPassword = !showPassword" :aria-label="showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition">
                         <EyeSlashIcon v-if="showPassword" class="w-5 h-5" />
                         <EyeIcon v-else class="w-5 h-5" />
                       </button>
@@ -557,7 +558,7 @@
 
         </Transition>
       </div>
-    </main>
+    </div>
 
   </div>
 </template>

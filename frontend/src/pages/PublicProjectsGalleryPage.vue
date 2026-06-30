@@ -28,7 +28,7 @@
       </div>
 
       <div v-else-if="!filtered.length" class="bg-white rounded-[24px] border border-[#edf4ff] p-16 text-center">
-        <SparklesIcon class="w-12 h-12 text-[#94a3b8]/40 mx-auto mb-3" />
+        <SparklesIcon class="w-12 h-12 text-[#64748b]/40 mx-auto mb-3" />
         <p class="font-jakarta font-bold text-[#001d32] text-lg">Aucun projet à découvrir pour le moment</p>
         <p class="text-[#40617f] text-sm mt-1">Revenez bientôt, nos artisans préparent de belles transformations.</p>
       </div>
@@ -39,7 +39,7 @@
           <div class="h-48 bg-[#edf4ff] overflow-hidden">
             <img v-if="cover(p)" :src="cover(p)" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
             <div v-else class="w-full h-full flex items-center justify-center">
-              <PhotoIcon class="w-12 h-12 text-[#94a3b8]/40" />
+              <PhotoIcon class="w-12 h-12 text-[#64748b]/40" />
             </div>
           </div>
           <div class="p-5">
@@ -52,7 +52,7 @@
             <p v-if="p.impact_label" class="text-[#006d35] text-xs font-semibold mt-2">🌱 {{ p.impact_label }}</p>
             <div class="flex items-center justify-between mt-3 pt-3 border-t border-[#f1f5f9]">
               <p class="text-xs text-[#40617f]">Par {{ p.provider_name || 'Artisan' }}</p>
-              <span v-if="p.step_count" class="text-xs text-[#94a3b8]">{{ p.step_count }} étape{{ p.step_count > 1 ? 's' : '' }}</span>
+              <span v-if="p.step_count" class="text-xs text-[#64748b]">{{ p.step_count }} étape{{ p.step_count > 1 ? 's' : '' }}</span>
             </div>
           </div>
         </RouterLink>

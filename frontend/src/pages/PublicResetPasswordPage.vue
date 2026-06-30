@@ -49,7 +49,7 @@
               placeholder="8 caractères minimum"
               class="w-full px-4 py-3 border border-[#e2e8f0] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/20 focus:border-[#006d35] transition bg-white pr-11"
             />
-            <button type="button" @click="showPwd = !showPwd" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition">
+            <button type="button" @click="showPwd = !showPwd" :aria-label="showPwd ? 'Masquer le mot de passe' : 'Afficher le mot de passe'" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition">
               <EyeSlashIcon v-if="showPwd" class="w-5 h-5" />
               <EyeIcon v-else class="w-5 h-5" />
             </button>

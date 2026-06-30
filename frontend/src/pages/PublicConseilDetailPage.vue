@@ -31,7 +31,7 @@
             {{ tip.title }}
           </h1>
 
-          <div class="flex items-center gap-4 text-xs text-[#94a3b8] pb-5 mb-6 border-b border-[#f1f5f9]">
+          <div class="flex items-center gap-4 text-xs text-[#64748b] pb-5 mb-6 border-b border-[#f1f5f9]">
             <span class="flex items-center gap-1.5">
               <UserIcon class="w-3.5 h-3.5" />
               {{ tip.author_name || 'UpcycleConnect' }}

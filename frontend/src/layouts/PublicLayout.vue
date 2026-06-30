@@ -25,9 +25,9 @@
         <div class="flex items-center gap-2 shrink-0 ml-auto md:ml-0">
           <button
             @click="searchRef?.open()"
-            class="relative hidden lg:flex items-center gap-2 bg-[#edf4ff] hover:bg-[#e0eeff] pl-3 pr-3 py-2 rounded-xl text-sm text-gray-400 w-44 xl:w-56 transition group"
+            class="relative hidden lg:flex items-center gap-2 bg-[#edf4ff] hover:bg-[#e0eeff] pl-3 pr-3 py-2 rounded-xl text-sm text-[#475569] w-44 xl:w-56 transition group"
           >
-            <MagnifyingGlassIcon class="w-[18px] h-[18px] shrink-0 text-gray-400" />
+            <MagnifyingGlassIcon class="w-[18px] h-[18px] shrink-0 text-[#475569]" />
             <span class="flex-1 text-left text-[13px]">{{ t('public.layout.searchPlaceholder') }}</span>
             <kbd class="hidden group-hover:flex items-center gap-0.5 text-[10px] bg-white/80 text-[#64748b] px-1.5 py-0.5 rounded-md font-mono border border-[#dde4f0] shadow-sm">⌘K</kbd>
           </button>
@@ -242,7 +242,7 @@
           </div>
 
           <div class="space-y-4">
-            <h4 class="text-[#0f172a] text-xs font-semibold uppercase tracking-[0.7px]">{{ t('public.layout.footerColPlatform') }}</h4>
+            <h2 class="text-[#0f172a] text-xs font-semibold uppercase tracking-[0.7px]">{{ t('public.layout.footerColPlatform') }}</h2>
             <ul class="space-y-3">
               <li v-for="link in footerPlateforme" :key="link.label">
                 <RouterLink :to="link.path" class="text-[#334155] text-base hover:text-[#006d35] transition">
@@ -253,7 +253,7 @@
           </div>
 
           <div class="space-y-4">
-            <h4 class="text-[#0f172a] text-xs font-semibold uppercase tracking-[0.7px]">{{ t('public.layout.footerColCommunity') }}</h4>
+            <h2 class="text-[#0f172a] text-xs font-semibold uppercase tracking-[0.7px]">{{ t('public.layout.footerColCommunity') }}</h2>
             <ul class="space-y-3">
               <li v-for="link in footerCommunaute" :key="link.label">
                 <RouterLink :to="link.path" class="text-[#334155] text-base hover:text-[#006d35] transition">
@@ -264,7 +264,7 @@
           </div>
 
           <div class="space-y-4">
-            <h4 class="text-[#0f172a] text-xs font-semibold uppercase tracking-[0.7px]">{{ t('public.layout.footerColLegal') }}</h4>
+            <h2 class="text-[#0f172a] text-xs font-semibold uppercase tracking-[0.7px]">{{ t('public.layout.footerColLegal') }}</h2>
             <ul class="space-y-3">
               <li v-for="link in footerLegal" :key="link.label">
                 <RouterLink :to="link.path" class="text-[#334155] text-base hover:text-[#006d35] transition">

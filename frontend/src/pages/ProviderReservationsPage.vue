@@ -50,7 +50,7 @@
               <span :class="['text-xs font-bold px-2.5 py-1 rounded-full', statusClass(r.status)]">
                 {{ statusLabel(r.status) }}
               </span>
-              <span class="text-xs text-[#94a3b8]">{{ formatDate(r.created_at) }}</span>
+              <span class="text-xs text-[#64748b]">{{ formatDate(r.created_at) }}</span>
             </div>
             <p class="font-jakarta font-bold text-[#001d32] text-base truncate">{{ r.prestation?.title || 'Prestation supprimée' }}</p>
             <p class="text-[#40617f] text-xs mt-0.5 truncate">{{ clientName(r.client) }}</p>
@@ -58,7 +58,7 @@
 
           <div class="shrink-0 text-right">
             <p class="font-jakarta font-bold text-[#001d32] text-sm">{{ amountLabel(r) }}</p>
-            <ChevronRightIcon class="w-4 h-4 text-[#94a3b8] inline-block mt-1" />
+            <ChevronRightIcon class="w-4 h-4 text-[#64748b] inline-block mt-1" />
           </div>
         </button>
       </div>

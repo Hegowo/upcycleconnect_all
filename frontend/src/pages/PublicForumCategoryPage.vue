@@ -64,7 +64,7 @@
                 <LockClosedIcon v-if="thread.locked" class="w-3.5 h-3.5 text-[#ef4444]" />
               </div>
               <p class="font-semibold text-[#001d32] text-sm group-hover:text-[#006d35] transition leading-snug truncate">{{ thread.title }}</p>
-              <p class="text-[#94a3b8] text-xs mt-0.5">
+              <p class="text-[#64748b] text-xs mt-0.5">
                 {{ thread.author?.first_name || thread.author?.email?.split('@')[0] }}
                 · {{ formatDate(thread.created_at) }}
               </p>
@@ -72,10 +72,10 @@
 
             <div class="shrink-0 text-center min-w-[40px]">
               <p class="font-bold text-[#001d32] text-sm">{{ thread.reply_count }}</p>
-              <p class="text-[#94a3b8] text-[10px] uppercase tracking-wide">{{ t('public.community.repliesLabel') }}</p>
+              <p class="text-[#64748b] text-[10px] uppercase tracking-wide">{{ t('public.community.repliesLabel') }}</p>
             </div>
 
-            <ChevronRightIcon class="w-4 h-4 text-[#94a3b8] shrink-0" />
+            <ChevronRightIcon class="w-4 h-4 text-[#64748b] shrink-0" />
           </RouterLink>
         </div>
 
@@ -97,7 +97,7 @@
       <div class="bg-white rounded-2xl p-6 w-full max-w-lg shadow-xl">
         <div class="flex items-center justify-between mb-5">
           <h3 class="font-jakarta font-bold text-[#001d32] text-lg">{{ t('public.community.modalTitle') }}</h3>
-          <button @click="showModal = false" class="text-[#94a3b8] hover:text-[#001d32]">
+          <button @click="showModal = false" class="text-[#64748b] hover:text-[#001d32]">
             <XMarkIcon class="w-5 h-5" />
           </button>
         </div>

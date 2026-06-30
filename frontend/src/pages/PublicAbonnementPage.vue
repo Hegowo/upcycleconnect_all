@@ -76,7 +76,7 @@
       </div>
 
       <p v-if="error" class="text-red-600 text-sm mt-6 text-center">{{ error }}</p>
-      <p class="text-[#94a3b8] text-xs text-center mt-8">Paiement sécurisé par Stripe. Résiliation possible à tout moment.</p>
+      <p class="text-[#64748b] text-xs text-center mt-8">Paiement sécurisé par Stripe. Résiliation possible à tout moment.</p>
     </div>
   </div>
 </template>

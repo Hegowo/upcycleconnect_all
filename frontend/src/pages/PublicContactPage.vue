@@ -25,7 +25,7 @@
           <div v-if="loadingList" class="p-4 space-y-3">
             <div v-for="n in 4" :key="n" class="h-14 bg-gray-50 rounded-lg animate-pulse" />
           </div>
-          <div v-else-if="!tickets.length" class="p-8 text-center text-sm text-[#94a3b8]">
+          <div v-else-if="!tickets.length" class="p-8 text-center text-sm text-[#64748b]">
             Aucune demande pour l'instant.
           </div>
           <div v-else class="divide-y divide-[#f1f5f9] overflow-y-auto">
@@ -39,7 +39,7 @@
                 <span class="font-semibold text-sm text-[#001d32] truncate">{{ t.subject }}</span>
                 <span class="shrink-0 text-[10px] font-bold uppercase px-2 py-0.5 rounded-full" :class="statusClass(t.status)">{{ statusLabel(t.status) }}</span>
               </div>
-              <p class="text-xs text-[#94a3b8]">{{ formatDate(t.last_message_at) }}</p>
+              <p class="text-xs text-[#64748b]">{{ formatDate(t.last_message_at) }}</p>
             </button>
           </div>
         </div>
@@ -128,7 +128,7 @@
                       </a>
                     </div>
                   </div>
-                  <p :class="['text-[10px] text-[#94a3b8] mt-1', m.is_staff ? '' : 'text-right']">{{ formatTime(m.created_at) }}</p>
+                  <p :class="['text-[10px] text-[#64748b] mt-1', m.is_staff ? '' : 'text-right']">{{ formatTime(m.created_at) }}</p>
                 </div>
               </div>
             </div>
@@ -149,12 +149,12 @@
                 <button @click="sendReply" :disabled="sending" class="shrink-0 px-4 py-2 rounded-xl text-white font-bold text-sm hover:opacity-90 disabled:opacity-50 transition" style="background:#006d35;">Envoyer</button>
               </div>
             </div>
-            <div v-else class="border-t border-[#f1f5f9] p-4 text-center text-sm text-[#94a3b8] shrink-0">
+            <div v-else class="border-t border-[#f1f5f9] p-4 text-center text-sm text-[#64748b] shrink-0">
               Cette demande est clôturée.
             </div>
           </template>
 
-          <div v-else class="flex-1 flex items-center justify-center p-8 text-center text-sm text-[#94a3b8]">
+          <div v-else class="flex-1 flex items-center justify-center p-8 text-center text-sm text-[#64748b]">
             Sélectionnez une demande ou créez-en une nouvelle.
           </div>
         </div>

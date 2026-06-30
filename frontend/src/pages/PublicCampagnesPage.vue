@@ -132,7 +132,7 @@
                 </div>
               </div>
 
-              <p v-if="!myPrestations.length && !myEvents.length" class="text-xs text-[#94a3b8]">
+              <p v-if="!myPrestations.length && !myEvents.length" class="text-xs text-[#64748b]">
                 Crée d'abord des prestations ou événements publiés pour pouvoir les mettre en avant dans cette campagne.
               </p>
               <p v-if="formError" class="text-red-600 text-sm">{{ formError }}</p>

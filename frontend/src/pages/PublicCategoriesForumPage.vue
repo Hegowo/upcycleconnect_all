@@ -184,7 +184,7 @@
             <div class="absolute -right-20 -top-16 w-64 h-64 rounded-full bg-[rgba(0,109,53,0.2)] blur-[32px] pointer-events-none" />
             <div>
               <h3 class="font-jakarta font-bold text-white text-3xl">{{ t('public.forumCategories.ctaTitle') }}</h3>
-              <p class="text-[#94a3b8] text-base mt-2">{{ t('public.forumCategories.ctaSubtitle') }}</p>
+              <p class="text-[#64748b] text-base mt-2">{{ t('public.forumCategories.ctaSubtitle') }}</p>
             </div>
             <button
               class="bg-[#006d35] text-white font-semibold text-base px-8 py-4 rounded-xl hover:bg-[#1b8848] transition shrink-0"

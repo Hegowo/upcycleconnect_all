@@ -44,8 +44,8 @@
                   <span class="font-semibold text-[#001d32] text-sm">
                     {{ authorName(thread.author) }}
                   </span>
-                  <span class="text-[#94a3b8] text-xs">· {{ formatDate(thread.created_at) }}</span>
-                  <span v-if="thread.updated_at !== thread.created_at" class="text-[#94a3b8] text-xs">(modifié)</span>
+                  <span class="text-[#64748b] text-xs">· {{ formatDate(thread.created_at) }}</span>
+                  <span v-if="thread.updated_at !== thread.created_at" class="text-[#64748b] text-xs">(modifié)</span>
                 </div>
 
                 <div v-if="!editingThread" class="forum-content" v-html="thread.content" />
@@ -86,7 +86,7 @@
               </template>
 
               <button v-if="userAuth.isLoggedIn && !isOwner" @click="report('thread', thread.id)"
-                class="flex items-center gap-1 text-xs text-[#94a3b8] hover:text-[#ef4444] transition font-medium ml-auto">
+                class="flex items-center gap-1 text-xs text-[#64748b] hover:text-[#ef4444] transition font-medium ml-auto">
                 <FlagIcon class="w-3.5 h-3.5" />
                 {{ t('public.community.report') }}
               </button>
@@ -104,7 +104,7 @@
               class="flex items-center gap-2 bg-white rounded-lg px-3 py-1.5 border border-[#fecaca]">
               <span class="text-sm text-[#991b1b] font-medium">{{ authorName(ban.user) }}</span>
               <button @click="unbanUser(ban.user_id)"
-                class="text-[#94a3b8] hover:text-[#ef4444] transition">
+                class="text-[#64748b] hover:text-[#ef4444] transition">
                 <XMarkIcon class="w-3.5 h-3.5" />
               </button>
             </div>
@@ -133,7 +133,7 @@
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center gap-2 mb-2 flex-wrap">
                     <span class="font-semibold text-[#001d32] text-sm">{{ authorName(reply.author) }}</span>
-                    <span class="text-[#94a3b8] text-xs">· {{ formatDate(reply.created_at) }}</span>
+                    <span class="text-[#64748b] text-xs">· {{ formatDate(reply.created_at) }}</span>
                   </div>
 
                   <div v-if="editingReply !== reply.id" class="forum-content" v-html="reply.content" />
@@ -182,7 +182,7 @@
 
                 <button v-if="userAuth.isLoggedIn && !canEditReply(reply)"
                   @click="report('reply', reply.id)"
-                  class="flex items-center gap-1 text-xs text-[#94a3b8] hover:text-[#ef4444] transition font-medium ml-auto">
+                  class="flex items-center gap-1 text-xs text-[#64748b] hover:text-[#ef4444] transition font-medium ml-auto">
                   <FlagIcon class="w-3.5 h-3.5" />
                   {{ t('public.community.report') }}
                 </button>
@@ -209,7 +209,7 @@
           </template>
 
           <template v-else-if="thread.locked">
-            <p class="text-[#94a3b8] text-sm flex items-center gap-2">
+            <p class="text-[#64748b] text-sm flex items-center gap-2">
               <LockClosedIcon class="w-4 h-4" />
               {{ t('public.community.threadLocked') }}
             </p>

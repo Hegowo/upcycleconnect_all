@@ -220,7 +220,7 @@
           <p v-if="passkeyError" class="text-red-600 text-xs bg-red-50 p-2.5 rounded-lg border border-red-200">{{ passkeyError }}</p>
         </Transition>
 
-        <div v-if="passkeys.length === 0" class="text-sm text-[#94a3b8] text-center py-6 border border-dashed border-[#e2e8f0] rounded-xl">
+        <div v-if="passkeys.length === 0" class="text-sm text-[#64748b] text-center py-6 border border-dashed border-[#e2e8f0] rounded-xl">
           Aucune clé d'accès enregistrée.
         </div>
         <div v-else class="space-y-2">
@@ -233,7 +233,7 @@
                 <span v-if="pk.last_used_at"> · Dernière utilisation {{ formatDate(pk.last_used_at) }}</span>
               </p>
             </div>
-            <button @click="deletePasskey(pk.id)" class="p-1.5 rounded-lg hover:bg-red-50 text-[#94a3b8] hover:text-red-500 transition">
+            <button @click="deletePasskey(pk.id)" class="p-1.5 rounded-lg hover:bg-red-50 text-[#64748b] hover:text-red-500 transition">
               <TrashIcon class="w-4 h-4" />
             </button>
           </div>

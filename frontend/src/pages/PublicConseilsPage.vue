@@ -18,7 +18,7 @@
 
       <div class="flex flex-col sm:flex-row gap-3 mb-6">
         <div class="relative flex-1">
-          <MagnifyingGlassIcon class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#94a3b8]" />
+          <MagnifyingGlassIcon class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#64748b]" />
           <input
             v-model="search"
             @input="debouncedFetch"
@@ -80,7 +80,7 @@
             <span v-if="tip.category" class="text-[10px] font-bold uppercase tracking-wider text-[#006d35]">{{ tip.category }}</span>
             <h3 class="font-jakarta font-bold text-[#001d32] text-base leading-snug group-hover:text-[#006d35] transition line-clamp-2">{{ tip.title }}</h3>
             <p v-if="tip.summary" class="text-[#40617f] text-xs line-clamp-3 leading-relaxed">{{ tip.summary }}</p>
-            <div class="flex items-center justify-between text-[11px] text-[#94a3b8] mt-auto pt-3 border-t border-[#f1f5f9]">
+            <div class="flex items-center justify-between text-[11px] text-[#64748b] mt-auto pt-3 border-t border-[#f1f5f9]">
               <span class="flex items-center gap-1.5">
                 <UserIcon class="w-3.5 h-3.5" />
                 {{ tip.author_name || 'UpcycleConnect' }}

@@ -120,23 +120,23 @@
             <template v-if="!editing">
               <dl class="space-y-3 text-sm">
                 <div>
-                  <dt class="text-[#94a3b8] text-xs uppercase tracking-wider mb-0.5">Société</dt>
+                  <dt class="text-[#64748b] text-xs uppercase tracking-wider mb-0.5">Société</dt>
                   <dd class="font-semibold text-[#001d32]">{{ profile.company_name }}</dd>
                 </div>
                 <div v-if="profile.siret">
-                  <dt class="text-[#94a3b8] text-xs uppercase tracking-wider mb-0.5">SIRET</dt>
+                  <dt class="text-[#64748b] text-xs uppercase tracking-wider mb-0.5">SIRET</dt>
                   <dd class="font-mono text-[#001d32]">{{ profile.siret }}</dd>
                 </div>
                 <div v-if="profile.website">
-                  <dt class="text-[#94a3b8] text-xs uppercase tracking-wider mb-0.5">Site web</dt>
+                  <dt class="text-[#64748b] text-xs uppercase tracking-wider mb-0.5">Site web</dt>
                   <dd><a :href="profile.website" target="_blank" class="text-[#006d35] hover:underline truncate block">{{ profile.website }}</a></dd>
                 </div>
                 <div>
-                  <dt class="text-[#94a3b8] text-xs uppercase tracking-wider mb-0.5">Email</dt>
+                  <dt class="text-[#64748b] text-xs uppercase tracking-wider mb-0.5">Email</dt>
                   <dd class="text-[#001d32]">{{ userAuth.user?.email }}</dd>
                 </div>
                 <div v-if="userAuth.user?.phone">
-                  <dt class="text-[#94a3b8] text-xs uppercase tracking-wider mb-0.5">Téléphone</dt>
+                  <dt class="text-[#64748b] text-xs uppercase tracking-wider mb-0.5">Téléphone</dt>
                   <dd class="text-[#001d32]">{{ userAuth.user.phone }}</dd>
                 </div>
               </dl>
@@ -179,7 +179,7 @@
 
               <div v-if="!realProjects.length" class="text-center py-8">
                 <WrenchScrewdriverIcon class="w-10 h-10 text-gray-200 mx-auto mb-2" />
-                <p class="text-[#94a3b8] text-sm">Aucun projet pour l'instant.</p>
+                <p class="text-[#64748b] text-sm">Aucun projet pour l'instant.</p>
                 <RouterLink to="/profil/pro/projets" class="text-[#006d35] text-sm font-semibold hover:underline mt-1 inline-block">
                   Créer mon premier projet
                 </RouterLink>
@@ -197,7 +197,7 @@
                   <div class="p-3 flex-1">
                     <p class="font-jakarta font-bold text-[#001d32] text-sm line-clamp-1">{{ p.title }}</p>
                     <p class="text-[#40617f] text-xs mt-0.5 line-clamp-2">{{ p.description }}</p>
-                    <p class="text-xs text-[#94a3b8] mt-1">{{ p.step_count }} étape{{ p.step_count !== 1 ? 's' : '' }}</p>
+                    <p class="text-xs text-[#64748b] mt-1">{{ p.step_count }} étape{{ p.step_count !== 1 ? 's' : '' }}</p>
                   </div>
                 </div>
               </div>
@@ -211,7 +211,7 @@
                 </RouterLink>
               </div>
               <div v-if="!prestations.length" class="text-center py-8">
-                <p class="text-[#94a3b8] text-sm">Aucune prestation publiée.</p>
+                <p class="text-[#64748b] text-sm">Aucune prestation publiée.</p>
               </div>
               <div v-else class="divide-y divide-[#f1f5f9]">
                 <div v-for="s in prestations.slice(0,5)" :key="s.id" class="py-3 flex items-center justify-between gap-3">

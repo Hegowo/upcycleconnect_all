@@ -44,7 +44,7 @@
               <div
                 @dragover.prevent="dragOverId = p.id" @dragleave.prevent="dragOverId = null" @drop.prevent="onDrop($event, p)"
                 @click="triggerFile(p)"
-                :class="dragOverId === p.id ? 'border-[#006d35] bg-[#f0fdf4] text-[#006d35]' : 'border-[#cbd5e1] text-[#94a3b8]'"
+                :class="dragOverId === p.id ? 'border-[#006d35] bg-[#f0fdf4] text-[#006d35]' : 'border-[#cbd5e1] text-[#64748b]'"
                 class="w-24 h-24 rounded-xl border-2 border-dashed flex flex-col items-center justify-center text-center cursor-pointer hover:border-[#006d35] hover:text-[#006d35] transition"
               >
                 <input type="file" accept="image/*" multiple class="hidden" :ref="el => { if (el) fileInputs[p.id] = el }" @change="onFilePick($event, p)" />
@@ -123,7 +123,7 @@
             </div>
           </div>
           <div v-else class="px-5 pb-5">
-            <p class="text-[#94a3b8] text-sm">Pas encore d'étapes — clique sur "+ Étape" pour commencer à documenter ce projet.</p>
+            <p class="text-[#64748b] text-sm">Pas encore d'étapes — clique sur "+ Étape" pour commencer à documenter ce projet.</p>
           </div>
         </div>
       </div>
@@ -152,7 +152,7 @@
                     <option value="completed">Terminé</option>
                     <option value="showcased">Mis en avant</option>
                   </select>
-                  <p class="text-[10px] text-[#94a3b8] mt-1 leading-tight">« Terminé » ou « Mis en avant » = visible dans la galerie publique.</p></div>
+                  <p class="text-[10px] text-[#64748b] mt-1 leading-tight">« Terminé » ou « Mis en avant » = visible dans la galerie publique.</p></div>
               </div>
               <div>
                 <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1.5">Images</label>
@@ -163,7 +163,7 @@
                   </div>
                   <div @dragover.prevent="projDrag = true" @dragleave.prevent="projDrag = false" @drop.prevent="projDrag = false; projAddFiles($event.dataTransfer.files)"
                     @click="projFileEl?.click()"
-                    :class="projDrag ? 'border-[#006d35] bg-[#f0fdf4] text-[#006d35]' : 'border-[#cbd5e1] text-[#94a3b8]'"
+                    :class="projDrag ? 'border-[#006d35] bg-[#f0fdf4] text-[#006d35]' : 'border-[#cbd5e1] text-[#64748b]'"
                     class="w-20 h-20 rounded-xl border-2 border-dashed flex flex-col items-center justify-center text-center cursor-pointer hover:border-[#006d35] hover:text-[#006d35] transition">
                     <input ref="projFileEl" type="file" accept="image/*" multiple class="hidden" @change="projAddFiles($event.target.files); $event.target.value = ''" />
                     <PhotoIcon class="w-5 h-5" />
@@ -211,7 +211,7 @@
                   </div>
                   <div @dragover.prevent="stepDrag = true" @dragleave.prevent="stepDrag = false" @drop.prevent="stepDrag = false; stepAddFiles($event.dataTransfer.files)"
                     @click="stepFileEl?.click()"
-                    :class="stepDrag ? 'border-[#006d35] bg-[#f0fdf4] text-[#006d35]' : 'border-[#cbd5e1] text-[#94a3b8]'"
+                    :class="stepDrag ? 'border-[#006d35] bg-[#f0fdf4] text-[#006d35]' : 'border-[#cbd5e1] text-[#64748b]'"
                     class="w-20 h-20 rounded-xl border-2 border-dashed flex flex-col items-center justify-center text-center cursor-pointer hover:border-[#006d35] hover:text-[#006d35] transition">
                     <input ref="stepFileEl" type="file" accept="image/*" multiple class="hidden" @change="stepAddFiles($event.target.files); $event.target.value = ''" />
                     <PhotoIcon class="w-5 h-5" />

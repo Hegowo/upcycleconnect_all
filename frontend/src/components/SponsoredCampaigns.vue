@@ -4,7 +4,7 @@
       <div class="flex items-center gap-2 mb-5">
         <SparklesIcon class="w-5 h-5 text-[#006d35]" />
         <h2 class="font-jakarta font-bold text-[#001d32] text-lg sm:text-xl">À la une</h2>
-        <span class="text-[10px] font-bold uppercase tracking-wider text-[#94a3b8] bg-[#f1f5f9] px-2 py-0.5 rounded-full">Sponsorisé</span>
+        <span class="text-[10px] font-bold uppercase tracking-wider text-[#475569] bg-[#f1f5f9] px-2 py-0.5 rounded-full">Sponsorisé</span>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -24,7 +24,7 @@
           <div class="p-5 flex flex-col gap-1.5 flex-1">
             <h3 class="font-jakarta font-bold text-[#001d32] text-base leading-snug line-clamp-2">{{ c.title }}</h3>
             <p v-if="c.description" class="text-[#40617f] text-xs line-clamp-3 leading-relaxed">{{ c.description }}</p>
-            <p class="text-[11px] text-[#94a3b8] mt-auto pt-3 border-t border-[#f1f5f9] flex items-center gap-1.5">
+            <p class="text-[11px] text-[#475569] mt-auto pt-3 border-t border-[#f1f5f9] flex items-center gap-1.5">
               <UserIcon class="w-3.5 h-3.5" />
               Proposé par {{ c.provider_name || 'un artisan UpcycleConnect' }}
             </p>

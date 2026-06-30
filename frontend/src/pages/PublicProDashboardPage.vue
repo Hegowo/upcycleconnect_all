@@ -62,10 +62,10 @@
                   <div v-for="m in advancedMonthly" :key="m.month" class="flex-1 flex flex-col items-center gap-1">
                     <div class="w-full rounded-t-lg transition-all" style="background:linear-gradient(180deg,#006d35,#1b8848);"
                       :style="{ height: barHeight(m.cents) }" :title="formatEUR(m.cents)" />
-                    <span class="text-[10px] text-[#94a3b8]">{{ shortMonth(m.month) }}</span>
+                    <span class="text-[10px] text-[#64748b]">{{ shortMonth(m.month) }}</span>
                   </div>
                 </div>
-                <p v-else class="text-[#94a3b8] text-sm py-10 text-center">Pas encore de revenus enregistrés.</p>
+                <p v-else class="text-[#64748b] text-sm py-10 text-center">Pas encore de revenus enregistrés.</p>
                 <div class="mt-4 flex items-center justify-between text-sm pt-3 border-t border-[#f1f5f9]">
                   <span class="text-[#40617f]">Réservations payées</span>
                   <span class="font-semibold text-[#001d32]">{{ data.advanced?.reservations_paid || 0 }} / {{ data.advanced?.reservations_total || 0 }}</span>
@@ -78,13 +78,13 @@
                   <div v-for="m in advancedMaterials" :key="m.category" class="flex items-center justify-between gap-3">
                     <span class="text-sm text-[#001d32] truncate">{{ m.category }}</span>
                     <div class="flex items-center gap-2 shrink-0">
-                      <span class="text-xs text-[#94a3b8]">{{ m.weight_kg }} kg</span>
+                      <span class="text-xs text-[#64748b]">{{ m.weight_kg }} kg</span>
                       <span class="text-sm font-bold text-[#006d35] bg-[#f0fdf4] px-2 py-0.5 rounded-full">{{ m.count }}</span>
                     </div>
                   </div>
                 </div>
-                <p v-else class="text-[#94a3b8] text-sm py-10 text-center">Aucun matériau disponible actuellement.</p>
-                <p class="text-[10px] text-[#94a3b8] mt-4 pt-3 border-t border-[#f1f5f9]">Objets validés en conteneur, prêts à être récupérés.</p>
+                <p v-else class="text-[#64748b] text-sm py-10 text-center">Aucun matériau disponible actuellement.</p>
+                <p class="text-[10px] text-[#64748b] mt-4 pt-3 border-t border-[#f1f5f9]">Objets validés en conteneur, prêts à être récupérés.</p>
               </div>
             </div>
           </div>
@@ -129,12 +129,12 @@
                   <div v-for="a in premiumAlerts" :key="a.id" class="flex items-center justify-between gap-3 p-2 rounded-lg hover:bg-[#f8fafc]">
                     <div class="min-w-0">
                       <p class="text-sm font-medium text-[#001d32] truncate">{{ a.title }}</p>
-                      <p class="text-xs text-[#94a3b8]">{{ a.category || 'Non catégorisé' }} · {{ a.collection_point || 'Point inconnu' }}</p>
+                      <p class="text-xs text-[#64748b]">{{ a.category || 'Non catégorisé' }} · {{ a.collection_point || 'Point inconnu' }}</p>
                     </div>
                     <RouterLink to="/profil/pro/collecte" class="text-xs font-bold text-[#006d35] hover:underline shrink-0">Collecter</RouterLink>
                   </div>
                 </div>
-                <p v-else class="text-[#94a3b8] text-sm py-8 text-center">Aucun objet à collecter pour l'instant.</p>
+                <p v-else class="text-[#64748b] text-sm py-8 text-center">Aucun objet à collecter pour l'instant.</p>
               </div>
             </div>
           </div>
