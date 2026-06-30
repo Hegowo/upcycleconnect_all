@@ -171,54 +171,48 @@ const legalAccessibilityContent = `<h2>Déclaration d'accessibilité</h2>
 <p>UpcycleConnect s'engage à rendre son site accessible au plus grand nombre, dans l'esprit du Référentiel Général d'Amélioration de l'Accessibilité (RGAA), dans sa version 4.1. Cette déclaration s'applique au site <strong>https://upcycleconnect.xyz</strong>.</p>
 
 <h3>1. Contexte</h3>
-<p>UpcycleConnect est un projet étudiant à but pédagogique (voir <a href="/mentions-legales">Mentions légales</a>). À ce titre, il n'entre pas dans le champ des organismes légalement soumis à l'obligation d'accessibilité prévue par l'article 47 de la loi n° 2005-102 du 11 février 2005, qui vise notamment les personnes morales de droit public et les entreprises dont le chiffre d'affaires dépasse 250 millions d'euros. Nous avons néanmoins souhaité prendre en compte les bonnes pratiques d'accessibilité dès la conception.</p>
+<p>UpcycleConnect est un projet étudiant à but pédagogique (voir <a href="/mentions-legales">Mentions légales</a>). À ce titre, il n'entre pas dans le champ des organismes légalement soumis à l'obligation d'accessibilité prévue par l'article 47 de la loi n° 2005-102 du 11 février 2005. Nous avons néanmoins souhaité prendre en compte les bonnes pratiques d'accessibilité et corriger les défauts identifiables.</p>
 
 <h3>2. État de conformité</h3>
-<p>Le site UpcycleConnect est <strong>non conforme</strong> avec le RGAA version 4.1. Aucun audit d'accessibilité formel portant sur les 106 critères du référentiel n'a été réalisé à ce jour ; la conformité totale ne peut donc pas être garantie.</p>
+<p>Le site UpcycleConnect est <strong>partiellement conforme</strong> au RGAA version 4.1. Cette appréciation repose sur une auto-évaluation et non sur un audit formel certifié portant sur l'intégralité des 106 critères du référentiel.</p>
 
 <h3>3. Résultats des tests</h3>
-<p>Aucun audit de conformité réalisé par un tiers ou à l'aide de la grille officielle d'évaluation du RGAA n'a encore été mené. Le taux de conformité au référentiel n'a donc pas été mesuré.</p>
+<p>Une auto-évaluation a été menée à l'aide de l'outil automatisé axe-core (basé sur les règles WCAG 2.1 niveau AA), sur les principales pages du site public et de l'espace d'administration, en thème clair et sombre. Les anomalies détectées ont été corrigées ; à l'issue de ces corrections, ces contrôles automatisés ne relèvent plus d'erreur sur les pages testées. Les outils automatisés ne couvrant qu'une partie des critères, une conformité totale ne peut être garantie sans audit manuel complet.</p>
 
-<h3>4. Mesures d'accessibilité prises en compte</h3>
-<p>Lors du développement, les bonnes pratiques suivantes ont été recherchées, sans pour autant garantir une conformité complète :</p>
+<h3>4. Mesures d'accessibilité mises en œuvre</h3>
 <ul>
-<li>utilisation d'un balisage HTML sémantique (titres, listes, liens, formulaires) ;</li>
-<li>indication de la langue principale des pages ;</li>
-<li>navigation possible au clavier sur les principales fonctionnalités ;</li>
-<li>recherche de contrastes suffisants et mise à disposition d'un mode sombre ;</li>
-<li>libellés explicites pour les champs de formulaire et les boutons ;</li>
-<li>conception responsive adaptée aux différentes tailles d'écran et au zoom ;</li>
-<li>textes alternatifs sur les images porteuses d'information lorsque cela est pertinent.</li>
+<li>contrastes de couleurs renforcés pour le texte (objectif 4.5:1), en thèmes clair et sombre ;</li>
+<li>noms accessibles ajoutés aux boutons à icône, aux menus déroulants et aux champs de formulaire (libellés associés) ;</li>
+<li>textes alternatifs sur les images porteuses d'information ;</li>
+<li>structure des titres et repères de page (landmarks) corrigés ;</li>
+<li>navigation au clavier améliorée (zones défilables focusables) ;</li>
+<li>balisage HTML sémantique et indication de la langue des pages ;</li>
+<li>conception responsive adaptée au zoom et aux différentes tailles d'écran.</li>
 </ul>
 
 <h3>5. Contenus non accessibles</h3>
-<p>En l'absence d'audit, certaines limitations sont connues ou probables, notamment :</p>
+<p>Malgré ces améliorations, certaines limitations peuvent subsister :</p>
 <ul>
-<li>des composants interactifs complexes (éditeur de texte enrichi, sélecteurs de date, cartes) peuvent ne pas être pleinement utilisables avec une technologie d'assistance ;</li>
-<li>certaines images illustratives ou contenus ajoutés par les utilisateurs peuvent être dépourvus d'alternative textuelle ;</li>
-<li>le respect de l'ensemble des 106 critères du RGAA n'a pas été vérifié.</li>
+<li>l'audit manuel de l'ensemble des 106 critères du RGAA (tests avec lecteurs d'écran, parcours complets) n'a pas été réalisé ;</li>
+<li>des composants riches (éditeur de texte, sélecteurs de date, cartes) peuvent ne pas être pleinement utilisables avec toutes les technologies d'assistance ;</li>
+<li>certains contenus ajoutés par les utilisateurs peuvent être dépourvus d'alternative textuelle.</li>
 </ul>
 
 <h3>6. Établissement de cette déclaration</h3>
-<p>Cette déclaration repose sur une auto-évaluation indicative et non sur un audit formel. Technologies utilisées pour la réalisation du site : HTML, CSS et JavaScript (Vue.js).</p>
+<p>Cette déclaration repose sur une auto-évaluation. Technologies utilisées pour la réalisation du site : HTML, CSS et JavaScript (Vue.js).</p>
 
 <h3>7. Retour d'information et contact</h3>
-<p>Si vous rencontrez un défaut d'accessibilité vous empêchant d'accéder à un contenu ou à une fonctionnalité du site, vous pouvez nous le signaler afin que nous puissions vous orienter vers une alternative ou corriger le problème :</p>
+<p>Si vous rencontrez un défaut d'accessibilité vous empêchant d'accéder à un contenu ou à une fonctionnalité, vous pouvez nous le signaler :</p>
 <ul>
 <li>par e-mail : contact@upcycleconnect.xyz ;</li>
 <li>via le formulaire de <a href="/contact">contact</a> du site.</li>
 </ul>
 
 <h3>8. Voies de recours</h3>
-<p>Cette procédure s'applique aux organismes soumis à l'obligation légale d'accessibilité. Bien qu'UpcycleConnect n'y soit pas soumis, nous la mentionnons à titre informatif. Si, après nous avoir signalé un défaut d'accessibilité, vous n'obtenez pas de réponse satisfaisante, vous pouvez :</p>
-<ul>
-<li>écrire au Défenseur des droits (https://www.defenseurdesdroits.fr) ;</li>
-<li>contacter le délégué du Défenseur des droits de votre région ;</li>
-<li>envoyer un courrier (gratuit, sans affranchissement) à : Défenseur des droits, Libre réponse 71120, 75342 Paris CEDEX 07.</li>
-</ul>
+<p>Cette procédure s'applique aux organismes soumis à l'obligation légale. Bien qu'UpcycleConnect n'y soit pas soumis, nous la mentionnons à titre informatif. Si, après nous avoir signalé un défaut, vous n'obtenez pas de réponse satisfaisante, vous pouvez saisir le Défenseur des droits (https://www.defenseurdesdroits.fr).</p>
 
 <h3>9. En savoir plus</h3>
-<p>Pour en savoir plus sur le RGAA et l'accessibilité numérique : <a href="https://accessibilite.numerique.gouv.fr">https://accessibilite.numerique.gouv.fr</a>.</p>`
+<p>Pour en savoir plus sur le RGAA : <a href="https://accessibilite.numerique.gouv.fr">https://accessibilite.numerique.gouv.fr</a>.</p>`
 
 var legalDefaults = []models.LegalDocument{
 	{Slug: "mentions-legales", Title: "Mentions légales", Content: legalMentionsContent},
