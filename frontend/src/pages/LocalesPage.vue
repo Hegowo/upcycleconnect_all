@@ -59,7 +59,7 @@
     <Teleport to="body">
       <div v-if="showAdd" class="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="showAdd = false" />
-        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
+        <div :class="{ 'admin-dark': theme.isDark }" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
           <h3 class="font-bold text-[#001d32] text-lg mb-1">Nouvelle langue</h3>
           <p class="text-xs text-[#64748b] mb-4">La langue sera pré-remplie avec les textes français, prêts à traduire.</p>
           <div class="space-y-3">
@@ -84,7 +84,7 @@
 
       <div v-if="showEdit" class="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="showEdit = false" />
-        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-6xl h-[92vh] flex flex-col overflow-hidden">
+        <div :class="{ 'admin-dark': theme.isDark }" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-6xl h-[92vh] flex flex-col overflow-hidden">
 
           <div class="px-6 py-4 border-b flex items-center justify-between shrink-0 gap-4" style="background:linear-gradient(135deg,#006d35,#1b8848);">
             <div class="min-w-0">
@@ -186,6 +186,9 @@ import { ref, computed } from 'vue'
 import { onMounted } from 'vue'
 import { PlusIcon, PencilSquareIcon, TrashIcon, XMarkIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
 import frMessages from '@/locales/fr.json'
+import { useThemeStore } from '@/stores/theme'
+
+const theme = useThemeStore()
 
 const BASE = '/api/admin/v1'
 function authHeaders() {

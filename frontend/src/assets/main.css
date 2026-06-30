@@ -328,3 +328,13 @@ html.dark .fixed.inset-0.z-50 .border-\[\#f1f5f9\]  { border-color: #334155 !imp
 .admin-dark [style^="color: rgb(194, 65, 12)"],  .admin-dark [style*="; color: rgb(194, 65, 12)"]  { color: #fdba74 !important; }
 .admin-dark [style^="color: rgb(185, 28, 28)"],  .admin-dark [style*="; color: rgb(185, 28, 28)"]  { color: #fca5a5 !important; }
 .admin-dark [style^="color: rgb(71, 85, 105)"],  .admin-dark [style*="; color: rgb(71, 85, 105)"]  { color: #94a3b8 !important; }
+
+.admin-dark .bg-\[\#fafbfc\] { background-color: #0f172a !important; }
+.admin-dark .bg-amber-50\/40 { background-color: rgba(202,138,4,0.12) !important; }
+.admin-dark .border-amber-200 { border-color: rgba(202,138,4,0.4) !important; }
+.admin-dark .border-gray-100 { border-color: #334155 !important; }
+.admin-dark .bg-gray-200 { background-color: #334155 !important; }
+.admin-dark .hover\:bg-white:hover { background-color: #263244 !important; }
+.admin-dark .text-amber-600 { color: #fde047 !important; }
+.admin-dark .bg-amber-100 { background-color: rgba(202,138,4,0.22) !important; }
+.admin-dark .text-\[\#cbd5e1\] { color: #94a3b8 !important; }
