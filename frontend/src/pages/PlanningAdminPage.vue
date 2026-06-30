@@ -52,7 +52,7 @@
               :title="b.tooltip">
               <p class="font-bold truncate">{{ b.title }}</p>
               <p class="truncate">{{ b.time }}</p>
-              <p v-if="b.subtitle" class="truncate opacity-80">{{ b.subtitle }}</p>
+              <p v-if="b.subtitle" class="truncate">{{ b.subtitle }}</p>
             </div>
           </div>
         </div>

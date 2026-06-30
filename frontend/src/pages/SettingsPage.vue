@@ -15,7 +15,7 @@
           <p class="text-xs text-gray-500 mt-0.5">{{ t('settings.autoValidationDesc') }}</p>
         </div>
         <button
-          @click="toggleAutoValidation"
+          @click="toggleAutoValidation" role="switch" :aria-checked="autoValidation" :aria-label="t('settings.autoValidation')"
           :class="['relative inline-flex h-6 w-11 items-center rounded-full transition-colors', autoValidation ? 'bg-[#006d35]' : 'bg-gray-300']"
         >
           <span :class="['inline-block h-4 w-4 transform rounded-full bg-white transition-transform shadow', autoValidation ? 'translate-x-6' : 'translate-x-1']" />
@@ -28,7 +28,7 @@
           <p class="text-xs text-gray-500 mt-0.5">{{ t('settings.emailNotifDesc') }}</p>
         </div>
         <button
-          @click="emailNotifications = !emailNotifications"
+          @click="emailNotifications = !emailNotifications" role="switch" :aria-checked="emailNotifications" :aria-label="t('settings.emailNotif')"
           :class="['relative inline-flex h-6 w-11 items-center rounded-full transition-colors', emailNotifications ? 'bg-[#006d35]' : 'bg-gray-300']"
         >
           <span :class="['inline-block h-4 w-4 transform rounded-full bg-white transition-transform shadow', emailNotifications ? 'translate-x-6' : 'translate-x-1']" />

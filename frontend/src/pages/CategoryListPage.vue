@@ -33,7 +33,7 @@
         v-for="cat in categories"
         :key="cat.id"
         class="bg-white rounded-2xl border shadow-sm hover:shadow-md transition-shadow overflow-hidden"
-        :class="cat.is_active ? 'border-[#f1f5f9]' : 'border-gray-200 opacity-75'"
+        :class="cat.is_active ? 'border-[#f1f5f9]' : 'border-gray-200 bg-gray-50'"
       >
         <div class="p-5">
 
@@ -50,11 +50,11 @@
             </button>
           </div>
 
-          <h4 class="text-sm font-bold text-[#001d32] mb-1">{{ cat.name }}</h4>
+          <h3 class="text-sm font-bold text-[#001d32] mb-1">{{ cat.name }}</h3>
           <p class="text-xs text-gray-500 mb-3 line-clamp-2">{{ cat.description || t('categories.noDescription') }}</p>
 
           <div class="flex items-center justify-between mb-4">
-            <span class="text-xs font-semibold px-2 py-0.5 rounded-full" :class="cat.is_active ? 'bg-[#dcfce7] text-[#166534]' : 'bg-gray-100 text-gray-500'">
+            <span class="text-xs font-semibold px-2 py-0.5 rounded-full" :class="cat.is_active ? 'bg-[#dcfce7] text-[#166534]' : 'bg-gray-100 text-gray-600'">
               {{ cat.is_active ? t('categories.active') : t('categories.inactive') }}
             </span>
             <span class="text-xs text-gray-500 font-medium">

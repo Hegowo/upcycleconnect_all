@@ -13,7 +13,7 @@
 
     <div class="bg-white rounded-2xl p-3 sm:p-4 border border-[#f1f5f9] shadow-sm space-y-2 sm:space-y-0 sm:flex sm:flex-wrap sm:gap-3 sm:items-center">
       <div class="relative flex-1 min-w-0">
-        <MagnifyingGlassIcon class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+        <MagnifyingGlassIcon class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
         <input
           v-model="filters.search"
           @input="debouncedFetch"
@@ -23,7 +23,7 @@
         />
       </div>
       <div class="flex items-center gap-2">
-        <select v-model="filters.status" @change="fetchProviders" class="flex-1 text-sm border border-[#e5e7eb] rounded-lg px-3 py-2 bg-[#f8fafc] text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#006d35]/30">
+        <select v-model="filters.status" aria-label="Filtrer par statut" @change="fetchProviders" class="flex-1 text-sm border border-[#e5e7eb] rounded-lg px-3 py-2 bg-[#f8fafc] text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#006d35]/30">
           <option value="">{{ t('providers.allStatuses') }}</option>
           <option value="pending">{{ t('providers.statusPending') }}</option>
           <option value="approved">{{ t('providers.statusApproved') }}</option>
@@ -66,7 +66,7 @@
           <RouterLink :to="`/admin/providers/${p.id}`" class="text-sm font-semibold text-[#001d32] truncate block" @click.stop>
             {{ p.profile?.company_name || p.company_name || '—' }}
           </RouterLink>
-          <p class="text-xs text-gray-400 truncate">{{ p.user?.email || p.email }}</p>
+          <p class="text-xs text-gray-500 truncate">{{ p.user?.email || p.email }}</p>
         </div>
         <span class="text-xs font-semibold px-2 py-0.5 rounded-full shrink-0" :class="providerStatusBadge(p.profile?.status || p.status)">
           {{ providerStatusText(p.profile?.status || p.status) }}
@@ -77,7 +77,7 @@
           <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-[#f1f5f9] text-[#475569]">
             {{ p.profile?.category || p.category || '—' }}
           </span>
-          <span class="text-xs font-mono text-gray-400">{{ (p.profile?.siret || p.siret || '').slice(0, 9) }}...</span>
+          <span class="text-xs font-mono text-gray-500">{{ (p.profile?.siret || p.siret || '').slice(0, 9) }}...</span>
         </div>
         <div class="flex items-center gap-1.5">
           <button
@@ -137,10 +137,10 @@
             <tr v-else-if="!providers.length">
               <td :colspan="6" class="px-6 py-16 text-center">
                 <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-3">
-                  <MagnifyingGlassIcon class="w-6 h-6 text-gray-400" />
+                  <MagnifyingGlassIcon class="w-6 h-6 text-gray-500" />
                 </div>
                 <p class="text-gray-500 font-medium">{{ t('providers.noFound') }}</p>
-                <p class="text-gray-400 text-sm mt-1">{{ t('common.searchCriteria') }}</p>
+                <p class="text-gray-500 text-sm mt-1">{{ t('common.searchCriteria') }}</p>
               </td>
             </tr>
             <tr
@@ -159,7 +159,7 @@
                     <RouterLink :to="`/admin/providers/${p.id}`" class="text-sm font-semibold text-[#001d32] hover:text-[#006d35] transition">
                       {{ p.profile?.company_name || p.company_name || '—' }}
                     </RouterLink>
-                    <p class="text-xs text-gray-400">{{ p.profile?.city || p.city || '' }}</p>
+                    <p class="text-xs text-gray-500">{{ p.profile?.city || p.city || '' }}</p>
                   </div>
                 </div>
               </td>
@@ -168,7 +168,7 @@
               </td>
               <td class="px-6 py-4">
                 <p class="text-sm text-[#001d32] font-medium">{{ p.user?.first_name || p.first_name }} {{ p.user?.last_name || p.last_name }}</p>
-                <p class="text-xs text-gray-400">{{ p.user?.email || p.email }}</p>
+                <p class="text-xs text-gray-500">{{ p.user?.email || p.email }}</p>
               </td>
               <td class="px-6 py-4">
                 <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-[#f1f5f9] text-[#475569]">
@@ -182,7 +182,7 @@
               </td>
               <td class="px-6 py-4 text-right" @click.stop>
                 <div class="flex justify-end gap-1.5">
-                  <RouterLink :to="`/admin/providers/${p.id}`" class="p-1.5 rounded-lg text-gray-400 hover:text-[#40617f] hover:bg-blue-50 transition inline-flex" :title="t('common.edit')">
+                  <RouterLink :to="`/admin/providers/${p.id}`" class="p-1.5 rounded-lg text-gray-500 hover:text-[#40617f] hover:bg-blue-50 transition inline-flex" :title="t('common.edit')">
                     <PencilIcon class="w-4 h-4" />
                   </RouterLink>
                   <button
@@ -220,11 +220,11 @@
           </div>
           <div>
             <p class="text-sm font-bold text-[#001d32]">{{ t('providers.verificationQueue') }}</p>
-            <p class="text-xs text-gray-400">{{ t('providers.verificationQueueSub') }}</p>
+            <p class="text-xs text-gray-500">{{ t('providers.verificationQueueSub') }}</p>
           </div>
         </div>
         <p class="text-3xl font-bold" :class="pendingProviders > 0 ? 'text-orange-500' : 'text-[#001d32]'">{{ pendingProviders }}</p>
-        <p class="text-xs text-gray-400 mt-1">{{ t('providers.pendingValidation') }}</p>
+        <p class="text-xs text-gray-500 mt-1">{{ t('providers.pendingValidation') }}</p>
       </div>
     </div>
   </div>

@@ -54,7 +54,7 @@
                 v-if="admin.id !== currentUserId"
                 @click="openDelete(admin)"
                 class="text-xs px-3 py-1.5 rounded-full font-medium transition"
-                style="background:#FEE2E2; color:#dc2626;"
+                style="background:#FEE2E2; color:#b91c1c;"
               >
                 {{ t('admins.actionDelete') }}
               </button>
@@ -132,7 +132,7 @@
                     v-if="admin.id !== currentUserId"
                     @click="openDelete(admin)"
                     class="text-xs px-3 py-1 rounded-full font-medium transition"
-                    style="background:#FEE2E2; color:#dc2626;"
+                    style="background:#FEE2E2; color:#b91c1c;"
                   >
                     {{ t('admins.actionDelete') }}
                   </button>

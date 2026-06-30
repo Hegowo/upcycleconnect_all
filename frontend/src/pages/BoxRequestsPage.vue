@@ -62,7 +62,7 @@
               :class="selectedRequest?.id === req.id ? 'bg-[#f0fdf4] border-l-2 border-[#006d35]' : 'hover:bg-[#f8fafc] border-l-2 border-transparent'"
             >
               <div class="w-10 h-10 rounded-xl overflow-hidden shrink-0 bg-gray-100 flex items-center justify-center">
-                <img v-if="req.photo1" :src="req.photo1" class="w-full h-full object-cover" />
+                <img v-if="req.photo1" :src="req.photo1" alt="Photo de la demande de dépôt" class="w-full h-full object-cover" />
                 <PhotoIcon v-else class="w-5 h-5 text-gray-500" />
               </div>
               <div class="flex-1 min-w-0">
@@ -147,7 +147,7 @@
                 <img
                   v-for="src in [selectedRequest.photo1, selectedRequest.photo2, selectedRequest.photo3].filter(Boolean)"
                   :key="src.slice(0,30)"
-                  :src="src"
+                  :src="src" alt="Photo de l'objet déposé"
                   class="w-24 h-24 rounded-xl object-cover border border-[#e5e7eb] cursor-pointer hover:opacity-90 transition"
                   @click="lightboxSrc = src"
                 />
@@ -227,7 +227,7 @@
 
   <Teleport to="body">
     <div v-if="lightboxSrc" class="fixed inset-0 z-50 bg-black/80 flex items-center justify-center" @click="lightboxSrc = null">
-      <img :src="lightboxSrc" class="max-w-[90vw] max-h-[90vh] rounded-2xl object-contain shadow-2xl" @click.stop />
+      <img :src="lightboxSrc" alt="Photo de l'objet déposé" class="max-w-[90vw] max-h-[90vh] rounded-2xl object-contain shadow-2xl" @click.stop />
       <button @click="lightboxSrc = null" class="absolute top-4 right-4 p-2 rounded-full bg-white/20 hover:bg-white/40 transition text-white">
         <XMarkIcon class="w-6 h-6" />
       </button>

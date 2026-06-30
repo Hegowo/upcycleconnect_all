@@ -36,7 +36,7 @@
 
     <div class="flex items-center gap-4 text-xs text-[#64748b] px-1">
       <span><strong class="text-[#001d32]">{{ filtered.length }}</strong> résultat(s)</span>
-      <span><strong class="text-[#16a34a]">{{ activeCount }}</strong> actifs</span>
+      <span><strong class="text-[#15803d]">{{ activeCount }}</strong> actifs</span>
       <span><strong class="text-[#6b7280]">{{ points.length - activeCount }}</strong> inactifs</span>
     </div>
 

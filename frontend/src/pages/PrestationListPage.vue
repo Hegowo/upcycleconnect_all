@@ -185,7 +185,7 @@
                 >
                   Modifier
                 </RouterLink>
-                <button @click="openDelete(p)" class="p-1.5 rounded-lg text-gray-500 hover:text-red-500 hover:bg-red-50 transition">
+                <button @click="openDelete(p)" aria-label="Supprimer la prestation" class="p-1.5 rounded-lg text-gray-500 hover:text-red-500 hover:bg-red-50 transition">
                   <TrashIcon class="w-4 h-4" />
                 </button>
               </div>

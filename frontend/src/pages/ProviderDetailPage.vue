@@ -26,7 +26,7 @@
             </div>
             <div>
               <h2 class="text-xl font-bold text-gray-900">{{ provider.profile?.company_name || `${provider.first_name} ${provider.last_name}` }}</h2>
-              <p class="text-sm text-gray-400 mt-0.5">{{ provider.first_name }} {{ provider.last_name }} — {{ provider.email }}</p>
+              <p class="text-sm text-gray-500 mt-0.5">{{ provider.first_name }} {{ provider.last_name }} — {{ provider.email }}</p>
             </div>
           </div>
           <AppBadge :label="provider.profile?.status || '—'" />
@@ -34,25 +34,25 @@
 
         <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-sm border-t border-gray-100 pt-6">
           <div>
-            <dt class="text-xs text-gray-400 uppercase font-medium mb-1">{{ t('providers.fieldSiret') }}</dt>
+            <dt class="text-xs text-gray-500 uppercase font-medium mb-1">{{ t('providers.fieldSiret') }}</dt>
             <dd class="text-gray-900 font-medium font-mono">{{ provider.profile?.siret || '—' }}</dd>
           </div>
           <div>
-            <dt class="text-xs text-gray-400 uppercase font-medium mb-1">{{ t('providers.fieldWebsite') }}</dt>
+            <dt class="text-xs text-gray-500 uppercase font-medium mb-1">{{ t('providers.fieldWebsite') }}</dt>
             <dd class="font-medium">
               <a v-if="provider.profile?.website" :href="provider.profile.website" target="_blank" rel="noopener" class="text-blue-600 hover:underline truncate block">
                 {{ provider.profile.website }}
               </a>
-              <span v-else class="text-gray-400">—</span>
+              <span v-else class="text-gray-500">—</span>
             </dd>
           </div>
           <div class="col-span-2">
-            <dt class="text-xs text-gray-400 uppercase font-medium mb-1">{{ t('providers.fieldDescription') }}</dt>
+            <dt class="text-xs text-gray-500 uppercase font-medium mb-1">{{ t('providers.fieldDescription') }}</dt>
             <dd class="text-gray-700 leading-relaxed">{{ provider.profile?.description || t('providers.noDescription') }}</dd>
           </div>
 
           <div class="col-span-2">
-            <dt class="text-xs text-gray-400 uppercase font-medium mb-2">Document officiel (Kbis)</dt>
+            <dt class="text-xs text-gray-500 uppercase font-medium mb-2">Document officiel (Kbis)</dt>
             <dd>
               <button
                 v-if="provider.profile?.has_kbis"

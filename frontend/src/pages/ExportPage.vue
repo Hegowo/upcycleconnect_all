@@ -9,11 +9,11 @@
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
           <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1.5">Du (optionnel)</label>
-          <input v-model="from" type="date" class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
+          <input v-model="from" type="date" aria-label="Date de début" class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
         </div>
         <div>
           <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1.5">Au (optionnel)</label>
-          <input v-model="to" type="date" class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
+          <input v-model="to" type="date" aria-label="Date de fin" class="w-full px-3 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
         </div>
         <div>
           <label class="block text-xs font-semibold text-[#40617f] uppercase mb-1.5">Raccourcis</label>

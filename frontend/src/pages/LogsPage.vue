@@ -70,7 +70,7 @@
                   <td class="px-6 py-3.5">
                     <span v-if="log.resource_type" class="text-xs font-medium px-2 py-0.5 rounded-full" :class="actionBadgeClass(log.action)">
                       {{ resourceLabel(log.resource_type) }}
-                      <span v-if="log.resource_id" class="opacity-60"> #{{ log.resource_id }}</span>
+                      <span v-if="log.resource_id"> #{{ log.resource_id }}</span>
                     </span>
                     <span v-else class="text-xs text-gray-500">—</span>
                   </td>
@@ -104,7 +104,7 @@
                   <p class="text-xs text-gray-600 mb-1">{{ actionLabel(log.action) }}</p>
                   <div class="flex items-center gap-2">
                     <span v-if="log.resource_type" class="text-xs font-medium px-1.5 py-0.5 rounded-full" :class="actionBadgeClass(log.action)">
-                      {{ resourceLabel(log.resource_type) }}<span v-if="log.resource_id" class="opacity-60"> #{{ log.resource_id }}</span>
+                      {{ resourceLabel(log.resource_type) }}<span v-if="log.resource_id"> #{{ log.resource_id }}</span>
                     </span>
                     <span class="text-xs text-gray-500 font-mono">{{ formatDateShort(log.created_at) }}</span>
                   </div>

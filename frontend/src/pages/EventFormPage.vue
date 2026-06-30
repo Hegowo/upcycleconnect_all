@@ -38,9 +38,9 @@
           <label class="label">Séances <span class="text-red-500">*</span></label>
           <div class="space-y-2">
             <div v-for="(s, i) in form.sessions" :key="i" class="flex items-center gap-2 flex-wrap">
-              <input v-model="s.start_date" type="datetime-local" class="input flex-1 min-w-[180px]" :min="isEditing ? undefined : todayMin" />
+              <input v-model="s.start_date" type="datetime-local" aria-label="Début de la séance" class="input flex-1 min-w-[180px]" :min="isEditing ? undefined : todayMin" />
               <span class="text-gray-500 text-sm">→</span>
-              <input v-model="s.end_date" type="datetime-local" class="input flex-1 min-w-[180px]" :min="isEditing ? undefined : todayMin" />
+              <input v-model="s.end_date" type="datetime-local" aria-label="Fin de la séance" class="input flex-1 min-w-[180px]" :min="isEditing ? undefined : todayMin" />
               <button type="button" @click="removeSession(i)" :disabled="form.sessions.length === 1"
                 class="p-2 text-red-500 hover:bg-red-50 rounded-lg disabled:opacity-30" title="Retirer">✕</button>
             </div>
