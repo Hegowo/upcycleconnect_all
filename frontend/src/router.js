@@ -45,6 +45,7 @@ const router = createRouter({
         { path: 'profil/pro/projets',     component: () => import('@/pages/PublicProjetsPage.vue'),      meta: { title: 'Mes Projets Upcycling' } },
         { path: 'profil/pro/collecte',    component: () => import('@/pages/PublicCollectePage.vue'),     meta: { title: 'Collecte code-barres' } },
         { path: 'profil/planning',      component: () => import('@/pages/PublicPlanningPage.vue'),             meta: { title: 'Mon Planning' } },
+        { path: 'qui-sommes-nous',  component: () => import('@/pages/PublicAboutPage.vue'),      meta: { title: 'Qui sommes-nous ?' } },
         { path: 'contact',          component: () => import('@/pages/PublicContactPage.vue'),    meta: { title: 'Contact' } },
         { path: 'mentions-legales', component: () => import('@/pages/PublicLegalPage.vue'),      meta: { title: 'Mentions légales', slug: 'mentions-legales' } },
         { path: 'cgu-cgv',          component: () => import('@/pages/PublicLegalPage.vue'),      meta: { title: 'CGU / CGV', slug: 'cgu-cgv' } },

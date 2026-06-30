@@ -344,6 +344,7 @@ function isActive(path) {
 }
 
 const footerPlateforme = computed(() => [
+  { label: t('public.layout.footerLinkAbout'),          path: '/qui-sommes-nous' },
   { label: t('public.layout.footerLinkDeposit'),        path: '/depot' },
   { label: t('public.layout.footerLinkFindPrestation'), path: '/prestations' },
   { label: t('public.layout.footerLinkEvents'),         path: '/evenements' },
