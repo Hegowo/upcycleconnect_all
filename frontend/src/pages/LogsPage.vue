@@ -69,7 +69,7 @@
                   <td class="px-6 py-3.5 text-sm text-gray-600">{{ actionLabel(log.action) }}</td>
                   <td class="px-6 py-3.5">
                     <span v-if="log.resource_type" class="text-xs font-medium px-2 py-0.5 rounded-full" :class="actionBadgeClass(log.action)">
-                      {{ log.resource_type }}
+                      {{ resourceLabel(log.resource_type) }}
                       <span v-if="log.resource_id" class="opacity-60"> #{{ log.resource_id }}</span>
                     </span>
                     <span v-else class="text-xs text-gray-400">—</span>
@@ -104,7 +104,7 @@
                   <p class="text-xs text-gray-600 mb-1">{{ actionLabel(log.action) }}</p>
                   <div class="flex items-center gap-2">
                     <span v-if="log.resource_type" class="text-xs font-medium px-1.5 py-0.5 rounded-full" :class="actionBadgeClass(log.action)">
-                      {{ log.resource_type }}<span v-if="log.resource_id" class="opacity-60"> #{{ log.resource_id }}</span>
+                      {{ resourceLabel(log.resource_type) }}<span v-if="log.resource_id" class="opacity-60"> #{{ log.resource_id }}</span>
                     </span>
                     <span class="text-xs text-gray-400 font-mono">{{ formatDateShort(log.created_at) }}</span>
                   </div>
@@ -227,7 +227,7 @@ import {
   ArrowDownTrayIcon,
 } from '@heroicons/vue/24/outline'
 
-const { t } = useI18n()
+const { t, te } = useI18n()
 const auth = useAuthStore()
 const tab = ref('admin')
 const adminLogs = ref([])
@@ -336,19 +336,21 @@ function formatDateFull(dateStr) {
 }
 
 function actionLabel(action) {
-  const map = {
-    'user.banned':        'logs.actionUserBanned',
-    'user.activated':     'logs.actionUserActivated',
-    'user.deleted':       'logs.actionUserDeleted',
-    'provider.approved':  'logs.actionProviderApproved',
-    'provider.suspended': 'logs.actionProviderSuspended',
-    'admin.created':      'logs.actionAdminCreated',
-    'admin.deleted':      'logs.actionAdminDeleted',
-    'category.created':   'logs.actionCategoryCreated',
-    'category.deleted':   'logs.actionCategoryDeleted',
-    'category.toggled':   'logs.actionCategoryToggled',
-  }
-  return map[action] ? t(map[action]) : action
+  if (!action) return '—'
+  const sep = action.indexOf('.')
+  if (sep === -1) return action
+  const resource = action.slice(0, sep)
+  const verb = action.slice(sep + 1)
+  const verbKey = `logs.verbs.${verb}`
+  const nounKey = `logs.nouns.${resource}`
+  if (te(verbKey) && te(nounKey)) return t(verbKey, { n: t(nounKey) })
+  if (te(verbKey)) return t(verbKey, { n: resource.replace(/_/g, ' ') })
+  return action.replace(/[._]/g, ' ').replace(/^\w/, c => c.toUpperCase())
+}
+function resourceLabel(resourceType) {
+  if (!resourceType) return resourceType
+  const key = `logs.resources.${resourceType}`
+  return te(key) ? t(key) : resourceType
 }
 function actionBadgeClass(action) {
   if (action.includes('deleted') || action.includes('banned')) return 'bg-[#fee2e2] text-[#991b1b]'
