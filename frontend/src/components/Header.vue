@@ -10,22 +10,6 @@
       {{ title }}
     </h1>
 
-    <div class="hidden md:flex items-center flex-1 max-w-md mx-8">
-      <div class="relative w-full">
-        <MagnifyingGlassIcon :class="['absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4', theme.isDark ? 'text-[#475569]' : 'text-gray-500']" />
-        <input
-          type="text"
-          :placeholder="t('common.search')"
-          :class="[
-            'w-full pl-9 pr-4 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006d35]/30 focus:border-[#006d35] transition',
-            theme.isDark
-              ? 'bg-[#0f172a] border-[#334155] text-[#f1f5f9] placeholder-[#475569]'
-              : 'bg-[#f8fafc] border-[#e5e7eb] text-gray-900'
-          ]"
-        />
-      </div>
-    </div>
-
     <div class="flex items-center gap-2 md:gap-3">
 
       <button
@@ -80,7 +64,6 @@ import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import { useThemeStore } from '@/stores/theme'
 import {
-  MagnifyingGlassIcon,
   ArrowRightOnRectangleIcon,
   SunIcon,
   MoonIcon,
