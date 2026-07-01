@@ -574,12 +574,16 @@ func (h *ForumHandler) AdminDeleteCategory(c *gin.Context) {
 func (h *ForumHandler) AdminDeleteThread(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	h.DB.Delete(&models.ForumThread{}, id)
+	rid := uint(id)
+	h.Audit.Log(c, "forum.thread_deleted", "ForumThread", &rid, nil, nil)
 	c.JSON(http.StatusOK, gin.H{"ok": true})
 }
 
 func (h *ForumHandler) AdminDeleteReply(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	h.DB.Delete(&models.ForumReply{}, id)
+	rid := uint(id)
+	h.Audit.Log(c, "forum.reply_deleted", "ForumReply", &rid, nil, nil)
 	c.JSON(http.StatusOK, gin.H{"ok": true})
 }
 
@@ -592,6 +596,8 @@ func (h *ForumHandler) AdminPinThread(c *gin.Context) {
 	}
 	thread.Pinned = !thread.Pinned
 	h.DB.Save(&thread)
+	rid := uint(id)
+	h.Audit.Log(c, "forum.thread_pinned", "ForumThread", &rid, nil, map[string]interface{}{"pinned": thread.Pinned})
 	c.JSON(http.StatusOK, gin.H{"pinned": thread.Pinned})
 }
 
@@ -604,6 +610,8 @@ func (h *ForumHandler) AdminLockThread(c *gin.Context) {
 	}
 	thread.Locked = !thread.Locked
 	h.DB.Save(&thread)
+	rid := uint(id)
+	h.Audit.Log(c, "forum.thread_locked", "ForumThread", &rid, nil, map[string]interface{}{"locked": thread.Locked})
 	c.JSON(http.StatusOK, gin.H{"locked": thread.Locked})
 }
 

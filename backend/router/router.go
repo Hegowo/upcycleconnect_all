@@ -148,6 +148,7 @@ func Setup(db *gorm.DB, cfg *config.Config) *gin.Engine {
 		{
 			userProtected.POST("/auth/logout", userAuthHandler.Logout)
 			userProtected.GET("/auth/me", userAuthHandler.Me)
+			userProtected.DELETE("/account", userAuthHandler.DeleteAccount)
 			userProtected.POST("/onboarding/complete", userAuthHandler.CompleteOnboarding)
 
 			userProtected.GET("/profile", profileHandler.Stats)
@@ -374,6 +375,7 @@ func Setup(db *gorm.DB, cfg *config.Config) *gin.Engine {
 			protected.POST("/users/:id/send-reset", userHandler.SendPasswordReset)
 			protected.GET("/users/:id/export", userHandler.Export)
 			protected.DELETE("/users/:id", userHandler.Destroy)
+			protected.POST("/users/:id/purge", userHandler.Purge)
 
 			protected.GET("/providers", providerHandler.Index)
 			protected.GET("/providers/:id", providerHandler.Show)

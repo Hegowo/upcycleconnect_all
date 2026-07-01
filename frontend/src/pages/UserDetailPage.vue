@@ -81,6 +81,23 @@
             {{ t('users.actionActivate') }}
           </button>
         </div>
+
+        <div class="mt-6 pt-4 border-t border-red-100">
+          <div class="flex items-start gap-3 rounded-xl bg-red-50 border border-red-200 p-4">
+            <TrashIcon class="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-semibold text-red-800">Supprimer toutes les données (RGPD)</p>
+              <p class="text-xs text-red-700/80 mt-0.5">Suppression définitive et irréversible de l'utilisateur et de toutes ses données. Un e-mail de confirmation RGPD lui sera envoyé.</p>
+            </div>
+            <button
+              @click="confirmAction('purge')"
+              class="shrink-0 inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-white text-xs font-bold transition hover:opacity-90"
+              style="background-color:#b91c1c;"
+            >
+              <TrashIcon class="w-3.5 h-3.5" /> Supprimer les données
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="card p-6 space-y-4">
@@ -151,10 +168,10 @@
 
     <AppConfirmDialog
       :show="confirm.show"
-      :title="confirm.action === 'ban' ? t('users.confirmBanTitle') : t('users.confirmActivateTitle')"
-      :message="confirm.action === 'ban' ? t('users.confirmBanMsg', { name: `${user?.first_name} ${user?.last_name}` }) : t('users.confirmActivateMsg', { name: `${user?.first_name} ${user?.last_name}` })"
-      :confirm-label="confirm.action === 'ban' ? t('users.actionBan') : t('users.actionActivate')"
-      :confirm-variant="confirm.action === 'ban' ? 'danger' : 'primary'"
+      :title="confirmTitle"
+      :message="confirmMessage"
+      :confirm-label="confirmLabel"
+      :confirm-variant="confirm.action === 'activate' ? 'primary' : 'danger'"
       :loading="confirm.loading"
       @confirm="executeAction"
       @cancel="confirm.show = false"
@@ -163,11 +180,12 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { EnvelopeIcon, CheckIcon, KeyIcon, ArrowDownTrayIcon } from '@heroicons/vue/24/outline'
+import { EnvelopeIcon, CheckIcon, KeyIcon, ArrowDownTrayIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { userService } from '@/services/userService'
+import api from '@/services/api'
 import { useToast } from '@/utils/useToast'
 import AppBadge from '@/components/AppBadge.vue'
 import AppConfirmDialog from '@/components/AppConfirmDialog.vue'
@@ -205,6 +223,23 @@ async function fetchUser() {
   }
 }
 
+const userName = computed(() => user.value ? `${user.value.first_name} ${user.value.last_name}` : '')
+const confirmTitle = computed(() => {
+  if (confirm.action === 'ban') return t('users.confirmBanTitle')
+  if (confirm.action === 'purge') return 'Supprimer toutes les données ?'
+  return t('users.confirmActivateTitle')
+})
+const confirmMessage = computed(() => {
+  if (confirm.action === 'ban') return t('users.confirmBanMsg', { name: userName.value })
+  if (confirm.action === 'purge') return `Cette action supprimera DÉFINITIVEMENT ${userName.value} et l'intégralité de ses données (réservations, dépôts, messages, projets, etc.). Elle est irréversible et un e-mail de confirmation RGPD sera envoyé à l'utilisateur. Confirmez-vous ?`
+  return t('users.confirmActivateMsg', { name: userName.value })
+})
+const confirmLabel = computed(() => {
+  if (confirm.action === 'ban') return t('users.actionBan')
+  if (confirm.action === 'purge') return 'Supprimer définitivement'
+  return t('users.actionActivate')
+})
+
 function confirmAction(action) {
   confirm.action = action
   confirm.show   = true
@@ -216,13 +251,20 @@ async function executeAction() {
     if (confirm.action === 'ban') {
       await userService.ban(user.value.id)
       user.value.status = 'banned'
-      toast.showSuccess(t('users.toastBanned', { name: `${user.value.first_name} ${user.value.last_name}` }))
+      toast.showSuccess(t('users.toastBanned', { name: userName.value }))
+      confirm.show = false
+    } else if (confirm.action === 'purge') {
+      await api.post(`/users/${user.value.id}/purge`)
+      toast.showSuccess('Toutes les données de l\'utilisateur ont été supprimées.')
+      confirm.show = false
+      router.push('/admin/users')
+      return
     } else {
       await userService.activate(user.value.id)
       user.value.status = 'active'
-      toast.showSuccess(t('users.toastActivated', { name: `${user.value.first_name} ${user.value.last_name}` }))
+      toast.showSuccess(t('users.toastActivated', { name: userName.value }))
+      confirm.show = false
     }
-    confirm.show = false
   } catch {
     toast.showError(t('users.toastError'))
   } finally {

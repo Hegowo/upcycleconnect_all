@@ -166,6 +166,22 @@ Si vous n'étiez pas au courant de cette demande, ignorez cet email — votre mo
 	return m.Send(to, "Réinitialisation de votre mot de passe — UpcycleConnect", body)
 }
 
+func (m *Mailer) SendAccountDeleted(to, firstName string) error {
+	body := fmt.Sprintf(`Bonjour %s,
+
+Nous vous confirmons que votre compte UpcycleConnect ainsi que l'ensemble des données personnelles qui y étaient associées ont été définitivement supprimés de nos systèmes.
+
+Conformément au Règlement Général sur la Protection des Données (RGPD), cette suppression est irréversible : vos informations de profil, vos contenus, vos échanges et l'historique lié à votre compte ne sont plus conservés.
+
+Si vous n'êtes pas à l'origine de cette demande ou si vous avez la moindre question, vous pouvez nous contacter à dpo@upcycleconnect.xyz.
+
+Nous vous remercions d'avoir fait partie de la communauté UpcycleConnect.
+
+— L'équipe UpcycleConnect`, firstName)
+
+	return m.Send(to, "Suppression de votre compte et de vos données — UpcycleConnect", body)
+}
+
 func (m *Mailer) SendEmailChangeCode(to, firstName, code string) error {
 	body := fmt.Sprintf(`Bonjour %s,
 

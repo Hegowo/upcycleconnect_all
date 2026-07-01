@@ -88,18 +88,48 @@
             {{ t('providers.actionSuspend') }}
           </button>
         </div>
+
+        <div class="mt-6 pt-4 border-t border-red-100">
+          <div class="flex items-start gap-3 rounded-xl bg-red-50 border border-red-200 p-4">
+            <TrashIcon class="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-semibold text-red-800">Supprimer toutes les données (RGPD)</p>
+              <p class="text-xs text-red-700/80 mt-0.5">Suppression définitive et irréversible du prestataire et de toutes ses données. Un e-mail de confirmation RGPD lui sera envoyé.</p>
+            </div>
+            <button
+              @click="purgeConfirm = true"
+              class="shrink-0 inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-white text-xs font-bold transition hover:opacity-90"
+              style="background-color:#b91c1c;"
+            >
+              <TrashIcon class="w-3.5 h-3.5" /> Supprimer les données
+            </button>
+          </div>
+        </div>
       </div>
     </template>
+
+    <AppConfirmDialog
+      :show="purgeConfirm"
+      title="Supprimer toutes les données ?"
+      :message="purgeMessage"
+      confirm-label="Supprimer définitivement"
+      confirm-variant="danger"
+      :loading="purgeLoading"
+      @confirm="executePurge"
+      @cancel="purgeConfirm = false"
+    />
   </div>
 </template>
 
-<script setup>import { ref, onMounted } from 'vue'
+<script setup>import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { providerService } from '@/services/userService'
+import api from '@/services/api'
 import { useToast } from '@/utils/useToast'
 import AppBadge from '@/components/AppBadge.vue'
-import { DocumentArrowDownIcon, ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
+import AppConfirmDialog from '@/components/AppConfirmDialog.vue'
+import { DocumentArrowDownIcon, ExclamationTriangleIcon, TrashIcon } from '@heroicons/vue/24/outline'
 
 const { t } = useI18n()
 const route    = useRoute()
@@ -107,6 +137,26 @@ const router   = useRouter()
 const toast    = useToast()
 const provider = ref(null)
 const loading  = ref(true)
+const purgeConfirm = ref(false)
+const purgeLoading = ref(false)
+const purgeMessage = computed(() => {
+  const name = provider.value ? `${provider.value.first_name} ${provider.value.last_name}` : ''
+  return `Cette action supprimera DÉFINITIVEMENT ${name} et l'intégralité de ses données (prestations, réservations, campagnes, messages, etc.). Elle est irréversible et un e-mail de confirmation RGPD sera envoyé. Confirmez-vous ?`
+})
+
+async function executePurge() {
+  purgeLoading.value = true
+  try {
+    await api.post(`/users/${provider.value.id}/purge`)
+    toast.showSuccess('Toutes les données du prestataire ont été supprimées.')
+    purgeConfirm.value = false
+    router.push('/admin/providers')
+  } catch (e) {
+    toast.showError(e?.response?.data?.message || 'Erreur lors de la suppression.')
+  } finally {
+    purgeLoading.value = false
+  }
+}
 
 async function fetchProvider() {
   try {

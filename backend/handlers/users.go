@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"upcycleconnect/backend/config"
+	"upcycleconnect/backend/database"
 	"upcycleconnect/backend/models"
 	"upcycleconnect/backend/services"
 
@@ -203,6 +204,41 @@ func (h *UserHandler) Destroy(c *gin.Context) {
 	h.DB.Delete(&user)
 
 	c.Status(http.StatusNoContent)
+}
+
+func (h *UserHandler) Purge(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "Ressource introuvable"})
+		return
+	}
+
+	var user models.User
+	if err := h.DB.Unscoped().Preload("Roles").First(&user, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "Ressource introuvable"})
+		return
+	}
+	if user.IsStaff() {
+		c.JSON(http.StatusForbidden, gin.H{"message": "Ce compte fait partie de l'équipe. Utilisez la gestion des administrateurs ou des employés."})
+		return
+	}
+
+	email := user.Email
+	firstName := user.FirstName
+	uid := user.ID
+
+	h.Audit.Log(c, "user.purged", "User", &uid, map[string]interface{}{"email": email}, nil)
+
+	if err := database.PurgeUser(h.DB, uid); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Erreur lors de la suppression des données."})
+		return
+	}
+
+	if h.Mailer != nil && email != "" {
+		go h.Mailer.SendAccountDeleted(email, firstName)
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Toutes les données de l'utilisateur ont été supprimées."})
 }
 
 func (h *UserHandler) UpdateEmail(c *gin.Context) {

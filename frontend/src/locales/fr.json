@@ -524,7 +524,12 @@
       "assigned": "Affectation {n}",
       "cancelled": "Annulation {n}",
       "status_updated": "Changement de statut {n}",
-      "exported": "Export {n}"
+      "exported": "Export {n}",
+      "purged": "Suppression RGPD {n}",
+      "thread_deleted": "Suppression {n}",
+      "reply_deleted": "Suppression d'une réponse {n}",
+      "thread_pinned": "Épinglage {n}",
+      "thread_locked": "Verrouillage {n}"
     },
     "nouns": {
       "account": "d'un compte",
@@ -547,7 +552,8 @@
       "subscription": "d'un abonnement",
       "subscription_plan": "d'un plan d'abonnement",
       "tip": "d'un conseil",
-      "user": "d'un utilisateur"
+      "user": "d'un utilisateur",
+      "forum": "sur le forum"
     },
     "resources": {
       "Admin": "Administrateur",
@@ -567,7 +573,9 @@
       "SubscriptionPlan": "Plan d'abonnement",
       "Tip": "Conseil",
       "UpcyclingProject": "Projet",
-      "User": "Utilisateur"
+      "User": "Utilisateur",
+      "ForumThread": "Fil de discussion",
+      "ForumReply": "Réponse forum"
     }
   },
   "settings": {

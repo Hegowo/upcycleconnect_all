@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"upcycleconnect/backend/config"
+	"upcycleconnect/backend/database"
 	"upcycleconnect/backend/middleware"
 	"upcycleconnect/backend/models"
 	"upcycleconnect/backend/services"
@@ -341,6 +342,66 @@ func (h *UserAuthHandler) Me(c *gin.Context) {
 
 func (h *UserAuthHandler) Logout(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Déconnexion réussie."})
+}
+
+func (h *UserAuthHandler) DeleteAccount(c *gin.Context) {
+	user := middleware.GetAuthUser(c)
+	if user == nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "Non authentifié"})
+		return
+	}
+	uid := user.ID
+
+	var upcomingEvents int64
+	h.DB.Table("event_registrations er").
+		Joins("JOIN events e ON e.id = er.event_id").
+		Where("er.user_id = ? AND e.deleted_at IS NULL AND e.end_date >= ?", uid, time.Now()).
+		Count(&upcomingEvents)
+
+	ongoing := []string{"pending", "paid"}
+
+	var clientReservations int64
+	h.DB.Model(&models.Reservation{}).
+		Where("user_id = ? AND status IN ?", uid, ongoing).
+		Count(&clientReservations)
+
+	var providerReservations int64
+	h.DB.Table("reservations r").
+		Joins("JOIN prestations p ON p.id = r.prestation_id").
+		Where("p.provider_id = ? AND r.deleted_at IS NULL AND r.status IN ?", uid, ongoing).
+		Count(&providerReservations)
+
+	var reasons []string
+	if upcomingEvents > 0 {
+		reasons = append(reasons, "vous êtes inscrit(e) à un ou plusieurs événements à venir")
+	}
+	if clientReservations > 0 {
+		reasons = append(reasons, "vous avez une ou plusieurs réservations en cours")
+	}
+	if providerReservations > 0 {
+		reasons = append(reasons, "vous avez une ou plusieurs prestations en cours à honorer")
+	}
+	if len(reasons) > 0 {
+		c.JSON(http.StatusConflict, gin.H{
+			"message": "Votre compte ne peut pas être supprimé pour le moment.",
+			"reasons": reasons,
+		})
+		return
+	}
+
+	email := user.Email
+	firstName := user.FirstName
+
+	if err := database.PurgeUser(h.DB, uid); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Erreur lors de la suppression de votre compte."})
+		return
+	}
+
+	if h.Mailer != nil && email != "" {
+		go h.Mailer.SendAccountDeleted(email, firstName)
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Votre compte et l'ensemble de vos données ont été supprimés."})
 }
 
 func (h *UserAuthHandler) CompleteOnboarding(c *gin.Context) {

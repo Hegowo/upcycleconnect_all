@@ -29,6 +29,40 @@
             </button>
           </div>
 
+          <div v-if="tab === 'admin'" class="flex flex-wrap items-end gap-2 p-3 border-b border-[#f1f5f9] bg-white">
+            <div class="flex flex-col">
+              <label for="flt-actor" class="text-[10px] font-semibold text-[#64748b] uppercase mb-1">Personne</label>
+              <select id="flt-actor" v-model="filters.actor" @change="applyFilters" class="text-sm border border-[#e5e7eb] rounded-lg px-2 py-1.5 bg-[#f8fafc] focus:outline-none focus:ring-2 focus:ring-[#006d35]/30">
+                <option value="">Toutes</option>
+                <option value="system">Système</option>
+                <option v-for="a in logFilters.actors" :key="a.id" :value="String(a.id)">{{ a.name }}{{ a.role ? ' · ' + roleLabel(a.role) : '' }}</option>
+              </select>
+            </div>
+            <div class="flex flex-col">
+              <label for="flt-action" class="text-[10px] font-semibold text-[#64748b] uppercase mb-1">Action</label>
+              <select id="flt-action" v-model="filters.action" @change="applyFilters" class="text-sm border border-[#e5e7eb] rounded-lg px-2 py-1.5 bg-[#f8fafc] focus:outline-none focus:ring-2 focus:ring-[#006d35]/30 max-w-[180px]">
+                <option value="">Toutes</option>
+                <option v-for="a in logFilters.actions" :key="a" :value="a">{{ actionLabel(a) }}</option>
+              </select>
+            </div>
+            <div class="flex flex-col">
+              <label for="flt-res" class="text-[10px] font-semibold text-[#64748b] uppercase mb-1">Élément</label>
+              <select id="flt-res" v-model="filters.resource_type" @change="applyFilters" class="text-sm border border-[#e5e7eb] rounded-lg px-2 py-1.5 bg-[#f8fafc] focus:outline-none focus:ring-2 focus:ring-[#006d35]/30">
+                <option value="">Tous</option>
+                <option v-for="r in logFilters.resource_types" :key="r" :value="r">{{ resourceLabel(r) }}</option>
+              </select>
+            </div>
+            <div class="flex flex-col">
+              <label for="flt-from" class="text-[10px] font-semibold text-[#64748b] uppercase mb-1">Du</label>
+              <input id="flt-from" v-model="filters.from" @change="applyFilters" type="date" class="text-sm border border-[#e5e7eb] rounded-lg px-2 py-1.5 bg-[#f8fafc] focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
+            </div>
+            <div class="flex flex-col">
+              <label for="flt-to" class="text-[10px] font-semibold text-[#64748b] uppercase mb-1">Au</label>
+              <input id="flt-to" v-model="filters.to" @change="applyFilters" type="date" class="text-sm border border-[#e5e7eb] rounded-lg px-2 py-1.5 bg-[#f8fafc] focus:outline-none focus:ring-2 focus:ring-[#006d35]/30" />
+            </div>
+            <button v-if="hasActiveFilters" @click="resetFilters" class="text-xs font-medium text-[#006d35] hover:underline px-2 py-2">Réinitialiser</button>
+          </div>
+
           <div v-if="tab === 'admin'" class="overflow-x-auto">
             <div v-if="adminLoading" class="p-4 space-y-3">
               <div v-for="n in 6" :key="n" class="h-12 bg-gray-50 rounded-lg animate-pulse"></div>
@@ -64,6 +98,7 @@
                         {{ (log.admin_name?.trim() || 'S').charAt(0).toUpperCase() }}
                       </div>
                       <span class="text-sm font-medium text-[#001d32]">{{ log.admin_name?.trim() || t('logs.system') }}</span>
+                      <span v-if="log.admin_role" class="text-[10px] font-bold uppercase px-1.5 py-0.5 rounded-full" :class="roleBadge(log.admin_role)">{{ roleLabel(log.admin_role) }}</span>
                     </div>
                   </td>
                   <td class="px-6 py-3.5 text-sm text-gray-600">{{ actionLabel(log.action) }}</td>
@@ -110,6 +145,14 @@
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <div v-if="tab === 'admin' && !adminLoading && meta.total > meta.limit" class="flex items-center justify-between gap-3 px-4 py-3 border-t border-[#f1f5f9] text-sm">
+            <span class="text-gray-500 text-xs">{{ meta.total }} entrées · page {{ meta.page }} / {{ totalPages }}</span>
+            <div class="flex items-center gap-2">
+              <button @click="goPage(meta.page - 1)" :disabled="meta.page <= 1" class="px-3 py-1.5 rounded-lg border border-[#e5e7eb] text-xs font-semibold disabled:opacity-40 hover:bg-gray-50 transition">Précédent</button>
+              <button @click="goPage(meta.page + 1)" :disabled="meta.page >= totalPages" class="px-3 py-1.5 rounded-lg border border-[#e5e7eb] text-xs font-semibold disabled:opacity-40 hover:bg-gray-50 transition">Suivant</button>
             </div>
           </div>
 
@@ -218,7 +261,7 @@
   </div>
 </template>
 
-<script setup>import { ref, onMounted, onUnmounted } from 'vue'
+<script setup>import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import api from '@/services/api'
@@ -239,6 +282,31 @@ const adminsLoading = ref(false)
 const selectedLog = ref(null)
 const selectedLogType = ref('admin')
 
+const filters = reactive({ actor: '', action: '', resource_type: '', from: '', to: '' })
+const logFilters = ref({ actors: [], actions: [], resource_types: [] })
+const meta = ref({ total: 0, page: 1, limit: 30 })
+const totalPages = computed(() => Math.max(1, Math.ceil(meta.value.total / meta.value.limit)))
+const hasActiveFilters = computed(() => filters.actor || filters.action || filters.resource_type || filters.from || filters.to)
+
+const ROLE_LABELS = { super_admin: 'Super admin', admin: 'Admin', employee: 'Employé' }
+function roleLabel(r) { return ROLE_LABELS[r] || r }
+function roleBadge(r) {
+  if (r === 'super_admin') return 'bg-[#ede9fe] text-[#6d28d9]'
+  if (r === 'admin') return 'bg-[#dbeafe] text-[#1e40af]'
+  if (r === 'employee') return 'bg-[#dcfce7] text-[#166534]'
+  return 'bg-[#f1f5f9] text-[#475569]'
+}
+
+function applyFilters() { meta.value.page = 1; loadAdminLogs() }
+function resetFilters() {
+  filters.actor = ''; filters.action = ''; filters.resource_type = ''; filters.from = ''; filters.to = ''
+  meta.value.page = 1; loadAdminLogs()
+}
+function goPage(p) {
+  if (p < 1 || p > totalPages.value) return
+  meta.value.page = p; loadAdminLogs()
+}
+
 function openModal(log, type) { selectedLog.value = log; selectedLogType.value = type }
 function closeModal() { selectedLog.value = null }
 function onKeydown(e) { if (e.key === 'Escape') closeModal() }
@@ -248,8 +316,16 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
 async function loadAdminLogs() {
   adminLoading.value = true
   try {
-    const { data } = await api.get('/logs')
+    const params = { page: meta.value.page }
+    if (filters.actor) params.actor = filters.actor
+    if (filters.action) params.action = filters.action
+    if (filters.resource_type) params.resource_type = filters.resource_type
+    if (filters.from) params.from = filters.from
+    if (filters.to) params.to = filters.to
+    const { data } = await api.get('/logs', { params })
     adminLogs.value = data.data || []
+    if (data.meta) meta.value = data.meta
+    if (data.filters) logFilters.value = data.filters
   } finally {
     adminLoading.value = false
   }

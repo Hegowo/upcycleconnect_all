@@ -240,7 +240,51 @@
         </div>
       </div>
 
+      <div class="bg-white rounded-2xl border border-red-200 p-5 sm:p-6">
+        <h2 class="font-semibold text-red-700 flex items-center gap-2"><TrashIcon class="w-4 h-4" /> Supprimer mon compte</h2>
+        <p class="text-sm text-[#40617f] mt-2">La suppression de votre compte est <strong>définitive et irréversible</strong>. Toutes vos données personnelles seront effacées de nos systèmes, conformément au RGPD, et un e-mail de confirmation vous sera envoyé.</p>
+        <button @click="openDeleteAccount" class="mt-4 inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-white text-sm font-bold transition hover:opacity-90" style="background-color:#b91c1c;">
+          <TrashIcon class="w-4 h-4" /> Supprimer mon compte
+        </button>
+      </div>
+
     </div>
+
+    <Teleport to="body">
+      <div v-if="deleteModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="deleteModal = false" />
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
+          <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+            <TrashIcon class="w-6 h-6 text-red-600" />
+          </div>
+          <h3 class="text-lg font-bold text-[#001d32] text-center mb-2">Supprimer définitivement votre compte ?</h3>
+
+          <div v-if="deleteReasons.length" class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-sm text-amber-800 mb-4">
+            <p class="font-semibold mb-1">Suppression impossible pour le moment :</p>
+            <ul class="list-disc pl-5 space-y-0.5">
+              <li v-for="r in deleteReasons" :key="r">{{ r }}</li>
+            </ul>
+            <p class="mt-2 text-xs">Veuillez régler ces points avant de pouvoir supprimer votre compte.</p>
+          </div>
+
+          <template v-else>
+            <p class="text-sm text-[#40617f] text-center mb-4">Cette action est <strong>irréversible</strong>. Vos réservations, dépôts, messages, projets et l'ensemble de vos informations seront définitivement supprimés.</p>
+            <label class="flex items-start gap-2 text-sm text-[#334155] mb-4 cursor-pointer">
+              <input type="checkbox" v-model="deleteAck" class="mt-0.5" />
+              <span>Je comprends que la suppression est définitive et que mes données ne pourront pas être récupérées.</span>
+            </label>
+            <p v-if="deleteError" class="text-red-600 text-sm mb-3">{{ deleteError }}</p>
+          </template>
+
+          <div class="flex justify-end gap-3">
+            <button @click="deleteModal = false" class="px-4 py-2 text-sm font-medium text-[#40617f]">{{ deleteReasons.length ? 'Fermer' : 'Annuler' }}</button>
+            <button v-if="!deleteReasons.length" @click="confirmDeleteAccount" :disabled="!deleteAck || deleteLoading" class="px-5 py-2 rounded-lg text-white text-sm font-bold disabled:opacity-50 transition hover:opacity-90" style="background-color:#b91c1c;">
+              {{ deleteLoading ? 'Suppression...' : 'Supprimer définitivement' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
@@ -264,6 +308,47 @@ import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
 const { t } = useI18n()
 const router   = useRouter()
 const userAuth = useUserAuthStore()
+
+const deleteModal = ref(false)
+const deleteAck = ref(false)
+const deleteLoading = ref(false)
+const deleteError = ref('')
+const deleteReasons = ref([])
+
+function openDeleteAccount() {
+  deleteAck.value = false
+  deleteError.value = ''
+  deleteReasons.value = []
+  deleteModal.value = true
+}
+
+async function confirmDeleteAccount() {
+  if (!deleteAck.value) return
+  deleteLoading.value = true
+  deleteError.value = ''
+  try {
+    const res = await fetch('/api/v1/account', {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${userAuth.token}` },
+    })
+    if (res.status === 409) {
+      const json = await res.json().catch(() => ({}))
+      deleteReasons.value = json.reasons || ['Votre compte comporte des activités en cours.']
+      return
+    }
+    if (!res.ok) {
+      const json = await res.json().catch(() => ({}))
+      deleteError.value = json.message || 'Erreur lors de la suppression.'
+      return
+    }
+    await userAuth.logout()
+    router.push('/')
+  } catch {
+    deleteError.value = 'Erreur réseau. Veuillez réessayer.'
+  } finally {
+    deleteLoading.value = false
+  }
+}
 
 const pushLoading = ref(false)
 const pushError   = ref('')
