@@ -6,7 +6,7 @@
     <TheSidebar />
     <div class="flex-1 flex flex-col overflow-hidden min-w-0">
       <TheHeader />
-      <main :class="route.meta.fullscreen
+      <main ref="mainEl" :class="route.meta.fullscreen
         ? 'flex-1 overflow-hidden flex flex-col'
         : 'flex-1 overflow-y-auto p-4 md:p-6 main-pad'"
       >
@@ -18,6 +18,7 @@
 </template>
 
 <script setup>
+import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useThemeStore } from '@/stores/theme'
 import TheSidebar from '@/components/Sidebar.vue'
@@ -26,6 +27,11 @@ import AdminBottomNav from '@/components/AdminBottomNav.vue'
 
 const route = useRoute()
 const theme = useThemeStore()
+const mainEl = ref(null)
+
+watch(() => route.path, () => {
+  if (mainEl.value) mainEl.value.scrollTop = 0
+})
 </script>
 
 <style scoped>
