@@ -239,10 +239,10 @@
               </td>
               <td class="px-6 py-4 text-right" @click.stop>
                 <div class="flex justify-end gap-1.5">
-                  <button @click="router.push(`/admin/users/${user.id}`)" class="p-1.5 rounded-lg text-gray-500 hover:text-[#40617f] hover:bg-blue-50 transition" :title="t('common.edit')">
+                  <button @click="router.push(`/admin/users/${user.id}`)" class="p-1.5 rounded-lg text-gray-500 hover:text-[#40617f] hover:bg-blue-50 transition" title="Voir la fiche" aria-label="Voir la fiche">
                     <EyeIcon class="w-4 h-4" />
                   </button>
-                  <button class="p-1.5 rounded-lg text-gray-500 hover:text-[#006d35] hover:bg-green-50 transition" :title="t('common.edit')">
+                  <button @click="router.push(`/admin/users/${user.id}`)" class="p-1.5 rounded-lg text-gray-500 hover:text-[#006d35] hover:bg-green-50 transition" title="Modifier" aria-label="Modifier">
                     <PencilIcon class="w-4 h-4" />
                   </button>
                   <button

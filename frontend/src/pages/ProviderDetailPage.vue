@@ -94,7 +94,7 @@
             <TrashIcon class="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
             <div class="flex-1 min-w-0">
               <p class="text-sm font-semibold text-red-800">Supprimer toutes les données (RGPD)</p>
-              <p class="text-xs text-red-700/80 mt-0.5">Suppression définitive et irréversible du prestataire et de toutes ses données. Un e-mail de confirmation RGPD lui sera envoyé.</p>
+              <p class="text-xs text-red-700 mt-0.5">Suppression définitive et irréversible du prestataire et de toutes ses données. Un e-mail de confirmation RGPD lui sera envoyé.</p>
             </div>
             <button
               @click="purgeConfirm = true"
