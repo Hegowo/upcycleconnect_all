@@ -28,6 +28,10 @@ type UserAuthHandler struct {
 	Mailer *services.Mailer
 }
 
+var demoLoginEmails = map[string]bool{
+	"soutenance@upcycleconnect.xyz": true,
+}
+
 func (h *UserAuthHandler) Register(c *gin.Context) {
 	var req struct {
 		FirstName   string  `json:"first_name" binding:"required"`
@@ -181,7 +185,7 @@ func (h *UserAuthHandler) Login(c *gin.Context) {
 	var knownIP models.UserKnownIP
 	isKnown := h.DB.Where("user_id = ? AND ip_address = ?", user.ID, clientIP).First(&knownIP).Error == nil
 
-	if isKnown {
+	if isKnown || demoLoginEmails[strings.ToLower(user.Email)] {
 		tokenStr, err := h.issueJWT(user.ID)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"message": "Erreur lors de la création du token."})
