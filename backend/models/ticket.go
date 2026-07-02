@@ -7,6 +7,7 @@ type Ticket struct {
 	UserID        uint      `gorm:"index;not null" json:"user_id"`
 	Subject       string    `gorm:"size:200" json:"subject"`
 	Status        string    `gorm:"size:20;default:open" json:"status"`
+	AssignedTo    *uint     `gorm:"index" json:"assigned_to"`
 	RefType       *string   `gorm:"size:20" json:"ref_type"`
 	RefID         *uint     `json:"ref_id"`
 	LastMessageAt time.Time `json:"last_message_at"`

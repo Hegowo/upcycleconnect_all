@@ -161,6 +161,8 @@
               </Transition>
             </div>
           </template>
+
+          <PublicLangMenu />
         </div>
 
         <button
@@ -294,6 +296,7 @@ import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { MagnifyingGlassIcon, UserCircleIcon, DocumentTextIcon, PlusCircleIcon, Cog6ToothIcon, PencilSquareIcon, ClipboardDocumentListIcon } from '@heroicons/vue/24/outline'
 import NotificationsDropdown from '@/components/NotificationsDropdown.vue'
+import PublicLangMenu from '@/components/PublicLangMenu.vue'
 import OnboardingTutorial from '@/components/OnboardingTutorial.vue'
 import { useUserAuthStore } from '@/stores/userAuth'
 import GlobalSearch from '@/components/GlobalSearch.vue'

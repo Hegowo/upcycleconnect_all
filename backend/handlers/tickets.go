@@ -261,10 +261,14 @@ func (h *TicketHandler) UserReply(c *gin.Context) {
 		return
 	}
 	if h.Notifications != nil {
-		h.Notifications.NotifyAdmins("ticket.message",
-			"Réponse à un ticket",
-			fmt.Sprintf("%s : %s", strings.TrimSpace(user.FirstName+" "+user.LastName), truncateMsg(msg.Content, 80)),
-			fmt.Sprintf("/admin/tickets?id=%d", ticket.ID))
+		title := "Réponse à un ticket"
+		body := fmt.Sprintf("%s : %s", strings.TrimSpace(user.FirstName+" "+user.LastName), truncateMsg(msg.Content, 80))
+		link := fmt.Sprintf("/admin/tickets?id=%d", ticket.ID)
+		if ticket.AssignedTo != nil {
+			h.Notifications.MustNotify(*ticket.AssignedTo, "ticket.message", title, body, link)
+		} else {
+			h.Notifications.NotifyAdmins("ticket.message", title, body, link)
+		}
 	}
 	c.JSON(http.StatusCreated, gin.H{"data": models.ToTicketMessageResponse(msg)})
 }
@@ -362,6 +366,10 @@ func (h *TicketHandler) AdminReply(c *gin.Context) {
 	msg, ok := h.storeMessage(c, &ticket, user, true)
 	if !ok {
 		return
+	}
+	if ticket.AssignedTo == nil {
+		h.DB.Model(&models.Ticket{}).Where("id = ?", ticket.ID).Update("assigned_to", user.ID)
+		ticket.AssignedTo = &user.ID
 	}
 	if h.Notifications != nil {
 		h.Notifications.MustNotify(ticket.UserID, "ticket.reply",

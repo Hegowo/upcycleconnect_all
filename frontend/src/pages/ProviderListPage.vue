@@ -211,22 +211,6 @@
         <AppPagination :current-page="meta.current_page" :last-page="meta.last_page" @page-change="fetchProviders" />
       </div>
     </div>
-
-    <div class="grid grid-cols-1 gap-4">
-      <div class="bg-white rounded-2xl p-5 border border-[#f1f5f9] shadow-sm">
-        <div class="flex items-center gap-3 mb-3">
-          <div class="w-9 h-9 rounded-xl flex items-center justify-center bg-orange-50">
-            <ClockIcon class="w-5 h-5 text-orange-500" />
-          </div>
-          <div>
-            <p class="text-sm font-bold text-[#001d32]">{{ t('providers.verificationQueue') }}</p>
-            <p class="text-xs text-gray-500">{{ t('providers.verificationQueueSub') }}</p>
-          </div>
-        </div>
-        <p class="text-3xl font-bold" :class="pendingProviders > 0 ? 'text-orange-500' : 'text-[#001d32]'">{{ pendingProviders }}</p>
-        <p class="text-xs text-gray-500 mt-1">{{ t('providers.pendingValidation') }}</p>
-      </div>
-    </div>
   </div>
 </template>
 
